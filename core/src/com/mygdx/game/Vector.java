@@ -35,6 +35,21 @@ public class Vector {
     }
 
     /**
+     * Applies mathematical operation of subtracting two vectors
+     **/
+    public Vector subtract(Vector b){
+        return set((this.x - b.x), (this.y - b.y), (this.z - b.z));
+    }
+
+    /**
+     * Applies mathematical operation of multiplying two vectors
+     **/
+    public Vector multiply(double scalingfactor){
+        return set((this.x * scalingfactor), (this.y * scalingfactor), (this.z * scalingfactor));
+    }
+
+
+    /**
      * Overrides toString function to print vector
      **/
     @Override
