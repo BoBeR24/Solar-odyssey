@@ -28,6 +28,14 @@ public class celestialBody{
 
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public Vector getLocation(){
         return location;
     }
@@ -39,9 +47,6 @@ public class celestialBody{
     }
     public double getRadius(){
         return radius;
-    }
-    public String getName(){
-        return name;
     }
 
     public Texture getTexture() {
