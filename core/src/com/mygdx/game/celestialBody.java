@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.math.Vector3;
+//import com.badlogic.gdx.math.Vector3;
 
 import java.util.jar.Attributes.Name;
 
@@ -8,11 +8,11 @@ public class celestialBody{
     public final String name;
     public final double mass;   // kg
     public final double radius; // meters
-    public Vector3 location; // meters
-    public Vector3 velocity;
+    public Vector location; // meters
+    public Vector velocity;
 
 
-    celestialBody(String name, double mass, double radius, Vector3 location, Vector3 velocity){
+    celestialBody(String name, double mass, double radius, Vector location, Vector velocity){
         this.name = name;
         this.mass = mass;
         this.radius=radius;
@@ -21,10 +21,10 @@ public class celestialBody{
 
     }
 
-    public Vector3 getLocation(){
+    public Vector getLocation(){
         return location;
     }
-    public Vector3 getVelocity(){
+    public Vector getVelocity(){
         return velocity;
     }
     public double getMass(){
