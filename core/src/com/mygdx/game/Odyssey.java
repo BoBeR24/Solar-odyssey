@@ -9,8 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Odyssey extends Game {
 	SpriteBatch batch;
-	Texture img;
-	
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -26,6 +25,5 @@ public class Odyssey extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
 }
