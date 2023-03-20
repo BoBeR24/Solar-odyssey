@@ -13,18 +13,20 @@ public class SolarSystemScreen implements Screen {
     private final Vector3 centerScreenCords;
 
 
-    final Texture sun;
+    final celestialBody sun;
 
 
     public SolarSystemScreen(final Odyssey game) {
         this.game = game;
 
         this.camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1920, 1080);
+        camera.setToOrtho(false, 1024, 1024);
 
-        this.sun = new Texture(Gdx.files.internal("Sun.png"));
+        this.sun = new celestialBody("Sun");
 
-        this.centerScreenCords = new Vector3(Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() / 2.0f, 0);
+        // specify center of the system as center of the sun
+        this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - sun.getTexture().getWidth()) / 2.0f ,
+                (Gdx.graphics.getHeight() - sun.getTexture().getHeight()) / 2.0f, 0);
     }
 
     @Override
@@ -36,7 +38,7 @@ public class SolarSystemScreen implements Screen {
     public void render(float delta) {
         game.batch.begin();
 
-        game.batch.draw(sun, centerScreenCords.x, centerScreenCords.y, sun.getWidth(), sun.getHeight());
+        game.batch.draw(sun.getTexture(), centerScreenCords.x, centerScreenCords.y, sun.getTexture().getWidth(), sun.getTexture().getHeight());
 
         game.batch.end();
     }

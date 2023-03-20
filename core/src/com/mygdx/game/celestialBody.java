@@ -1,23 +1,30 @@
 package com.mygdx.game;
 
-//import com.badlogic.gdx.math.Vector3;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.jar.Attributes.Name;
 
 public class celestialBody{
-    public final String name;
-    public final double mass;   // kg
-    public final double radius; // meters
-    public Vector location; // meters
-    public Vector velocity;
+    private final String name;
+    private final double mass;   // kg
+    private final double radius; // meters
+    private final int id;
+    private Vector location; // meters
+    private Vector velocity;
+    private Texture texture;
 
 
-    celestialBody(String name, double mass, double radius, Vector location, Vector velocity){
+    celestialBody(String name){
         this.name = name;
-        this.mass = mass;
-        this.radius=radius;
-        this.location=location;
-        this.velocity=velocity;
+        this.id = SystemProperties.entities.get(name);
+        this.mass = SystemProperties.masses[id];
+        this.radius = SystemProperties.radiuses[id];
+        this.location = SystemProperties.coordinates[id];
+        this.velocity = SystemProperties.velocities[id];
+
+        this.texture = new Texture(Gdx.files.internal(name + ".png"));
 
     }
 
@@ -37,5 +44,7 @@ public class celestialBody{
         return name;
     }
 
-
+    public Texture getTexture() {
+        return texture;
+    }
 }
