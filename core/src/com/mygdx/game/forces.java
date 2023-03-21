@@ -6,7 +6,7 @@ package com.mygdx.game;
 public class forces{
 
     //Still have to change
-    public final static double gravitionalconstant = 6.0;
+    public final static double gravitionalconstant = 6.6743 * Math.pow(10, -20);
 
     public static Vector actingforces(celestialBody Planet, celestialBody Spacecraft){
 
