@@ -18,13 +18,13 @@ public class GravForce extends SystemProperties{
 
 
     public Vector GravForceSun(){
-       int index = entities.get("Sun");
+       int index = entities.get("Mercury");
         //first part of the formula
        double firstPart = Gravcst*ProbeMass*masses[index];
        Vector Xi = coordinates[index];
        Vector numerateur = new Vector(0, 0, 0);
        // in the add we need to put the coordinate vector of the probe, but we don't have it
-       Vector sum = numerateur.Add(Xi, Xi/*need to have the coordinate of the probe */);
+       Vector sum = numerateur.Add(Xi, Xi/*need to have the coordinate of the probe and add -[probe cordinate] */);
 
 
        double X1 = Xi.getX();
@@ -38,6 +38,7 @@ public class GravForce extends SystemProperties{
        Ymin = Ymin*Ymin;
        Zmin = Zmin*Zmin;
        double denom = Math.sqrt(Xmin+Ymin+Zmin);
+       denom = denom*denom*denom;
 
        double multplicateur = firstPart/denom;
        double a = sum.getX();
