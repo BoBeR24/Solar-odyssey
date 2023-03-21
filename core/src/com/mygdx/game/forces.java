@@ -5,21 +5,23 @@ package com.mygdx.game;
 
 public class forces{
 
-    //Still have to change
+    //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     public final static double gravitionalconstant = 6.6743 * Math.pow(10, -20);
 
     public static Vector actingforces(celestialBody Planet, celestialBody Spacecraft){
-
-        double scalingfactor = gravitionalconstant*Planet.getMass()*Spacecraft.getMass()*(-1);
 
         Vector Planetvector = Planet.getLocation();
         Vector Spacecraftvector = Spacecraft.getLocation();
 
         Vector force = Spacecraftvector.subtract(Planetvector);
 
-        double magnitude = Math.pow(force.getLength(), 3);
+        double magnitude = Math.pow(force.getLength(), 2);
 
-        force.multiply(scalingfactor/magnitude);
+        double scalingfactor = (-1)*gravitionalconstant*((Planet.getMass()*Spacecraft.getMass())/magnitude);
+
+        force.multiply(1/force.getLength());
+
+        force.multiply(scalingfactor);
 
         return force;
     }
