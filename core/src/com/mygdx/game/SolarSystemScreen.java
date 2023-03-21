@@ -15,6 +15,15 @@ public class SolarSystemScreen implements Screen {
     OrthographicCamera camera;
     private final Vector3 centerScreenCords;
     final celestialBody sun;
+    final celestialBody mercury;
+    final celestialBody venus;
+    final celestialBody earth;
+    final celestialBody moon;
+    final celestialBody mars;
+    final celestialBody jupiter;
+    final celestialBody saturn;
+    final celestialBody titan;
+    
 
 
     public SolarSystemScreen(final Odyssey game) {
@@ -24,6 +33,14 @@ public class SolarSystemScreen implements Screen {
         camera.setToOrtho(false, 1920, 1080); // create a camera
 
         this.sun = new celestialBody("Sun"); // add all bodies here
+        this.mercury = new celestialBody("Mercury");
+        this.venus = new celestialBody("Venus");
+        this.earth = new celestialBody("Earth");
+        this.moon = new celestialBody("Moon");
+        this.mars = new celestialBody("Mars");
+        this.jupiter = new celestialBody("Jupiter");
+        this.saturn = new celestialBody("Saturn");
+        this.titan = new celestialBody("Titan");
 
         // specify center of the system as center of the sun
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - sun.getTexture().getWidth()) / 2.0f ,
@@ -46,6 +63,14 @@ public class SolarSystemScreen implements Screen {
         game.batch.begin();
 
         game.batch.draw(sun.getTexture(), centerScreenCords.x, centerScreenCords.y, sun.getTexture().getWidth(), sun.getTexture().getHeight());
+        game.batch.draw(mercury.getTexture(), centerScreenCords.x + (float)mercury.getLocation().x, centerScreenCords.y + (float)mercury.getLocation().y,sun.getTexture().getWidth(), sun.getTexture().getHeight());
+        game.batch.draw(venus.getTexture(), centerScreenCords.x + (float)venus.getLocation().x, centerScreenCords.y + (float)venus.getLocation().y, sun.getTexture().getWidth(), sun.getTexture().getHeight());
+        game.batch.draw(earth.getTexture(), centerScreenCords.x + (float)earth.getLocation().x, centerScreenCords.y + (float)earth.getLocation().y,sun.getTexture().getWidth(), sun.getTexture().getHeight());
+        game.batch.draw(moon.getTexture(), centerScreenCords.x + (float)moon.getLocation().x, centerScreenCords.y + (float)moon.getLocation().y,sun.getTexture().getWidth(), sun.getTexture().getHeight());
+        game.batch.draw(mars.getTexture(), centerScreenCords.x + (float)mars.getLocation().x, centerScreenCords.y + (float)mars.getLocation().y,sun.getTexture().getWidth(), sun.getTexture().getHeight());
+        game.batch.draw(jupiter.getTexture(), centerScreenCords.x + (float)jupiter.getLocation().x, centerScreenCords.y + (float)jupiter.getLocation().y,sun.getTexture().getWidth(), sun.getTexture().getHeight());
+        game.batch.draw(saturn.getTexture(), centerScreenCords.x + (float)saturn.getLocation().x, centerScreenCords.y + (float)saturn.getLocation().y,sun.getTexture().getWidth(), sun.getTexture().getHeight());
+        game.batch.draw(titan.getTexture(), centerScreenCords.x + (float)titan.getLocation().x, centerScreenCords.y + (float)titan.getLocation().y,sun.getTexture().getWidth(), sun.getTexture().getHeight());
 
         game.batch.end();
     }
@@ -76,5 +101,13 @@ public class SolarSystemScreen implements Screen {
     @Override
     public void dispose() {
         sun.getTexture().dispose();
+        mercury.getTexture().dispose();
+        venus.getTexture().dispose();
+        earth.getTexture().dispose();
+        moon.getTexture().dispose();
+        mars.getTexture().dispose();
+        jupiter.getTexture().dispose();
+        saturn.getTexture().dispose();
+        titan.getTexture().dispose();
     }
 }

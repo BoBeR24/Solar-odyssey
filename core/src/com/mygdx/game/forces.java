@@ -1,6 +1,5 @@
-package core.src.com.mygdx.game;
-
-import com.mygdx.game.vector;
+package com.mygdx.game;
+//import com.mygdx.game.vector;
 
 // Calculates forces between a Planet and Spacecraft
 
