@@ -17,7 +17,7 @@ public class GravForce extends SystemProperties{
     }
 
 
-    public void GravForceSun(){
+    public Vector GravForceSun(){
        int index = entities.get("Sun");
         //first part of the formula
        double firstPart = Gravcst*ProbeMass*masses[index];
@@ -27,17 +27,41 @@ public class GravForce extends SystemProperties{
        Vector sum = numerateur.Add(Xi, Xi/*need to have the coordinate of the probe */);
 
 
-       Vector denominateur = new Vector(0, 0, 0);
-       //faire en sorte d'avoir -Xj
-       Vector sumdown = denominateur.Add(Xi, denominateur);
-       double x = sumdown.getX();
-       double y = sumdown.getY();
-       double z = sumdown.getZ();
-       Vector fin = sumdown.set(x*x*x, y*y*y, z*z*z);
-        System.out.println(fin.toString());
-       //pour la division use .getX,etcc, puis multiplier denom*(1/nume) puis set dans un vector 
-       Vector test = new Vector(0, 0, 0);
-       
+       double X1 = Xi.getX();
+       double Y1 = Xi.getY();
+       double Z1 = Xi.getZ();
+       /*then need the position of the probe gonna put some random value for now */
+       double Xmin = X1 - 1;
+       double Ymin = Y1 - 1;
+       double Zmin = Z1 - 1;
+       Xmin = Xmin*Xmin;
+       Ymin = Ymin*Ymin;
+       Zmin = Zmin*Zmin;
+       double denom = Math.sqrt(Xmin+Ymin+Zmin);
+
+       double multplicateur = firstPart/denom;
+       double a = sum.getX();
+       double b = sum.getY();
+       double c = sum.getZ();
+
+       a = a*multplicateur;
+       b = b*multplicateur;
+       c = c*multplicateur;
+
+       Vector finalForce = new Vector(a, b, c);
+       System.out.println(finalForce.toString());
+
+       return finalForce;
+
+
+
+
+
+
+
+
+
+
 
        
        //combine les 2 partie 
