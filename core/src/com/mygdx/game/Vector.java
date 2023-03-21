@@ -42,12 +42,25 @@ public class Vector {
     }
 
     /**
-     * Applies mathematical operation of multiplying two vectors
+     * Applies mathematical operation of the vector and scalar value
      **/
-    public Vector multiply(double scalingfactor){
-        return set((this.x * scalingfactor), (this.y * scalingfactor), (this.z * scalingfactor));
+    public Vector multiply(double scalingFactor){
+        return set((this.x * scalingFactor), (this.y * scalingFactor), (this.z * scalingFactor)); // - both changes values and returns them
+//        return new Vector((this.x * scalingFactor), (this.y * scalingFactor), (this.z * scalingFactor)); - doesn't change values of this. matrix
+
     }
 
+    /**
+     * Applies mathematical operation of multiplying two vectors
+    * */
+    public Vector multiply(Vector vector) {
+           return multiply(vector.x);
+    }
+
+
+    public double getLength(){
+        return sqrt((x*x)+(y*y)+(z*z));
+    }
 
     /**
      * Overrides toString function to print vector
@@ -55,9 +68,5 @@ public class Vector {
     @Override
     public String toString() {
         return "(" + x + "," + y + "," + z + ")";
-    }
-
-    public double getLength(){
-        return sqrt((x*x)+(y*y)+(z*z));
     }
 }

@@ -26,23 +26,6 @@ public class celestialBody{
         this.radius = SystemProperties.radii[id];
         this.location = SystemProperties.coordinates[id];
         this.velocity = SystemProperties.velocities[id];
-
-//        Pixmap pixmap = new Pixmap(Gdx.files.internal(name + ".png"));
-
-        this.texture = new Texture(Gdx.files.internal(name + ".png"));
-    }
-
-    /**
-     * Not used for now
-     * */
-    public Pixmap resize(Pixmap pixmap) {
-
-        Pixmap pixmap100 = new Pixmap(100, 100, pixmap.getFormat()); // pixmap(sprite) reduced to 100px
-
-        pixmap100.drawPixmap(pixmap, 0, 0, pixmap100.getWidth(), pixmap100.getHeight(),
-                0, 0, pixmap100.getWidth(), pixmap100.getHeight());
-
-        return pixmap100;
     }
 
     public String getName(){
