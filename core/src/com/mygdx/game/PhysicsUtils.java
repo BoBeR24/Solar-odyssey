@@ -6,10 +6,13 @@ public class PhysicsUtils{
 
     //Still have to change
     public final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
-    public final static int STEPSIZE = 86400;
+    public final static int STEPSIZE = 1800;
     private final static Vector[] velocities = SystemProperties.velocities;
     private final static Vector[] coordinates = SystemProperties.coordinates;
     private final static double[] masses = SystemProperties.masses;
+
+    public final static Vector[] coordinates_nextState = coordinates.clone();
+    public final static Vector[] velocities_nextState = velocities.clone();
     private static int counter = 0;
 
     public static void updateBody(celestialBody body){
@@ -20,7 +23,6 @@ public class PhysicsUtils{
                 continue;
             }
 
-
                 double scalingFactor = gravitationalConstant * planet.getMass() * body.getMass() * (-1);
 
                 Vector planetVector = planet.getLocation();
@@ -30,16 +32,16 @@ public class PhysicsUtils{
 
                 double magnitude = Math.pow(force.magnitude(), 3);
 
-                force.multiply(scalingFactor / magnitude);
+                force = force.multiply(scalingFactor / magnitude);
 
-                forcesSum.add(force);
+                forcesSum = forcesSum.add(force);
         }
 
-        if (counter < 2) {
-            System.out.println(forcesSum);
-            counter++;
-        }
-
+//        System.out.println(body.getName() + forcesSum + " step: " + counter);
+//        if (counter < 2) {
+//            counter++;
+//        }
+        counter++;
         updateVelocity(body, forcesSum);
         updateCoordinate(body);
         
@@ -47,13 +49,18 @@ public class PhysicsUtils{
     
      private static void updateVelocity(celestialBody body, Vector forcesSum){
         int index = body.getId();
-         velocities[index].set(velocities[index].x + ((forcesSum.x) * STEPSIZE) / masses[index], velocities[index].y +
+         velocities_nextState[index].set(velocities[index].x + ((forcesSum.x) * STEPSIZE) / masses[index], velocities[index].y +
                  ((forcesSum.y) * STEPSIZE) / masses[index], velocities[index].z + ((forcesSum.z) * STEPSIZE) / masses[index]);
     }
 
     private static void updateCoordinate(celestialBody body){
         int index = body.getId();
-        coordinates[index].set((coordinates[index].x + velocities[index].x * STEPSIZE), (coordinates[index].y +
+
+//        for (int i = 0; i < coordinates_nextState.length; i++) {
+//            coordinates_nextState[i] = new Vector(0.0, 0.0, 0.0);
+//        }
+
+        coordinates_nextState[index].set((coordinates[index].x + velocities[index].x * STEPSIZE), (coordinates[index].y +
                 velocities[index].y * STEPSIZE), (coordinates[index].z + velocities[index].z * STEPSIZE));
 
         
