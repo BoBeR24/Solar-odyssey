@@ -1,10 +1,8 @@
 package com.mygdx.game;
 
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+
+import java.util.Objects;
 
 /**
  * Class representing all bodies in simulated system
@@ -33,7 +31,7 @@ public class celestialBody{
 
         this.color = Color.WHITE; // default color
 
-        if (this.name == "Sun") {
+        if (Objects.equals(this.name, "Sun")) {
             this.width = this.radius / (SolarSystem.SIZE_FACTOR * 8); // default width and height
             this.height = this.radius / (SolarSystem.SIZE_FACTOR * 8);
 
@@ -48,9 +46,25 @@ public class celestialBody{
         this.color = color;
     }
 
-//    public rescale() {
-//
-//    }
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setLocation(double x, double y, double z) {
+        SystemProperties.coordinates[id].x = x;
+        SystemProperties.coordinates[id].y = y;
+        SystemProperties.coordinates[id].z = z;
+    }
+
+    public void setVelocity(double x, double y, double z) {
+         SystemProperties.velocities[id].x = x;
+         SystemProperties.velocities[id].y = y;
+         SystemProperties.velocities[id].z = z;
+    }
 
     public String getName(){
         return name;
@@ -84,8 +98,4 @@ public class celestialBody{
     public int getWidth() {
         return width;
     }
-
-    //    public Texture getTexture() {
-//        return texture;
-//    }
 }

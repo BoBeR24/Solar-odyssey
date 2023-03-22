@@ -1,7 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.math.Vector3;
-
 import static java.lang.Math.sqrt;
 
 /** Implementation of Vector class for double data type */
@@ -60,6 +58,9 @@ public class Vector {
     }
 
 
+    /**
+     * Calculates magnitude of the current vector
+     * */
     public double magnitude(){
         return sqrt((x * x) + (y * y) + (z * z));
     }
