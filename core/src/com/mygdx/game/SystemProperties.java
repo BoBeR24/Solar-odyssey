@@ -17,7 +17,7 @@ public class SystemProperties {
             new Vector(1253801723.95465,-760453007.810989,-36697431.1565206 ),
             new Vector(1254501624.95946,-761340299.067828,-36309613.8378104 ),
             new Vector(4454487339.09447,-397895128.763904,-94464151.3421107 ),
-            new Vector(1958732435.99338,2191808553.21893,-17235283.8321992 )
+            new Vector(1958732435.99338,2191808553.21893,-17235283.8321992)
     };
 
     final public static Vector[] velocities = {new Vector(0.0, 0.0, 0.0),
@@ -28,7 +28,6 @@ public class SystemProperties {
             new Vector(0.447991656952326,5.44610697514907,-0.122638125365954),new Vector(-5.12766216337626,4.22055347264457,0.0821190336403063)};
 
     final public static double[] masses={1.9885e30,3.302e23,48.685E23,5.97219E24,7.349e22,6.4171e23,1.89818722e19,5.6834e26,13455.3e19,102.409e24,86.813e24};
-    final public static double[] radii ={1,1,1,6370,1,1,1,1,2575,1,1};
-    // temporary filled with ones as we don't use radii of any planets except Earth and Titan
+    final public static int[] radii ={696340, 2440, 6052, 6370, 1737, 3390, 69911, 58232, 2575, 24622, 25362};
 
 }

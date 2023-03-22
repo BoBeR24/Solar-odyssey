@@ -8,27 +8,30 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.ArrayList;
+
 /**
  * Screen in which solar system simulation happens
  * */
 public class SolarSystemScreen implements Screen {
 
-    final Odyssey game;
-    OrthographicCamera camera;
-    private final Vector3 centerScreenCords;
-    final celestialBody sun;
-    final celestialBody mercury;
-    final celestialBody venus;
-    final celestialBody earth;
-    final celestialBody moon;
-    final celestialBody mars;
-    final celestialBody jupiter;
-    final celestialBody saturn;
-    final celestialBody titan;
-    final celestialBody neptune;
-    final celestialBody uranus;
+    private final Odyssey game;
+    private final OrthographicCamera camera;
+    private final SimulationLogic logic;
 
-    final double scalingFactor = 407734; // pre-calculated scaling factor
+    private final celestialBody sun;
+    private final celestialBody mercury;
+    private final celestialBody venus;
+    private final celestialBody earth;
+    private final celestialBody moon;
+    private final celestialBody mars;
+    private final celestialBody jupiter;
+    private final celestialBody saturn;
+    private final celestialBody titan;
+    private final celestialBody neptune;
+    private final celestialBody uranus;
+
+    private ArrayList<celestialBody> bodies = SolarSystem.bodies; // list of all bodies
     
 
 
@@ -40,23 +43,54 @@ public class SolarSystemScreen implements Screen {
         camera.zoom = 5f;
         camera.update(); // update camera
         game.shape.setProjectionMatrix(camera.combined);
+        this.logic = new SimulationLogic(game); // class which updates state of the game
 
 
         this.sun = new celestialBody("Sun"); // add all bodies here
+        sun.setColor(Color.YELLOW);
+        bodies.add(sun);
+
         this.mercury = new celestialBody("Mercury");
+        mercury.setColor(Color.valueOf("#C0C2C9"));
+        bodies.add(mercury);
+
         this.venus = new celestialBody("Venus");
+        venus.setColor(Color.valueOf("#f7e4ab"));
+        bodies.add(venus);
+
         this.earth = new celestialBody("Earth");
+        earth.setColor(Color.BLUE);
+        bodies.add(earth);
+
         this.moon = new celestialBody("Moon");
+        mercury.setColor(Color.WHITE);
+        bodies.add(moon);
+
         this.mars = new celestialBody("Mars");
+        mars.setColor(Color.valueOf("#D6723B"));
+        bodies.add(mars);
+
         this.jupiter = new celestialBody("Jupiter");
+        jupiter.setColor(Color.valueOf("#c99039"));
+        bodies.add(jupiter);
+
         this.saturn = new celestialBody("Saturn");
+        saturn.setColor(Color.valueOf("#cae8b0c"));
+        bodies.add(saturn);
+
         this.titan = new celestialBody("Titan");
+        titan.setColor(Color.valueOf("#f2a900"));
+        bodies.add(titan);
+
         this.neptune = new celestialBody("Neptune");
+        neptune.setColor(Color.valueOf("#d1e7e7"));
+        bodies.add(neptune);
+
         this.uranus = new celestialBody("Uranus");
+        uranus.setColor(Color.valueOf("#5b5ddf"));
+        bodies.add(uranus);
 
         // specify center of the system as center of the sun
-        this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
-                (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
     }
 
     /**
@@ -75,50 +109,7 @@ public class SolarSystemScreen implements Screen {
 
         game.shape.begin(ShapeType.Filled);
 
-        //  adding the Sun
-        game.shape.setColor(Color.YELLOW);
-        game.shape.ellipse(centerScreenCords.x, centerScreenCords.y, 218, 218);
-
-        // adding Mercury
-        game.shape.setColor(Color.valueOf("#C0C2C9"));
-        game.shape.ellipse((float) (centerScreenCords.x + (mercury.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (mercury.getLocation().y / scalingFactor)), 12, 12);
-
-        // adding Venus
-        game.shape.setColor(Color.valueOf("#f7e4ab"));
-        game.shape.ellipse((float) (centerScreenCords.x + (venus.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (venus.getLocation().y / scalingFactor)), 30, 30);
-
-        // adding Earth
-        game.shape.setColor(Color.BLUE);
-        game.shape.ellipse((float) (centerScreenCords.x + (earth.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (earth.getLocation().y / scalingFactor)), 32, 32);
-
-        // adding Moon
-        game.shape.setColor(Color.WHITE);
-        game.shape.ellipse((float) (centerScreenCords.x + (moon.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (moon.getLocation().y / scalingFactor)), 8, 8);
-
-        // adding Mars
-        game.shape.setColor(Color.valueOf("#D6723B"));
-        game.shape.ellipse((float) (centerScreenCords.x + (mars.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (mars.getLocation().y / scalingFactor)), 17, 17);
-
-        // adding Jupiter(this thing is huge)
-        game.shape.setColor(Color.valueOf("#c99039"));
-        game.shape.ellipse((float) (centerScreenCords.x + (jupiter.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (jupiter.getLocation().y / scalingFactor)), 351, 351);
-
-        // adding Saturn
-        game.shape.setColor(Color.valueOf("#ae8b0c"));
-        game.shape.ellipse((float) (centerScreenCords.x + (saturn.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (saturn.getLocation().y / scalingFactor)), 292, 292);
-
-        // adding Titan
-        game.shape.setColor(Color.valueOf("#f2a900"));
-        game.shape.ellipse((float) (centerScreenCords.x + (titan.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (titan.getLocation().y / scalingFactor)), 13, 13);
-
-        // adding Uranus
-        game.shape.setColor(Color.valueOf("#d1e7e7"));
-        game.shape.ellipse((float) (centerScreenCords.x + (uranus.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (uranus.getLocation().y / scalingFactor)), 128, 128);
-
-        // adding Neptune
-        game.shape.setColor(Color.valueOf("#5b5ddf"));
-        game.shape.ellipse((float) (centerScreenCords.x + (neptune.getLocation().x / scalingFactor)), (float) (centerScreenCords.y + (neptune.getLocation().y / scalingFactor)), 128, 128);
-
+        logic.update();
 
         game.shape.end();
 
@@ -138,10 +129,10 @@ public class SolarSystemScreen implements Screen {
 //        game.batch.draw(earth.getTexture(), centerScreenCords.x + (float)earth.getLocation().x, centerScreenCords.y + (float)earth.getLocation().y,sun.getTexture().getWidth(), sun.getTexture().getHeight());
 //        game.batch.draw(earth.getTexture(), centerScreenCords.x + 250, centerScreenCords.y + 250,earth.getTexture().getWidth(), earth.getTexture().getHeight());
 //        Vector3
-//        earth.getLocation().set(earth.getLocation().multiply(1.0 / scalingFactor));
-//        System.out.println(earth.getLocation().multiply(1.0 / scalingFactor));
-//        game.batch.draw(earth.getTexture(), (float) (centerScreenCords.x + earth.getLocation().x / scalingFactor), (float) (centerScreenCords.y + earth.getLocation().y / scalingFactor), earth.getTexture().getWidth(), earth.getTexture().getHeight());
-//        game.batch.draw(moon.getTexture(), (float) (centerScreenCords.x + moon.getLocation().x / scalingFactor), (float) (centerScreenCords.y + moon.getLocation().y / scalingFactor), moon.getTexture().getWidth(), moon.getTexture().getHeight());
+//        earth.getLocation().set(earth.getLocation().multiply(1.0 / scaleFactor));
+//        System.out.println(earth.getLocation().multiply(1.0 / scaleFactor));
+//        game.batch.draw(earth.getTexture(), (float) (centerScreenCords.x + earth.getLocation().x / scaleFactor), (float) (centerScreenCords.y + earth.getLocation().y / scaleFactor), earth.getTexture().getWidth(), earth.getTexture().getHeight());
+//        game.batch.draw(moon.getTexture(), (float) (centerScreenCords.x + moon.getLocation().x / scaleFactor), (float) (centerScreenCords.y + moon.getLocation().y / scaleFactor), moon.getTexture().getWidth(), moon.getTexture().getHeight());
 
 //        game.batch.end();
     }
@@ -171,14 +162,6 @@ public class SolarSystemScreen implements Screen {
 
     @Override
     public void dispose() {
-        sun.getTexture().dispose();
-        mercury.getTexture().dispose();
-        venus.getTexture().dispose();
-        earth.getTexture().dispose();
-        moon.getTexture().dispose();
-        mars.getTexture().dispose();
-        jupiter.getTexture().dispose();
-        saturn.getTexture().dispose();
-        titan.getTexture().dispose();
+        logic.close();
     }
 }
