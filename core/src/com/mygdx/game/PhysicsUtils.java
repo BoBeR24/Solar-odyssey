@@ -31,6 +31,20 @@ public class PhysicsUtils{
 
 
         return forcesSum;
+        
+    }
+    
+     public void newVelocity(){
+        int index = entities.get(planet); 
+        velocities[index].set(velocities[index].x+ ((finalForce.x)*3600)/masses[index], velocities[index].y+ ((finalForce.y)*3600)/masses[index], velocities[index].z+ ((finalForce.z)*3600)/masses[index]);
+
+    }
+
+    public void newCoordinate(){
+        int index = entities.get(planet);
+        coordinates[index].set((coordinates[index].x+velocities[index].x)*3600, (coordinates[index].y+velocities[index].y)*3600, (coordinates[index].z+velocities[index].z)*3600);
+
+        
     }
 
 }
