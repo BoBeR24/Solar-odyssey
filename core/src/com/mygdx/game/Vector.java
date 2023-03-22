@@ -58,7 +58,7 @@ public class Vector {
     }
 
 
-    public double getLength(){
+    public double magnitude(){
         return sqrt((x*x)+(y*y)+(z*z));
     }
 

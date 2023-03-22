@@ -22,7 +22,7 @@ public class PhysicsUtils{
 
                 Vector force = Spacecraftvector.subtract(planetvector);
 
-                double magnitude = Math.pow(force.getLength(), 3);
+                double magnitude = Math.pow(force.magnitude(), 3);
 
                 force.multiply(scalingFactor / magnitude);
 
