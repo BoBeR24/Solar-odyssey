@@ -47,8 +47,8 @@ public class PhysicsUtils{
 
     private static void updateCoordinate(celestialBody body){
         int index = body.getId();
-        coordinates[index].set((coordinates[index].x + velocities[index].x) * STEPSIZE, (coordinates[index].y +
-                velocities[index].y) * STEPSIZE, (coordinates[index].z + velocities[index].z) * STEPSIZE);
+        coordinates[index].set((coordinates[index].x + velocities[index].x* STEPSIZE) , (coordinates[index].y +
+                velocities[index].y* STEPSIZE) , (coordinates[index].z + velocities[index].z* STEPSIZE) );
 
         
     }
