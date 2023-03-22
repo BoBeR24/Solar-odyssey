@@ -19,17 +19,17 @@ public class SolarSystemScreen implements Screen {
     private final OrthographicCamera camera;
     private final SimulationLogic logic;
 
-    private final celestialBody sun;
-    private final celestialBody mercury;
-    private final celestialBody venus;
-    private final celestialBody earth;
-    private final celestialBody moon;
-    private final celestialBody mars;
-    private final celestialBody jupiter;
-    private final celestialBody saturn;
-    private final celestialBody titan;
-    private final celestialBody neptune;
-    private final celestialBody uranus;
+    private  celestialBody sun;
+    private  celestialBody mercury;
+    private  celestialBody venus;
+    private  celestialBody earth;
+    private  celestialBody moon;
+    private  celestialBody mars;
+    private  celestialBody jupiter;
+    private  celestialBody saturn;
+    private  celestialBody titan;
+    private  celestialBody neptune;
+    private  celestialBody uranus;
 
     private ArrayList<celestialBody> bodies = SolarSystem.bodies; // list of all bodies
     
@@ -39,7 +39,7 @@ public class SolarSystemScreen implements Screen {
         this.game = game;
 
         this.camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(),Gdx.graphics.getHeight()); // create a camera
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // create a camera
         camera.zoom = 5f;
         camera.update(); // update camera
         game.shape.setProjectionMatrix(camera.combined);
@@ -49,49 +49,50 @@ public class SolarSystemScreen implements Screen {
         this.sun = new celestialBody("Sun"); // add all bodies here
         sun.setColor(Color.YELLOW);
         bodies.add(sun);
-
-        this.mercury = new celestialBody("Mercury");
-        mercury.setColor(Color.valueOf("#C0C2C9"));
-        bodies.add(mercury);
-
-        this.venus = new celestialBody("Venus");
-        venus.setColor(Color.valueOf("#f7e4ab"));
-        bodies.add(venus);
+//
+//        this.mercury = new celestialBody("Mercury");
+//        mercury.setColor(Color.valueOf("#C0C2C9"));
+//        bodies.add(mercury);
+//
+//        this.venus = new celestialBody("Venus");
+//        venus.setColor(Color.valueOf("#f7e4ab"));
+//        bodies.add(venus);
 
         this.earth = new celestialBody("Earth");
         earth.setColor(Color.BLUE);
         bodies.add(earth);
-
-        this.moon = new celestialBody("Moon");
-        mercury.setColor(Color.WHITE);
-        bodies.add(moon);
-
-        this.mars = new celestialBody("Mars");
-        mars.setColor(Color.valueOf("#D6723B"));
-        bodies.add(mars);
-
-        this.jupiter = new celestialBody("Jupiter");
-        jupiter.setColor(Color.valueOf("#c99039"));
-        bodies.add(jupiter);
-
-        this.saturn = new celestialBody("Saturn");
-        saturn.setColor(Color.valueOf("#cae8b0c"));
-        bodies.add(saturn);
-
-        this.titan = new celestialBody("Titan");
-        titan.setColor(Color.valueOf("#f2a900"));
-        bodies.add(titan);
-
-        this.neptune = new celestialBody("Neptune");
-        neptune.setColor(Color.valueOf("#d1e7e7"));
-        bodies.add(neptune);
-
-        this.uranus = new celestialBody("Uranus");
-        uranus.setColor(Color.valueOf("#5b5ddf"));
-        bodies.add(uranus);
+//
+//        this.moon = new celestialBody("Moon");
+//        mercury.setColor(Color.WHITE);
+//        bodies.add(moon);
+//
+//        this.mars = new celestialBody("Mars");
+//        mars.setColor(Color.valueOf("#D6723B"));
+//        bodies.add(mars);
+//
+//        this.jupiter = new celestialBody("Jupiter");
+//        jupiter.setColor(Color.valueOf("#c99039"));
+//        bodies.add(jupiter);
+//
+//        this.saturn = new celestialBody("Saturn");
+//        saturn.setColor(Color.valueOf("#cae8b0c"));
+//        bodies.add(saturn);
+//
+//        this.titan = new celestialBody("Titan");
+//        titan.setColor(Color.valueOf("#f2a900"));
+//        bodies.add(titan);
+//
+//        this.neptune = new celestialBody("Neptune");
+//        neptune.setColor(Color.valueOf("#d1e7e7"));
+//        bodies.add(neptune);
+//
+//        this.uranus = new celestialBody("Uranus");
+//        uranus.setColor(Color.valueOf("#5b5ddf"));
+//        bodies.add(uranus);
 
         // specify center of the system as center of the sun
     }
+
 
     /**
      * Called when screen appears
@@ -110,6 +111,7 @@ public class SolarSystemScreen implements Screen {
         game.shape.begin(ShapeType.Filled);
 
         logic.update();
+
 
         game.shape.end();
 
@@ -147,6 +149,7 @@ public class SolarSystemScreen implements Screen {
 
     @Override
     public void pause() {
+        System.out.println("a");
 
     }
 

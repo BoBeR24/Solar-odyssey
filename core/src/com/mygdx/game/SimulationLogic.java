@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Odyssey;
 import com.mygdx.game.SolarSystem;
 
+import java.util.Arrays;
+
 public class SimulationLogic {
     private Odyssey game;
     private final double scaleFactor = SolarSystem.scaleFactor; // pre-calculated scaling factor
@@ -24,6 +26,10 @@ public class SimulationLogic {
     public void update(){
 
         for (celestialBody body : SolarSystem.bodies) {
+            PhysicsUtils.updateBody(body);
+
+//            System.out.println(Arrays.toString(SystemProperties.coordinates));
+
             game.shape.setColor(body.getColor());
             game.shape.ellipse((float) (centerScreenCords.x + (body.getLocation().x / scaleFactor) - (body.getWidth() / 2)), (float) (centerScreenCords.y + (body.getLocation().y / scaleFactor) - (body.getHeight()) / 2), body.getWidth(), body.getHeight());
 
