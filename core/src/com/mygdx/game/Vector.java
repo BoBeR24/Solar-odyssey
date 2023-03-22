@@ -20,34 +20,36 @@ public class Vector {
      * Updates current values with values from input
      **/
     public Vector set(double x, double y, double z){
-        this.x=x;
-        this.y=y;
-        this.z=z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
 
         return this;
+    }
+
+    public Vector set(Vector vector){
+        return set(vector.x, vector.y, vector.z);
     }
 
     /**
      * Applies mathematical operation of summing two vectors
      **/
     public Vector add(Vector b){
-        return set((this.x + b.x), (this.y + b.y), (this.z + b.z));
+        return new Vector((this.x + b.x), (this.y + b.y), (this.z + b.z));
     }
 
     /**
      * Applies mathematical operation of subtracting two vectors
      **/
     public Vector subtract(Vector b){
-        return set((this.x - b.x), (this.y - b.y), (this.z - b.z));
+        return new Vector((this.x - b.x), (this.y - b.y), (this.z - b.z));
     }
 
     /**
      * Applies mathematical operation of the vector and scalar value
      **/
     public Vector multiply(double scalingFactor){
-        return set((this.x * scalingFactor), (this.y * scalingFactor), (this.z * scalingFactor)); // - both changes values and returns them
-//        return new Vector((this.x * scalingFactor), (this.y * scalingFactor), (this.z * scalingFactor)); - doesn't change values of this. matrix
-
+        return new Vector((this.x * scalingFactor), (this.y * scalingFactor), (this.z * scalingFactor)); // - both changes values and returns them
     }
 
     /**
@@ -59,7 +61,7 @@ public class Vector {
 
 
     public double magnitude(){
-        return sqrt((x*x)+(y*y)+(z*z));
+        return sqrt((x * x) + (y * y) + (z * z));
     }
 
     /**

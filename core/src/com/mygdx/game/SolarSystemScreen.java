@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
@@ -19,17 +20,17 @@ public class SolarSystemScreen implements Screen {
     private final OrthographicCamera camera;
     private final SimulationLogic logic;
 
-    private final celestialBody sun;
-    private final celestialBody mercury;
-    private final celestialBody venus;
-    private final celestialBody earth;
-    private final celestialBody moon;
-    private final celestialBody mars;
-    private final celestialBody jupiter;
-    private final celestialBody saturn;
-    private final celestialBody titan;
-    private final celestialBody neptune;
-    private final celestialBody uranus;
+    private  celestialBody sun;
+    private  celestialBody mercury;
+    private  celestialBody venus;
+    private  celestialBody earth;
+    private  celestialBody moon;
+    private  celestialBody mars;
+    private  celestialBody jupiter;
+    private  celestialBody saturn;
+    private  celestialBody titan;
+    private  celestialBody neptune;
+    private  celestialBody uranus;
 
     private ArrayList<celestialBody> bodies = SolarSystem.bodies; // list of all bodies
     
@@ -39,7 +40,7 @@ public class SolarSystemScreen implements Screen {
         this.game = game;
 
         this.camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(),Gdx.graphics.getHeight()); // create a camera
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // create a camera
         camera.zoom = 5f;
         camera.update(); // update camera
         game.shape.setProjectionMatrix(camera.combined);
@@ -63,7 +64,7 @@ public class SolarSystemScreen implements Screen {
         bodies.add(earth);
 
         this.moon = new celestialBody("Moon");
-        mercury.setColor(Color.WHITE);
+        moon.setColor(Color.WHITE);
         bodies.add(moon);
 
         this.mars = new celestialBody("Mars");
@@ -93,6 +94,7 @@ public class SolarSystemScreen implements Screen {
         // specify center of the system as center of the sun
     }
 
+
     /**
      * Called when screen appears
      * */
@@ -106,10 +108,13 @@ public class SolarSystemScreen implements Screen {
     @Override
     public void render(float delta) {
         game.shape.setProjectionMatrix(camera.combined);
+        ScreenUtils.clear(0, 0, 0, 1);
+
 
         game.shape.begin(ShapeType.Filled);
 
         logic.update();
+
 
         game.shape.end();
 
@@ -147,6 +152,7 @@ public class SolarSystemScreen implements Screen {
 
     @Override
     public void pause() {
+        System.out.println("a");
 
     }
 
