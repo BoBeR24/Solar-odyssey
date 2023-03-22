@@ -30,11 +30,16 @@ public class SimulationLogic {
 
 //            System.out.println(Arrays.toString(SystemProperties.coordinates));
 
-            game.shape.setColor(body.getColor());
-            game.shape.ellipse((float) (centerScreenCords.x + (body.getLocation().x / scaleFactor) - (body.getWidth() / 2)), (float) (centerScreenCords.y + (body.getLocation().y / scaleFactor) - (body.getHeight()) / 2), body.getWidth(), body.getHeight());
 
         }
 
+        for (celestialBody body : SolarSystem.bodies) {
+            body.getLocation().set(PhysicsUtils.coordinates_nextState[body.getId()]);
+            body.getVelocity().set(PhysicsUtils.velocities_nextState[body.getId()]);
+
+            game.shape.setColor(body.getColor());
+            game.shape.ellipse((float) (centerScreenCords.x + (body.getLocation().x / scaleFactor) - (body.getWidth() / 2)), (float) (centerScreenCords.y + (body.getLocation().y / scaleFactor) - (body.getHeight()) / 2), body.getWidth(), body.getHeight());
+        }
             //  adding the Sun
 //            game.shape.setColor(Color.YELLOW);
 //            game.shape.ellipse(centerScreenCords.x, centerScreenCords.y, 218, 218);

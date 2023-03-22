@@ -20,11 +20,15 @@ public class Vector {
      * Updates current values with values from input
      **/
     public Vector set(double x, double y, double z){
-        this.x=x;
-        this.y=y;
-        this.z=z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
 
         return this;
+    }
+
+    public Vector set(Vector vector){
+        return set(vector.x, vector.y, vector.z);
     }
 
     /**
