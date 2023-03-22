@@ -44,12 +44,14 @@ public class PhysicsUtils{
     
      public static void newVelocity(celestialBody planet, Vector finalForce){
         int index = entities.get(planet.getName());
-        velocities[index].set(velocities[index].x+ ((finalForce.x)*STEPSIZE)/masses[index], velocities[index].y+ ((finalForce.y)*STEPSIZE)/masses[index], velocities[index].z+ ((finalForce.z)*STEPSIZE)/masses[index]);
+        velocities[index].set(velocities[index].x + ((finalForce.x) * STEPSIZE) / masses[index], velocities[index].y +
+                ((finalForce.y) * STEPSIZE) / masses[index], velocities[index].z + ((finalForce.z) * STEPSIZE) / masses[index]);
     }
 
     public void newCoordinate(celestialBody planet){
         int index = entities.get(planet.getName());
-        coordinates[index].set((coordinates[index].x+velocities[index].x)*STEPSIZE, (coordinates[index].y+velocities[index].y)*STEPSIZE, (coordinates[index].z+velocities[index].z)*STEPSIZE);
+        coordinates[index].set((coordinates[index].x + velocities[index].x) * STEPSIZE, (coordinates[index].y +
+                velocities[index].y) * STEPSIZE, (coordinates[index].z + velocities[index].z) * STEPSIZE);
 
         
     }
