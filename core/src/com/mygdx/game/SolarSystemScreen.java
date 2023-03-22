@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
@@ -63,7 +64,7 @@ public class SolarSystemScreen implements Screen {
         bodies.add(earth);
 
         this.moon = new celestialBody("Moon");
-        mercury.setColor(Color.WHITE);
+        moon.setColor(Color.WHITE);
         bodies.add(moon);
 
         this.mars = new celestialBody("Mars");
@@ -107,6 +108,8 @@ public class SolarSystemScreen implements Screen {
     @Override
     public void render(float delta) {
         game.shape.setProjectionMatrix(camera.combined);
+        ScreenUtils.clear(0, 0, 0, 1);
+
 
         game.shape.begin(ShapeType.Filled);
 
