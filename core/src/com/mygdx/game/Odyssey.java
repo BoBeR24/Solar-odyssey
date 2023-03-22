@@ -10,20 +10,17 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Odyssey extends Game {
 //	SpriteBatch batch;
-	ShapeRenderer shape;
-	ShapeRenderer shape2;
+	public ShapeRenderer shape;
 
 	@Override
 	public void create () {
 //		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
-		shape2 = new ShapeRenderer();
 		this.setScreen(new SolarSystemScreen(this));
 	}
 
 	@Override
 	public void render () {
-
 		super.render();
 	}
 	
