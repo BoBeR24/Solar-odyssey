@@ -30,5 +30,6 @@ public class SystemProperties {
 
     final public static double[] masses = {1.9885e30, 3.302e23, 48.685e23, 5.97219e24, 7.349e22, 6.4171e23, 1.89818722e19, 5.6834e26, 13455.3e19, 102.409e24, 86.813e24, 50000};
     final public static int[] radii = {696340, 2440, 6052, 6370, 1737, 3390, 69911, 58232, 2575, 24622, 25362, 1};
+    final public static int[] counter = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 }

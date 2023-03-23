@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -36,7 +37,7 @@ public class SolarSystemScreen implements Screen {
     
 
 
-    public SolarSystemScreen(final Odyssey game) {
+    public SolarSystemScreen(final Odyssey game) throws IOException {
         this.game = game;
 
         this.camera = new OrthographicCamera();
@@ -125,7 +126,11 @@ public class SolarSystemScreen implements Screen {
 
         game.shape.begin(ShapeType.Filled);
 
-        logic.update();
+        try {
+            logic.update();
+        } catch (IOException e) {
+            System.err.println("Error SSC");
+        }
 
         game.shape.end();
 

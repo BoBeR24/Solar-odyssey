@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.io.IOException;
+
 /**
  * class with methods for calculating and updating physical processes of bodies presented in the system
  * */
@@ -16,8 +18,9 @@ public class PhysicsUtils{
 
     /**
      * Calculates sum of the forces and initializes methods for updating velocity and coordinates
+     * @throws IOException
      * */
-    public static void updateBody(celestialBody body){
+    public static void updateBody(celestialBody body) throws IOException{
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
 
         for (celestialBody planet : SolarSystem.bodies){
@@ -51,13 +54,20 @@ public class PhysicsUtils{
                  (forcesSum.y * STEPSIZE) / masses[index], velocities[index].z + (forcesSum.z * STEPSIZE) / masses[index]);
     }
 
-    private static void updateCoordinate(celestialBody body){
+    private static void (celestialBody bupdateCoordinateody) throws IOException{
         int index = body.getId();
 
         coordinates_nextState[index].set((coordinates[index].x + velocities[index].x * STEPSIZE), (coordinates[index].y +
                 velocities[index].y * STEPSIZE), (coordinates[index].z + velocities[index].z * STEPSIZE));
 
-        
+        if(SystemProperties.counter[index] % 100 == 0){
+            SimulationLogic.fileupdate(index);
+        }
+
+        if(SystemProperties.counter[index] == 101){
+            SimulationLogic.fileclose();
+        }
+        SystemProperties.counter[index]++;
     }
 
 }

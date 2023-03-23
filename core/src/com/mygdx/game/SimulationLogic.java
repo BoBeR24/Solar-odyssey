@@ -1,5 +1,11 @@
 package com.mygdx.game;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.swing.plaf.TreeUI;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
@@ -11,10 +17,16 @@ public class SimulationLogic {
     private Odyssey game;
     private final int scaleFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
+    private final FileWriter fileWriter;
+    private static BufferedWriter writer;
+    private static boolean closed = false;
+    private static boolean[] visited = new boolean[12];
 
 
-    public SimulationLogic(final Odyssey game) {
+    public SimulationLogic(final Odyssey game) throws IOException {
         this.game = game;
+        fileWriter = new FileWriter("core\\src\\com\\mygdx\\game\\Coordinates.txt");
+        writer = new BufferedWriter(fileWriter);
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
@@ -23,8 +35,9 @@ public class SimulationLogic {
 
     /**
      * updates the current state of the simulation. Draws all objects
+     * @throws IOException
      * */
-    public void update(){
+    public void update() throws IOException{
 
         for (celestialBody body : SolarSystem.bodies) {
             PhysicsUtils.updateBody(body);
@@ -53,5 +66,35 @@ public class SimulationLogic {
      * */
     public void close(){
         System.out.println("Thank you");
+    }
+
+    public static void fileclose() throws IOException{
+        writer.close();
+        closed = true;
+    }
+
+    public static void fileupdate(int index) throws IOException{
+        boolean allVisit = true;
+        String coordinatesX;
+        String coordinatesY;
+        String coordinatesZ;
+        if(closed == false){
+
+            for(int i = 0; i < visited.length; i++){
+                if(visited[i] == false)
+                    allVisit = false;
+            }
+
+            if(allVisit != false){
+                writer.newLine();
+                visited = new boolean[12];
+            }
+            coordinatesX = String.valueOf(SystemProperties.coordinates[index].x);
+            coordinatesY = String.valueOf(SystemProperties.coordinates[index].y);
+            coordinatesZ = String.valueOf(SystemProperties.coordinates[index].z);
+            writer.write(coordinatesX + " " + coordinatesY + " " + coordinatesZ + " ");
+
+            visited[index] = true; 
+        }
     }
 }
