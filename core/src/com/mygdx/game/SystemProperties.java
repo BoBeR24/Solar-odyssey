@@ -5,7 +5,7 @@ import java.util.Hashtable;
 public class SystemProperties {
     final public static Hashtable<String, Integer> entities = new Hashtable<String, Integer>(){
         {put("Sun", 0); put("Mercury", 1); put("Venus", 2);put("Earth", 3);put("Moon", 4);put("Mars", 5);put("Jupiter", 6);put("Saturn", 7);put("Titan", 8);
-            put("Neptune", 9); put("Uranus", 10); put("Probe", 11);}
+            put("Neptune", 9); put("Uranus", 10);}
     }; // hashtable with all entities presented in the system. Key is represented by the name and value is index of the entity
 
     //BELOW GO ARRAYS OF ENTITY PROPERTIES(they're placed in an array relatively to their index)//
@@ -16,7 +16,7 @@ public class SystemProperties {
         new Vector(1253801723.95465,-760453007.810989,-36697431.1565206 ),
         new Vector(1254501624.95946,-761340299.067828,-36309613.8378104 ),
         new Vector(4454487339.09447,-397895128.763904,-94464151.3421107 ),
-        new Vector(1958732435.99338,2191808553.21893,-17235283.8321992), new Vector(0.0, 0.0, 0.0)
+        new Vector(1958732435.99338,2191808553.21893,-17235283.8321992)
     };
 
     final public static Vector[] velocities = {new Vector(0.0, 0.0, 0.0),
@@ -24,12 +24,11 @@ public class SystemProperties {
         new Vector(5.05251577575409,-29.3926687625899,0.00170974277401292),new Vector(4.34032634654904,-30.0480834180741,-0.0116103535014229),
         new Vector(-17.6954469224752,-13.4635253412947,0.152331928200531),new Vector(-4.71443059866156,12.8555096964427,0.0522118126939208),
         new Vector(4.46781341335014,8.23989540475628,-0.320745376969732),new Vector(8.99593229549645,11.1085713608453,-2.25130986174761),
-        new Vector(0.447991656952326,5.44610697514907,-0.122638125365954),new Vector(-5.12766216337626,4.22055347264457,0.0821190336403063),
-        new Vector(0.0, 0.0, 0.0)
+        new Vector(0.447991656952326,5.44610697514907,-0.122638125365954),new Vector(-5.12766216337626,4.22055347264457,0.0821190336403063)
     };
 
 
-    final public static double[] masses = {1.9885e30, 3.302e23, 48.685e23, 5.97219e24, 7.349e22, 6.4171e23, 1.89818722e19, 5.6834e26, 13455.3e19, 102.409e24, 86.813e24, 50000};
-    final public static int[] radii = {696340, 2440, 6052, 6370, 1737, 3390, 69911, 58232, 2575, 24622, 25362, 1};
+    final public static double[] masses = {1.9885e30, 3.302e23, 48.685e23, 5.97219e24, 7.349e22, 6.4171e23, 1.89818722e19, 5.6834e26, 13455.3e19, 102.409e24, 86.813e24};
+    final public static int[] radii = {696340, 2440, 6052, 6370, 1737, 3390, 69911, 58232, 2575, 24622, 25362};
 
 }

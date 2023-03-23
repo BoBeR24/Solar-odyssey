@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 
@@ -11,6 +12,8 @@ public class SimulationLogic {
     private Odyssey game;
     private final int scaleFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
+    private boolean titanReached = false;
+    private celestialBody titan = new celestialBody("Titan");
 
 
     public SimulationLogic(final Odyssey game) {
@@ -19,7 +22,12 @@ public class SimulationLogic {
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
 
-
+        for (celestialBody planet : SolarSystem.planets) {
+            if (planet.getName().equals("Titan")) {
+                this.titan = planet;
+                break;
+            }
+        }
     }
 
     /**
@@ -31,9 +39,35 @@ public class SimulationLogic {
             PhysicsUtils.updateBody(planet);
         }
 
-        for (Probe probe : SolarSystem.probes) { // updates positions for probes
-            PhysicsUtils.updateBody(probe);
-        }
+//        int counter = 0;
+//        for (Probe probe : SolarSystem.probes) { // updates positions for probes
+////            PhysicsUtils.updateBody(probe);
+//            counter++;
+//            if (counter == 2) {
+//                System.out.println((centerScreenCords.x + (probe.getLocation().x / scaleFactor)));
+//                System.out.println((centerScreenCords.y + (probe.getLocation().y / scaleFactor)));
+////                System.out.println(probe.getLocation().x);
+//            }
+//
+//            game.shape.setColor(Color.VIOLET);
+//            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - (10 / 2)),
+//                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - (10 / 2)),
+//                    250, 250);
+//        }
+//
+//        switch (Launch.BunchLaunchPaths(SolarSystem.probes, titan)) {
+//            case 0:
+//                break;
+//
+//            case 1:
+//                System.out.println("fucking yes");
+//                break;
+//
+//            case 2:
+//                System.out.println("fucking no");
+//                break;
+//        }
+
 
         for (celestialBody body : SolarSystem.planets) {
             body.getLocation().set(PhysicsUtils.coordinates_nextState[body.getId()]);
