@@ -11,10 +11,17 @@ public class SimulationLogic {
     private Odyssey game;
     private final int scaleFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
-
+    private int counter = 0;
+    private int timeDesired = 31536000;
+    //31536000 seconds in 1 year
+    private int range = 0;
 
     public SimulationLogic(final Odyssey game) {
         this.game = game;
+
+        int temp = timeDesired/PhysicsUtils.STEPSIZE;
+
+        range = timeDesired - PhysicsUtils.STEPSIZE*temp;
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
@@ -26,8 +33,26 @@ public class SimulationLogic {
      * */
     public void update(){
 
-        for (celestialBody body : SolarSystem.bodies) {
-            PhysicsUtils.updateBody(body);
+        switch (SolarSystemScreen.state){
+
+            case RUNNING:
+            counter += PhysicsUtils.STEPSIZE;
+
+            if((counter == timeDesired) || (counter+range == timeDesired) || (counter-range == timeDesired)){
+                System.out.println("Calender is Same");
+                SolarSystemScreen.state = State.PAUSED;
+                System.out.println("The Position of the Probe is: (" + SystemProperties.coordinates[11].x + ", " + SystemProperties.coordinates[11].y + ", " + SystemProperties.coordinates[11].z + ")");
+                System.out.println("The Velocity of the Probe is: (" + SystemProperties.velocities[11].x + ", " + SystemProperties.velocities[11].y + ", " + SystemProperties.velocities[11].z + ")");
+            }
+
+            for (celestialBody body : SolarSystem.bodies) {
+                PhysicsUtils.updateBody(body);
+            }
+
+            break;
+
+            default:
+                break;
         }
 
         for (celestialBody body : SolarSystem.bodies) {

@@ -18,6 +18,7 @@ public class SolarSystemScreen implements Screen {
     private final Odyssey game;
     private final OrthographicCamera camera;
     private final SimulationLogic logic;
+    public static State state = State.RUNNING;
 
     private final celestialBody sun;
     private final celestialBody mercury;
@@ -123,12 +124,13 @@ public class SolarSystemScreen implements Screen {
 
 //        logic.moveCamera(camera); // if you want to make camera follow the probe - uncomment this
 
-        game.shape.begin(ShapeType.Filled);
+            game.shape.begin(ShapeType.Filled);
 
-        logic.update();
+            logic.update();
+    
+            game.shape.end();
 
-        game.shape.end();
-
+        
     }
 
     /**

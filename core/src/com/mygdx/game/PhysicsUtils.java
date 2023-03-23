@@ -6,7 +6,7 @@ package com.mygdx.game;
 public class PhysicsUtils{
     //Still have to change
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
-    private final static int STEPSIZE = 14440;
+    public final static int STEPSIZE = 14440;
     private final static Vector[] velocities = SystemProperties.velocities;
     private final static Vector[] coordinates = SystemProperties.coordinates;
     private final static double[] masses = SystemProperties.masses;
