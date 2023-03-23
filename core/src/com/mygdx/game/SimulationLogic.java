@@ -33,39 +33,39 @@ public class SimulationLogic {
      * updates the current state of the simulation. Draws all objects
      * */
     public void update(){
+        for (int i = 0; i < 600; i++) {
+            //Determines what happens when the Solar System is PAUSED or RUNNING
+            switch (SolarSystemScreen.state) {
 
-        //Determines what happens when the Solar System is PAUSED or RUNNING
-        switch (SolarSystemScreen.state){
+                case RUNNING:
+                    counter += PhysicsUtils.STEPSIZE;
 
-            case RUNNING:
-            counter += PhysicsUtils.STEPSIZE;
+                    //Pauses when point in time is reached and displays information about probe
+                    if ((counter == timeDesired) || (counter + range == timeDesired) || (counter - range == timeDesired)) {
+                        System.out.println("Calender is Same");
+                        SolarSystemScreen.state = State.PAUSED;
+                        System.out.println("The Position of the Probe is: (" + SystemProperties.coordinates[11].x + ", " + SystemProperties.coordinates[11].y + ", " + SystemProperties.coordinates[11].z + ")");
+                        System.out.println("The Velocity of the Probe is: (" + SystemProperties.velocities[11].x + ", " + SystemProperties.velocities[11].y + ", " + SystemProperties.velocities[11].z + ")");
+                    }
 
-            //Pauses when point in time is reached and displays information about probe
-            if((counter == timeDesired) || (counter+range == timeDesired) || (counter-range == timeDesired)){
-                System.out.println("Calender is Same");
-                SolarSystemScreen.state = State.PAUSED;
-                System.out.println("The Position of the Probe is: (" + SystemProperties.coordinates[11].x + ", " + SystemProperties.coordinates[11].y + ", " + SystemProperties.coordinates[11].z + ")");
-                System.out.println("The Velocity of the Probe is: (" + SystemProperties.velocities[11].x + ", " + SystemProperties.velocities[11].y + ", " + SystemProperties.velocities[11].z + ")");
+                    for (celestialBody body : SolarSystem.bodies) {
+                        PhysicsUtils.updateBody(body);
+                    }
+
+                    break;
+
+                default:
+                    break;
             }
 
             for (celestialBody body : SolarSystem.bodies) {
-                PhysicsUtils.updateBody(body);
+                body.getLocation().set(PhysicsUtils.coordinates_nextState[body.getId()]);
+                body.getVelocity().set(PhysicsUtils.velocities_nextState[body.getId()]);
+
+                game.shape.setColor(body.getColor());
+                game.shape.ellipse((float) (centerScreenCords.x + (body.getLocation().x / scaleFactor) - (body.getWidth() / 2)), (float) (centerScreenCords.y + (body.getLocation().y / scaleFactor) - (body.getHeight()) / 2), body.getWidth(), body.getHeight());
             }
-
-            break;
-
-            default:
-                break;
         }
-
-        for (celestialBody body : SolarSystem.bodies) {
-            body.getLocation().set(PhysicsUtils.coordinates_nextState[body.getId()]);
-            body.getVelocity().set(PhysicsUtils.velocities_nextState[body.getId()]);
-
-            game.shape.setColor(body.getColor());
-            game.shape.ellipse((float) (centerScreenCords.x + (body.getLocation().x / scaleFactor) - (body.getWidth() / 2)), (float) (centerScreenCords.y + (body.getLocation().y / scaleFactor) - (body.getHeight()) / 2), body.getWidth(), body.getHeight());
-        }
-
     }
 
     public void moveCamera(OrthographicCamera camera){
