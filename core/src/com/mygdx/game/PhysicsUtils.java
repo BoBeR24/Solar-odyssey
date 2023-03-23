@@ -19,12 +19,12 @@ public class PhysicsUtils{
     * Calculates sum of the forces and initializes methods for updating velocity and coordinates
     * @param body object that the forces are being exerted on
     */
-    public static void updateBody(celestialBody body){
+    public static void updateBody(Body body){
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
 
         //Loops through all celestial bodies except itself and the probe since an object cant affect itself
-        for (celestialBody planet : SolarSystem.bodies){
-            if (planet.getId() == body.getId() || planet.getName().equals("Probe")) {
+        for (celestialBody planet : SolarSystem.planets){
+            if (planet.getName().equals(body.getName()) || planet.getClass().getSimpleName().equals("Probe")) {
                 continue;
             }
 

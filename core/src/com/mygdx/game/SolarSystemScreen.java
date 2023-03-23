@@ -95,8 +95,8 @@ public class SolarSystemScreen implements Screen {
         uranus.setColor(Color.valueOf("#5b5ddf"));
         bodies.add(uranus);
 
-        for (int i = 0; i < 100; i++) {
-            ProbeLauncher.launch(new Vector(40.0, -15.1 + i / 1000.0, -3.1 + i / 1000.0));
+        for (int i = 0; i < 1; i++) {
+            ProbeLauncher.launch(new Vector(40.0, -15.038462175, -3.168796));
         }
 
 //        ProbeLauncher.launch(new Vector(40.0, -15.1, -3.1));
