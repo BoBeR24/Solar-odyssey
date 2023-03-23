@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Class representing all bodies in simulated system
  * */
-public class celestialBody{
+public class celestialBody implements Body{
     private final String name; // name of the body
     private final double mass;   // kg
     private final int radius; // meters

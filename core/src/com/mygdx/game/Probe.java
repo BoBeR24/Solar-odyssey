@@ -1,7 +1,7 @@
 package com.mygdx.game;
 
-public class Probe extends celestialBody{
-
+public class Probe implements Body{
+    private String name;
     private double mass;
     private Vector location;
     private Vector velocity;
@@ -10,36 +10,57 @@ public class Probe extends celestialBody{
     private double distanceToTitan; // closest the probe has gotten to titan
     
 
-    Probe(String name) {
-        super(name);
-        mass = 50000;
+    Probe() {
+        this.name = "Probe";
+        this.mass = 50000;
+        this.location = SystemProperties.coordinates[3].add(new Vector(SystemProperties.radii[3], 0, 0)); // default position
+        this.velocity = SystemProperties.velocities[3]; // default velocity
+
+        this.pStart = new Vector(this.location);
+        this.vStart = new Vector(this.velocity);
     }
 
+    @Override
     public void setLocation(double x, double y, double z){
         this.location = new Vector(x, y, z);
+    }
+
+    public void setLocation(Vector vector){
+        this.setLocation(vector.x, vector.y, vector.z);
     }
 
     public void setVelocity(double x, double y, double z){
         this.velocity = new Vector(x, y, z);
     }
+
+    public void setVelocity(Vector vector){
+        this.setVelocity(vector.x, vector.y, vector.z);
+    }
+
+
     
     public Vector getLocation(){
-        return location;
+        return this.location;
     }
 
     public Vector getVelocity(){
-        return velocity;
+        return this.velocity;
     }
 
     public double getMass(){
-        return mass;
+        return this.mass;
     }
 
-    public void setPSTART(Vector p){
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    public void setPStart(Vector p){
         this.pStart = p;
     }
 
-    public Vector getPStrart(){
+    public Vector getPStart(){
         return pStart;
     }
 
@@ -48,11 +69,11 @@ public class Probe extends celestialBody{
     }
 
     public Vector getVStart(){
-        return vStart;
+        return this.vStart;
     }
 
     public double getdistanceToTitan(){
-        return distanceToTitan;
+        return this.distanceToTitan;
     }
 
     public void setDistanceToTitan(double distance){

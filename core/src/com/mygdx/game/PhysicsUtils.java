@@ -6,6 +6,7 @@ package com.mygdx.game;
 public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
+//    private final static int STEPSIZE = 86400;
     public final static int STEPSIZE = 30;
     private final static Vector[] velocities = SystemProperties.velocities;
     private final static Vector[] coordinates = SystemProperties.coordinates;
@@ -47,21 +48,42 @@ public class PhysicsUtils{
         updateCoordinate(body);
         
     }
-     //updates velocity based on the force vector, stepsize and mass of the body
-     private static void updateVelocity(celestialBody body, Vector forcesSum){
-        int index = body.getId();
+    
+    private static void updateVelocity(Body body, Vector forcesSum){
+        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
+        if (!body.getClass().getSimpleName().equals("Probe")) {
+            int index = ((celestialBody) body).getId(); // hate myself for having to do that
 
-         velocities_nextState[index].set(velocities[index].x + (forcesSum.x * STEPSIZE) / masses[index], velocities[index].y +
-                 (forcesSum.y * STEPSIZE) / masses[index], velocities[index].z + (forcesSum.z * STEPSIZE) / masses[index]);
+            velocities_nextState[index].set(velocities[index].x + (forcesSum.x * STEPSIZE) / masses[index], velocities[index].y +
+                    (forcesSum.y * STEPSIZE) / masses[index], velocities[index].z + (forcesSum.z * STEPSIZE) / masses[index]);
+
+            return;
+        }
+
+        body.setVelocity(body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(), body.getVelocity().y +
+                (forcesSum.y * STEPSIZE) / body.getMass(), body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass());
     }
-    // updates coordinates for the body based on previous coordinates, new velocity and stepsize
-    private static void updateCoordinate(celestialBody body){
-        int index = body.getId();
 
-        coordinates_nextState[index].set((coordinates[index].x + velocities[index].x * STEPSIZE), (coordinates[index].y +
-                velocities[index].y * STEPSIZE), (coordinates[index].z + velocities[index].z * STEPSIZE));
+    private static void updateCoordinate(Body body){
+       if (!body.getClass().getSimpleName().equals("Probe")) {
+           int index = ((celestialBody) body).getId();
 
-        
+           coordinates_nextState[index].set((coordinates[index].x + velocities[index].x * STEPSIZE), (coordinates[index].y +
+                   velocities[index].y * STEPSIZE), (coordinates[index].z + velocities[index].z * STEPSIZE));
+
+           return;
+       }
+
+       body.setLocation((body.getLocation().x + body.getVelocity().x * STEPSIZE), (body.getLocation().y +
+               body.getVelocity().y * STEPSIZE), (body.getLocation().z + body.getVelocity().z * STEPSIZE));
+    }
+
+    public static Vector distanceToTitan(Probe probe, celestialBody target) {
+        Vector probe_location = probe.getLocation();
+        Vector target_location = target.getLocation();
+
+//        return probe_location.subtract(target_location).magnitude();
+        return probe_location.subtract(target_location);
     }
 
 }

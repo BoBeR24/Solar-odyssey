@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 /** Implementation of Vector class for double data type */
 public class Vector {
@@ -12,6 +12,11 @@ public class Vector {
         this.x=x;
         this.y=y;
         this.z=z;
+    }
+    public Vector(Vector vector){
+        this.x = vector.x;
+        this.y = vector.y;
+        this.z = vector.z;
     }
 
     /**
@@ -36,11 +41,20 @@ public class Vector {
         return new Vector((this.x + b.x), (this.y + b.y), (this.z + b.z));
     }
 
+    public Vector add(double b){
+        return add(new Vector(b, b, b));
+    }
+
+
     /**
      * Applies mathematical operation of subtracting two vectors
      **/
     public Vector subtract(Vector b){
         return new Vector((this.x - b.x), (this.y - b.y), (this.z - b.z));
+    }
+
+    public Vector subtract(double b){
+        return subtract(new Vector(b, b, b));
     }
 
     /**
@@ -63,6 +77,24 @@ public class Vector {
      * */
     public double magnitude(){
         return sqrt((x * x) + (y * y) + (z * z));
+    }
+
+    public void rotate(double angle, char axis) {
+        if (axis == 'z') {
+            double new_X = x * cos(angle) - y * sin(angle);
+            double new_Y = x * sin(angle) + y * cos(angle);
+            this.set(new_X, new_Y, this.z);
+        }
+        else if (axis == 'x') {
+            double new_Y = y * cos(angle) - z * sin(angle);
+            double new_Z = y * sin(angle) + z * cos(angle);
+            this.set(this.x, new_Y, new_Z);
+        }
+        else if (axis == 'y') {
+            double new_X = x * cos(angle) + z * sin(angle);
+            double new_Z = (-1 * x) * sin(angle) + z * cos(angle);
+            this.set(new_X, this.y, new_Z);
+        }
     }
 
     /**
