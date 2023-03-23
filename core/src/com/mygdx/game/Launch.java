@@ -37,17 +37,18 @@ public class Launch {
             // set the x,y
             probes[i] = new Probe("probe");
             probes[i].setColor(Color.VIOLET);
-            probes[i].setLocation(Math.cos(alphaLong + i*siteRange), Math.sin(alphaLong + i*siteRange), 0);
+
             
             //randomize the z to the width and compromise with the y
             double random = Math.random()*2 - 1; // generate numbver between -1 and 1
             double alphaZ = with*random;
-            double y = Math.cos(alphaZ)*EARTHRADIUS;
             double z = Math.sin(alphaZ)*EARTHRADIUS;
             
             v = probes[i].getLocation().multiply((v.magnitude()) / (probes[i].getLocation().magnitude()));
-            
-            probes[i].setLocation(probes[i].getLocation().x + earth.getLocation().x, y + earth.getLocation().y, z + earth.getLocation().z);
+
+            Vector position = new Vector(Math.cos(alphaLong + i*siteRange), Math.sin(alphaLong + i*siteRange), z);
+            position.multiply(EARTHRADIUS / position.magnitude());
+            probes[i].setLocation(position.x, position.y, position.z);
             probes[i].setPSTART(probes[i].getLocation());
             probes[i].setVelocity(launch(earth, v).x, launch(earth, v).y, launch(earth, v).z);
             probes[i].setVSRART(probes[i].getVelocity());
@@ -55,6 +56,7 @@ public class Launch {
         return probes;
     }
     // keeps track of launched probes and evaluates them.
+    // returns a vector if all probes missed, or null of at leats one is still getting closer.
     public static Vector[] BunchLaunchPaths(Probe[] probes, celestialBody titan){
         boolean[] isDrifting = new boolean[probes.length];
         for (int i = 0; i < probes.length; i++){
