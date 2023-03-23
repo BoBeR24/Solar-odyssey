@@ -45,6 +45,8 @@ public class Launch {
             double y = Math.cos(alphaZ)*EARTHRADIUS;
             double z = Math.sin(alphaZ)*EARTHRADIUS;
             
+            v = probes[i].getLocation().multiply((v.magnitude()) / (probes[i].getLocation().magnitude()));
+            
             probes[i].setLocation(probes[i].getLocation().x + earth.getLocation().x, y + earth.getLocation().y, z + earth.getLocation().z);
             probes[i].setPSTART(probes[i].getLocation());
             probes[i].setVelocity(launch(earth, v).x, launch(earth, v).y, launch(earth, v).z);
@@ -98,6 +100,6 @@ public class Launch {
         }
         Vector v = new Vector(0, 0, 0);
         v = longBound.getVStart().add(shortBound.getVStart()).multiply(0.5);
-        return new Vector[] {longBound.getPStrart(), shortBound.getPStrart(),v};
+        return new Vector[] {longBound.getPStrart(), shortBound.getPStrart(), v};
     }
 }
