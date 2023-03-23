@@ -5,8 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
@@ -32,7 +30,7 @@ public class SolarSystemScreen implements Screen {
     private final celestialBody uranus;
     private final celestialBody probe;
 
-    private ArrayList<celestialBody> bodies = SolarSystem.bodies; // list of all bodies
+    private ArrayList<celestialBody> bodies = SolarSystem.planets; // list of all bodies
     
 
 
@@ -102,6 +100,8 @@ public class SolarSystemScreen implements Screen {
         probe.setHeight(10);
         probe.setWidth(10);
         bodies.add(probe);
+
+        Launch.launchBunch(10, earth, new Vector(earth.getLocation().x + earth.getRadius(), earth.getLocation().y - earth.getRadius(), 0), new Vector(earth.getLocation().x + earth.getRadius(), earth.getLocation().y + earth.getRadius(), 0), Math.PI / 80, new Vector(40.0, -15.0, 0));
     }
 
 
@@ -117,7 +117,7 @@ public class SolarSystemScreen implements Screen {
      * */
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1); // trails on/off
+//        ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
         game.shape.setProjectionMatrix(camera.combined);
 

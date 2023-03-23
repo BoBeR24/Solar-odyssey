@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.graphics.Color;
+import java.util.ArrayList;
 
 public class Launch {
     
@@ -14,57 +14,70 @@ public class Launch {
 
     
     // Launches an amount of probes
-    public static Probe[] launchBunch(int amount, celestialBody earth, Vector longBoundryP, Vector shortBoundryP, int with, Vector v){
-        
+    public static ArrayList<Probe> launchBunch(int amount, celestialBody earth, Vector longBoundryP, Vector shortBoundryP, double width, Vector v){
+
         // making sure that the z factor is set to the same value
         double zValue = longBoundryP.z;
         shortBoundryP.set(shortBoundryP.x, shortBoundryP.y, zValue);
 
         // making sure that the launching positions are on earth
-        if (longBoundryP.magnitude() - EARTHRADIUS != 0){longBoundryP.multiply(EARTHRADIUS/longBoundryP.magnitude());}
-        if (shortBoundryP.magnitude() - EARTHRADIUS != 0){shortBoundryP.multiply(EARTHRADIUS/shortBoundryP.magnitude());}
+        if (longBoundryP.magnitude() - EARTHRADIUS != 0){
+            longBoundryP.multiply(EARTHRADIUS/longBoundryP.magnitude());
+        }
+
+        if (shortBoundryP.magnitude() - EARTHRADIUS != 0){
+            shortBoundryP.multiply(EARTHRADIUS/shortBoundryP.magnitude());
+        }
 
         // setting the angles
         double alphaLong = Math.asin(longBoundryP.y / longBoundryP.magnitude());
-        double alphashort = Math.asin(shortBoundryP.y / shortBoundryP.magnitude()) + 2*Math.PI;
-        double range = alphashort - alphaLong; // range between long and short
+        double alphaShort = Math.asin(shortBoundryP.y / shortBoundryP.magnitude()) + 2*Math.PI;
+        double range = alphaShort - alphaLong; // range between long and short
         double siteRange = range / (amount-1); // range between sites over the x,y plane
 
-        Probe[] probes = new Probe[amount];
+//        SystemProperties.probes = new Probe[amount]; // specify amount of probes in the system
+        ArrayList<Probe> probes = SolarSystem.probes; // save to local variable
 
         for (int i = 0; i < amount; i++){
 
+            Probe probe = new Probe();
             // set the x,y
-            probes[i] = new Probe("probe");
-            probes[i].setColor(Color.VIOLET);
 
-            
             //randomize the z to the width and compromise with the y
-            double random = Math.random()*2 - 1; // generate numbver between -1 and 1
-            double alphaZ = with*random;
-            double z = Math.sin(alphaZ)*EARTHRADIUS;
-            
-            v = probes[i].getLocation().multiply((v.magnitude()) / (probes[i].getLocation().magnitude()));
+            double random = Math.random() * 2 - 1; // generate number between -1 and 1
+            double alphaZ = width * random;
+            double z = Math.sin(alphaZ) * EARTHRADIUS;
 
-            Vector position = new Vector(Math.cos(alphaLong + i*siteRange), Math.sin(alphaLong + i*siteRange), z);
-            position.multiply(EARTHRADIUS / position.magnitude());
-            probes[i].setLocation(position.x, position.y, position.z);
-            probes[i].setPSTART(probes[i].getLocation());
-            probes[i].setVelocity(launch(earth, v).x, launch(earth, v).y, launch(earth, v).z);
-            probes[i].setVSRART(probes[i].getVelocity());
+
+            Vector position = new Vector(Math.cos(alphaLong + i * siteRange), Math.sin(alphaLong + i * siteRange), z);
+            position = position.multiply(EARTHRADIUS / position.magnitude());
+
+            probe.setLocation(position.x, position.y, position.z);
+            probe.setPStart(probe.getLocation());
+
+            v = probe.getLocation().multiply((v.magnitude()) / (probe.getLocation().magnitude()));
+
+            probe.setVelocity(launch(earth, v).x, launch(earth, v).y, launch(earth, v).z);
+            probe.setVSRART(probe.getVelocity());
+
+            probes.add(probe);
         }
+
         return probes;
     }
+
     // keeps track of launched probes and evaluates them.
-    // returns a vector if all probes missed, or null of at leats one is still getting closer.
+    // returns a vector if all probes missed, or null of at least one is still getting closer.
     public static Vector[] BunchLaunchPaths(Probe[] probes, celestialBody titan){
         boolean[] isDrifting = new boolean[probes.length];
+
         for (int i = 0; i < probes.length; i++){
             double distanceOld = probes[i].getdistanceToTitan();
             double distanceCurrent = Math.abs((probes[i].getLocation().add(titan.getLocation().multiply(-1))).magnitude()); // distances to titan
-            if (distanceCurrent <= TITANRADIUS){
+
+            if (distanceCurrent <= TITANRADIUS + 300){
                 System.out.println("TITAN HIT");
-                System.out.println("launch location :" + probes[i].getPStrart().toString());
+                System.out.println("launch location :" + probes[i].getPStart().toString());
                 System.out.println("launch velocity :" + probes[i].getVStart().toString());
             }
             else if (distanceCurrent > distanceOld){
@@ -73,6 +86,7 @@ public class Launch {
                 isDrifting[i] = true;
             }
         }
+
         boolean allAreDrifting = true;
         for (int i = 0; i < isDrifting.length; i++){
             if (!isDrifting[i]){
@@ -102,6 +116,6 @@ public class Launch {
         }
         Vector v = new Vector(0, 0, 0);
         v = longBound.getVStart().add(shortBound.getVStart()).multiply(0.5);
-        return new Vector[] {longBound.getPStrart(), shortBound.getPStrart(), v};
+        return new Vector[] {longBound.getPStart(), shortBound.getPStart(), v};
     }
 }
