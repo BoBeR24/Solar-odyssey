@@ -29,10 +29,11 @@ public class SolarSystemScreen implements Screen {
     private final celestialBody titan;
     private final celestialBody neptune;
     private final celestialBody uranus;
-//    private final celestialBody probe;
+    private final Probe probe;
 
     private ArrayList<celestialBody> bodies = SolarSystem.planets; // list of all bodies
-    
+    private ArrayList<Probe> probes = SolarSystem.probes; // list of all bodies
+
 
 
     public SolarSystemScreen(final Odyssey game) {
@@ -92,6 +93,13 @@ public class SolarSystemScreen implements Screen {
         this.uranus = new celestialBody("Uranus");
         uranus.setColor(Color.valueOf("#5b5ddf"));
         bodies.add(uranus);
+
+        this.probe = new Probe();
+        for (int i = 0; i < 1; i++) {
+            probe.setVelocity(probe.getVelocity().add(new Vector(40.0, -15.0, 0))); // add initial velocity
+            probes.add(probe);
+        }
+
 //
 //        this.probe = new celestialBody("Probe");
 //        probe.setLocation(earth.getLocation().x + earth.getRadius(), earth.getLocation().y - earth.getRadius(), earth.getLocation().z);

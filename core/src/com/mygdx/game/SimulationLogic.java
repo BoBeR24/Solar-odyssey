@@ -34,40 +34,70 @@ public class SimulationLogic {
      * updates the current state of the simulation. Draws all objects
      * */
     public void update(){
+        for (int i = 0; i < 4; i++) {
+            for (celestialBody planet : SolarSystem.planets) { // updates positions for planets
+                PhysicsUtils.updateBody(planet);
+            }
 
-        for (celestialBody planet : SolarSystem.planets) { // updates positions for planets
-            PhysicsUtils.updateBody(planet);
+            //        int counter = 0;
+            //        for (Probe probe : SolarSystem.probes) { // updates positions for probes
+            ////            PhysicsUtils.updateBody(probe);
+            //            counter++;
+            //            if (counter == 2) {
+            //                System.out.println((centerScreenCords.x + (probe.getLocation().x / scaleFactor)));
+            //                System.out.println((centerScreenCords.y + (probe.getLocation().y / scaleFactor)));
+            ////                System.out.println(probe.getLocation().x);
+            //            }
+            //
+            //            game.shape.setColor(Color.VIOLET);
+            //            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - (10 / 2)),
+            //                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - (10 / 2)),
+            //                    250, 250);
+            //        }
+            //
+            //        switch (Launch.BunchLaunchPaths(SolarSystem.probes, titan)) {
+            //            case 0:
+            //                break;
+            //
+            //            case 1:
+            //                System.out.println("fucking yes");
+            //                break;
+            //
+            //            case 2:
+            //                System.out.println("fucking no");
+            //                break;
+            //        }
+
+            for (Probe probe : SolarSystem.probes) { // updates positions for probes
+                PhysicsUtils.updateBody(probe);
+
+
+                Vector dist_v = PhysicsUtils.distanceToTitan(probe, titan);
+                double dist = dist_v.magnitude();
+
+
+                if (dist < titan.getRadius() + 300) {
+                    titanReached = true;
+                }
+
+                if (titanReached) {
+                    System.out.println("reached");
+                }
+                else {
+                    System.out.println(dist_v);
+                }
+//                System.out.println(titanReached);
+            }
+
         }
 
-//        int counter = 0;
-//        for (Probe probe : SolarSystem.probes) { // updates positions for probes
-////            PhysicsUtils.updateBody(probe);
-//            counter++;
-//            if (counter == 2) {
-//                System.out.println((centerScreenCords.x + (probe.getLocation().x / scaleFactor)));
-//                System.out.println((centerScreenCords.y + (probe.getLocation().y / scaleFactor)));
-////                System.out.println(probe.getLocation().x);
-//            }
-//
-//            game.shape.setColor(Color.VIOLET);
-//            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - (10 / 2)),
-//                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - (10 / 2)),
-//                    250, 250);
-//        }
-//
-//        switch (Launch.BunchLaunchPaths(SolarSystem.probes, titan)) {
-//            case 0:
-//                break;
-//
-//            case 1:
-//                System.out.println("fucking yes");
-//                break;
-//
-//            case 2:
-//                System.out.println("fucking no");
-//                break;
-//        }
 
+        for (Probe probe : SolarSystem.probes) {
+            game.shape.setColor(Color.VIOLET);
+            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - (10 / 2)),
+                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - (10 / 2)),
+                    10, 10);
+        }
 
         for (celestialBody body : SolarSystem.planets) {
             body.getLocation().set(PhysicsUtils.coordinates_nextState[body.getId()]);
@@ -82,7 +112,7 @@ public class SimulationLogic {
     }
 
     public void moveCamera(OrthographicCamera camera){
-        Vector toFollow = SolarSystem.planets.get(11).getLocation(); // our custom vector
+        Vector toFollow = SolarSystem.probes.get(0).getLocation(); // our custom vector
         Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / scaleFactor), centerScreenCords.y + (float) (toFollow.y / scaleFactor), 0);
 
         camera.position.set(toFollow_gdx);

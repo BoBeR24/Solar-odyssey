@@ -36,11 +36,20 @@ public class Vector {
         return new Vector((this.x + b.x), (this.y + b.y), (this.z + b.z));
     }
 
+    public Vector add(double b){
+        return add(new Vector(b, b, b));
+    }
+
+
     /**
      * Applies mathematical operation of subtracting two vectors
      **/
     public Vector subtract(Vector b){
         return new Vector((this.x - b.x), (this.y - b.y), (this.z - b.z));
+    }
+
+    public Vector subtract(double b){
+        return subtract(new Vector(b, b, b));
     }
 
     /**

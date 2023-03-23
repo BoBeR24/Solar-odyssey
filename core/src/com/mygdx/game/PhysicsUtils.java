@@ -76,4 +76,12 @@ public class PhysicsUtils{
                body.getVelocity().y * STEPSIZE), (body.getLocation().z + body.getVelocity().z * STEPSIZE));
     }
 
+    public static Vector distanceToTitan(Probe probe, celestialBody target) {
+        Vector probe_location = probe.getLocation();
+        Vector target_location = target.getLocation();
+
+//        return probe_location.subtract(target_location).magnitude();
+        return probe_location.subtract(target_location);
+    }
+
 }

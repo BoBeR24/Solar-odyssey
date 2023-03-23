@@ -13,6 +13,8 @@ public class Probe implements Body{
     Probe() {
         this.name = "Probe";
         this.mass = 50000;
+        this.location = SystemProperties.coordinates[3].add(new Vector(SystemProperties.radii[0], SystemProperties.radii[0],0)); // default position
+        this.velocity = SystemProperties.velocities[3]; // default velocity
     }
 
     @Override
@@ -20,9 +22,19 @@ public class Probe implements Body{
         this.location = new Vector(x, y, z);
     }
 
+    public void setLocation(Vector vector){
+        this.setVelocity(vector.x, vector.y, vector.z);
+    }
+
     public void setVelocity(double x, double y, double z){
         this.velocity = new Vector(x, y, z);
     }
+
+    public void setVelocity(Vector vector){
+        this.setVelocity(vector.x, vector.y, vector.z);
+    }
+
+
     
     public Vector getLocation(){
         return this.location;
