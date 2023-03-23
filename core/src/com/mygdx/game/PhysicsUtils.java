@@ -23,7 +23,7 @@ public class PhysicsUtils{
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
 
         //Loops through all celestial bodies except itself and the probe since an object cant affect itself
-        for (celestialBody planet : SolarSystem.planets){
+        for (Body planet : SolarSystem.planets){
             if (planet.getName().equals(body.getName()) || planet.getClass().getSimpleName().equals("Probe")) {
                 continue;
             }
