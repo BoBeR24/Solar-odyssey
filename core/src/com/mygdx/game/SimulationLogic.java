@@ -50,8 +50,23 @@ public class SimulationLogic {
                 case RUNNING:
                     counter += PhysicsUtils.STEPSIZE;
 
-                    updatePlanets();
-                    updateProbes();
+                    for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
+                        PhysicsUtils.updateBody(planet);
+                    }
+
+                    for (Probe probe : SolarSystem.probes) { // updates positions for probes
+                        PhysicsUtils.updateBody(probe);
+
+
+                        Vector dist_v = PhysicsUtils.distanceToTitan(probe, titan);
+                        double dist = dist_v.magnitude();
+
+
+                        if (dist <= 100 * (titan.getRadius() + 300)) {
+                            titanReached = true;
+                            System.out.println(probe.getVStart());
+                        }
+                    }
 
                     //Pauses when point in time is reached and displays information about probe
                     if ((counter == timeDesired) || (counter + range == timeDesired) || (counter - range == timeDesired)) {
@@ -66,6 +81,9 @@ public class SimulationLogic {
 
             }
         }
+
+        redrawScene(); // redraw all entities of the system
+
     }
 
     public void moveCamera(OrthographicCamera camera){
@@ -76,11 +94,7 @@ public class SimulationLogic {
         camera.update();
     }
 
-    public void updatePlanets() {
-        for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
-            PhysicsUtils.updateBody(planet);
-        }
-
+    public void redrawScene() {
         for (celestialBody planet : SolarSystem.planets) {
             // apply all calculated positions and velocities
             planet.getLocation().set(PhysicsUtils.coordinates_nextState[planet.getId()]);
@@ -89,26 +103,12 @@ public class SimulationLogic {
             game.shape.setColor(planet.getColor());
             game.shape.ellipse((float) (centerScreenCords.x + (planet.getLocation().x / scaleFactor) - (planet.getWidth() / 2)), (float) (centerScreenCords.y + (planet.getLocation().y / scaleFactor) - (planet.getHeight()) / 2), planet.getWidth(), planet.getHeight());
         }
-    }
 
-
-    public void updateProbes() {
-        for (Probe probe : SolarSystem.probes) { // updates positions for probes
-            PhysicsUtils.updateBody(probe);
-
+        for (Probe probe : SolarSystem.probes) {
             game.shape.setColor(Color.VIOLET);
             game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - 5),
                     (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - 5),
                     10, 10);
-
-            Vector dist_v = PhysicsUtils.distanceToTitan(probe, titan);
-            double dist = dist_v.magnitude();
-
-
-            if (dist <= 100 * (titan.getRadius() + 300)) {
-                titanReached = true;
-                System.out.println(probe.getVStart());
-            }
         }
     }
 
