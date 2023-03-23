@@ -21,6 +21,7 @@ public class SimulationLogic {
 
         int temp = timeDesired/PhysicsUtils.STEPSIZE;
 
+        //Calculates range in case the step size is not a multiple of the point in time
         range = timeDesired - PhysicsUtils.STEPSIZE*temp;
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
@@ -33,11 +34,13 @@ public class SimulationLogic {
      * */
     public void update(){
 
+        //Determines what happens when the Solar System is PAUSED or RUNNING
         switch (SolarSystemScreen.state){
 
             case RUNNING:
             counter += PhysicsUtils.STEPSIZE;
 
+            //Pauses when point in time is reached and displays information about probe
             if((counter == timeDesired) || (counter+range == timeDesired) || (counter-range == timeDesired)){
                 System.out.println("Calender is Same");
                 SolarSystemScreen.state = State.PAUSED;
