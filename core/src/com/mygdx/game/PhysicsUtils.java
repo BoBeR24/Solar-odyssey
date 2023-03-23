@@ -6,7 +6,7 @@ package com.mygdx.game;
 public class PhysicsUtils{
     //Still have to change
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
-    private final static int STEPSIZE = 3600;
+    public final static int STEPSIZE = 3600;
 //    private final static int STEPSIZE = 86400;
     private final static Vector[] velocities = SystemProperties.velocities;
     private final static Vector[] coordinates = SystemProperties.coordinates;
@@ -49,8 +49,7 @@ public class PhysicsUtils{
     
     private static void updateVelocity(Body body, Vector forcesSum){
         // if body is a probe update its properties immediately, if it is a planet write them to nextState array
-        if (!body.getClass().getName().equals("Probe")) {
-            System.out.println(body.getClass());
+        if (!body.getClass().getSimpleName().equals("Probe")) {
             int index = ((celestialBody) body).getId(); // hate myself for having to do that
 
             velocities_nextState[index].set(velocities[index].x + (forcesSum.x * STEPSIZE) / masses[index], velocities[index].y +
@@ -64,7 +63,7 @@ public class PhysicsUtils{
     }
 
     private static void updateCoordinate(Body body){
-       if (!body.getClass().getName().equals("Probe")) {
+       if (!body.getClass().getSimpleName().equals("Probe")) {
            int index = ((celestialBody) body).getId();
 
            coordinates_nextState[index].set((coordinates[index].x + velocities[index].x * STEPSIZE), (coordinates[index].y +

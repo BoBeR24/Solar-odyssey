@@ -29,7 +29,7 @@ public class SolarSystemScreen implements Screen {
     private final celestialBody titan;
     private final celestialBody neptune;
     private final celestialBody uranus;
-    private final celestialBody probe;
+//    private final celestialBody probe;
 
     private ArrayList<celestialBody> bodies = SolarSystem.planets; // list of all bodies
     
@@ -92,17 +92,19 @@ public class SolarSystemScreen implements Screen {
         this.uranus = new celestialBody("Uranus");
         uranus.setColor(Color.valueOf("#5b5ddf"));
         bodies.add(uranus);
-
-        this.probe = new celestialBody("Probe");
-        probe.setLocation(earth.getLocation().x + earth.getRadius(), earth.getLocation().y - earth.getRadius(), earth.getLocation().z);
+//
+//        this.probe = new celestialBody("Probe");
+//        probe.setLocation(earth.getLocation().x + earth.getRadius(), earth.getLocation().y - earth.getRadius(), earth.getLocation().z);
+////        probe.setVelocity(earth.getVelocity().x + 40.0, earth.getVelocity().y - 15, earth.getVelocity().z);
 //        probe.setVelocity(earth.getVelocity().x + 40.0, earth.getVelocity().y - 15, earth.getVelocity().z);
-        probe.setVelocity(earth.getVelocity().x + 40.0, earth.getVelocity().y - 15, earth.getVelocity().z);
-        probe.setColor(Color.GREEN);
-        probe.setHeight(10);
-        probe.setWidth(10);
-        bodies.add(probe);
+//        probe.setColor(Color.GREEN);
+//        probe.setHeight(10);
+//        probe.setWidth(10);
+//        bodies.add(probe);
+//        Launch.launchBunch(100, earth, new Vector(earth.getLocation().x + 1, earth.getLocation().y-1,0),
+//                new Vector(earth.getLocation().x + 1, earth.getLocation().y - 1, 0),
+//                Math.PI / 180, new Vector(40.0, -15.0, 0));
 
-        Launch.launchBunch(10, earth, new Vector(earth.getLocation().x + earth.getRadius(), earth.getLocation().y - earth.getRadius(), 0), new Vector(earth.getLocation().x + earth.getRadius(), earth.getLocation().y + earth.getRadius(), 0), Math.PI / 80, new Vector(40.0, -15.0, 0));
     }
 
 
