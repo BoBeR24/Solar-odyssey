@@ -39,7 +39,7 @@ public class Launch {
             probes[i].setColor(Color.VIOLET);
             probes[i].setLocation(Math.cos(alphaLong + i*siteRange), Math.sin(alphaLong + i*siteRange), 0);
             
-            //randomize the z to the width
+            //randomize the z to the width and compromise with the y
             double random = Math.random()*2 - 1; // generate numbver between -1 and 1
             double alphaZ = with*random;
             double y = Math.cos(alphaZ)*EARTHRADIUS;
@@ -81,6 +81,7 @@ public class Launch {
         
     }
 
+    // evaluate and returns the longbound 
     public static Vector[] evaluate(Probe[] probes, celestialBody titan){
         Probe longBound = null;
         Probe shortBound = null;
@@ -95,6 +96,8 @@ public class Launch {
                 }
             }
         }
-        return new Vector[] {longBound.getPStrart(), longBound.getVStart(), shortBound.getPStrart(), shortBound.getVStart()};
+        Vector v = new Vector(0, 0, 0);
+        v = longBound.getVStart().add(shortBound.getVStart()).multiply(0.5);
+        return new Vector[] {longBound.getPStrart(), shortBound.getPStrart(),v};
     }
 }
