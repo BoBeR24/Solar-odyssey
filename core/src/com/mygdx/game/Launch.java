@@ -22,16 +22,20 @@ public class Launch {
 
         // making sure that the launching positions are on earth
         if (longBoundryP.magnitude() - EARTHRADIUS != 0){
-            longBoundryP.multiply(EARTHRADIUS/longBoundryP.magnitude());
+            longBoundryP = longBoundryP.multiply(EARTHRADIUS/longBoundryP.magnitude());
         }
 
         if (shortBoundryP.magnitude() - EARTHRADIUS != 0){
-            shortBoundryP.multiply(EARTHRADIUS/shortBoundryP.magnitude());
+            shortBoundryP = shortBoundryP.multiply(EARTHRADIUS/shortBoundryP.magnitude());
+//            System.out.println(shortBoundryP.magnitude());
         }
 
         // setting the angles
         double alphaLong = Math.asin(longBoundryP.y / longBoundryP.magnitude());
-        double alphaShort = Math.asin(shortBoundryP.y / shortBoundryP.magnitude()) + 2*Math.PI;
+        System.out.println(alphaLong + " long");
+        double alphaShort = Math.asin(shortBoundryP.y / shortBoundryP.magnitude());
+        System.out.println(alphaShort + " short");
+
         double range = alphaShort - alphaLong; // range between long and short
         double siteRange = range / (amount-1); // range between sites over the x,y plane
 
@@ -49,7 +53,7 @@ public class Launch {
             double z = Math.sin(alphaZ) * EARTHRADIUS;
 
 
-            Vector position = new Vector(Math.cos(alphaLong + i * siteRange), Math.sin(alphaLong + i * siteRange), z);
+            Vector position = new Vector(Math.cos(alphaLong + i * siteRange) + earth.getLocation().x, Math.sin(alphaLong + i * siteRange) + earth.getLocation().y, z);
             position = position.multiply(EARTHRADIUS / position.magnitude());
 
             probe.setLocation(position.x, position.y, position.z);
@@ -68,49 +72,54 @@ public class Launch {
 
     // keeps track of launched probes and evaluates them.
     // returns a vector if all probes missed, or null of at least one is still getting closer.
-    public static Vector[] BunchLaunchPaths(Probe[] probes, celestialBody titan){
-        boolean[] isDrifting = new boolean[probes.length];
+    public static int BunchLaunchPaths(ArrayList<Probe> probes, celestialBody titan){
+        boolean[] areDrifting = new boolean[probes.size()];
 
-        for (int i = 0; i < probes.length; i++){
-            double distanceOld = probes[i].getdistanceToTitan();
-            double distanceCurrent = Math.abs((probes[i].getLocation().add(titan.getLocation().multiply(-1))).magnitude()); // distances to titan
+        for (int i = 0; i < probes.size(); i++){
+            double distanceOld = probes.get(i).getdistanceToTitan();
+            double distanceCurrent = Math.abs((probes.get(i).getLocation().add(titan.getLocation().multiply(-1))).magnitude()); // distances to titan
 
             if (distanceCurrent <= TITANRADIUS + 300){
                 System.out.println("TITAN HIT");
-                System.out.println("launch location :" + probes[i].getPStart().toString());
-                System.out.println("launch velocity :" + probes[i].getVStart().toString());
+                System.out.println("launch location :" + probes.get(i).getPStart().toString());
+                System.out.println("launch velocity :" + probes.get(i).getVStart().toString());
+                return 1; // WE REACHED TITAN!!!
             }
-            else if (distanceCurrent > distanceOld){
-                probes[i].setDistanceToTitan(distanceCurrent);
+            else if (distanceCurrent < distanceOld){
+                probes.get(i).setDistanceToTitan(distanceCurrent);
             } else {
-                isDrifting[i] = true;
+                areDrifting[i] = true;
             }
         }
 
         boolean allAreDrifting = true;
-        for (int i = 0; i < isDrifting.length; i++){
-            if (!isDrifting[i]){
+
+        for (boolean isDrifting : areDrifting) {
+            if (!isDrifting) {
                 allAreDrifting = false;
             }
         }
+
         if (allAreDrifting){
-            return evaluate(probes, titan);
-        } else return null;
+            return 2; // all probes are drifting away
+        } else {
+            return 0; // everything is fine, continue
+        }
         
     }
 
     // evaluate and returns the longbound 
-    public static Vector[] evaluate(Probe[] probes, celestialBody titan){
+    public static Vector[] evaluate(ArrayList<Probe> probes, celestialBody titan){
         Probe longBound = null;
         Probe shortBound = null;
-        for (int i = 0; i < probes.length; i++){
-            if (probes[i].getLocation().magnitude() < titan.getLocation().magnitude()){
-                if (shortBound == null || probes[i].getdistanceToTitan() < shortBound.getdistanceToTitan()){
-                    shortBound = probes[i];
+        for (int i = 0; i < probes.size(); i++){
+            if (probes.get(i).getLocation().magnitude() < titan.getLocation().magnitude()){
+                if (shortBound == null || probes.get(i).getdistanceToTitan() < shortBound.getdistanceToTitan()){
+                    shortBound = probes.get(i);
                 }
             } else{
-                if (longBound == null || probes[i].getdistanceToTitan() < longBound.getdistanceToTitan()){
-                    longBound = probes[i];
+                if (longBound == null || probes.get(i).getdistanceToTitan() < longBound.getdistanceToTitan()){
+                    longBound = probes.get(i);
                 }
             }
         }

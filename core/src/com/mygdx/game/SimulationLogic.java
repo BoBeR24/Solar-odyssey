@@ -71,21 +71,24 @@ public class SimulationLogic {
             for (Probe probe : SolarSystem.probes) { // updates positions for probes
                 PhysicsUtils.updateBody(probe);
 
+//                if (counter == 1 || counter == 2)
+//                    System.out.println(probe.getVelocity() + " " + counter);
 
                 Vector dist_v = PhysicsUtils.distanceToTitan(probe, titan);
                 double dist = dist_v.magnitude();
 
 
-                if (dist < titan.getRadius() + 300) {
+                if (dist <= 100 * (titan.getRadius() + 300)) {
                     titanReached = true;
+                    System.out.println(probe.getVStart());
                 }
 
-                if (titanReached) {
-                    System.out.println("reached");
-                }
-                else {
-                    System.out.println(dist_v);
-                }
+//                if (titanReached) {
+//                    System.out.println("reached");
+//                }
+//                else {
+//                    System.out.println(dist_v);
+//                }
 //                System.out.println(titanReached);
             }
 
