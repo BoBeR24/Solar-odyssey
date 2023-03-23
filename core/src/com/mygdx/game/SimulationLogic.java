@@ -12,12 +12,21 @@ public class SimulationLogic {
     private Odyssey game;
     private final int scaleFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
+    private int counter = 0;
+    private int timeDesired = 31536000;
+    //31536000 seconds in 1 year
+    private int range = 0;
     private boolean titanReached = false;
     private celestialBody titan = new celestialBody("Titan");
 
 
     public SimulationLogic(final Odyssey game) {
         this.game = game;
+
+        int temp = timeDesired/PhysicsUtils.STEPSIZE;
+
+        //Calculates range in case the step size is not a multiple of the point in time
+        range = timeDesired - PhysicsUtils.STEPSIZE*temp;
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
@@ -34,59 +43,73 @@ public class SimulationLogic {
      * updates the current state of the simulation. Draws all objects
      * */
     public void update(){
+        for (int i = 0; i < 1200; i++) {
+            //Determines what happens when the Solar System is PAUSED or RUNNING
+            switch (SolarSystemScreen.state) {
 
-        for (celestialBody planet : SolarSystem.planets) { // updates positions for planets
-            PhysicsUtils.updateBody(planet);
+                case RUNNING:
+                    counter += PhysicsUtils.STEPSIZE;
+
+                    updatePlanets();
+                    updateProbes();
+
+                    //Pauses when point in time is reached and displays information about probe
+                    if ((counter == timeDesired) || (counter + range == timeDesired) || (counter - range == timeDesired)) {
+                        System.out.println("Calender is Same");
+//                        SolarSystemScreen.state = State.PAUSED;
+                        System.out.println("The Position of the Probe is: " + SolarSystem.probes.get(0).getLocation());
+                        System.out.println("The Velocity of the Probe is: " + SolarSystem.probes.get(0).getVelocity());
+                    }
+
+                default:
+                    break;
+
+            }
         }
-
-//        int counter = 0;
-//        for (Probe probe : SolarSystem.probes) { // updates positions for probes
-////            PhysicsUtils.updateBody(probe);
-//            counter++;
-//            if (counter == 2) {
-//                System.out.println((centerScreenCords.x + (probe.getLocation().x / scaleFactor)));
-//                System.out.println((centerScreenCords.y + (probe.getLocation().y / scaleFactor)));
-////                System.out.println(probe.getLocation().x);
-//            }
-//
-//            game.shape.setColor(Color.VIOLET);
-//            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - (10 / 2)),
-//                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - (10 / 2)),
-//                    250, 250);
-//        }
-//
-//        switch (Launch.BunchLaunchPaths(SolarSystem.probes, titan)) {
-//            case 0:
-//                break;
-//
-//            case 1:
-//                System.out.println("fucking yes");
-//                break;
-//
-//            case 2:
-//                System.out.println("fucking no");
-//                break;
-//        }
-
-
-        for (celestialBody body : SolarSystem.planets) {
-            body.getLocation().set(PhysicsUtils.coordinates_nextState[body.getId()]);
-            body.getVelocity().set(PhysicsUtils.velocities_nextState[body.getId()]);
-
-            game.shape.setColor(body.getColor());
-            game.shape.ellipse((float) (centerScreenCords.x + (body.getLocation().x / scaleFactor) - (body.getWidth() / 2)),
-                    (float) (centerScreenCords.y + (body.getLocation().y / scaleFactor) - (body.getHeight()) / 2),
-                    body.getWidth(), body.getHeight());
-        }
-
     }
 
     public void moveCamera(OrthographicCamera camera){
-        Vector toFollow = SolarSystem.planets.get(11).getLocation(); // our custom vector
+        Vector toFollow = SolarSystem.probes.get(0).getLocation(); // our custom vector
         Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / scaleFactor), centerScreenCords.y + (float) (toFollow.y / scaleFactor), 0);
 
         camera.position.set(toFollow_gdx);
         camera.update();
+    }
+
+    public void updatePlanets() {
+        for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
+            PhysicsUtils.updateBody(planet);
+        }
+
+        for (celestialBody planet : SolarSystem.planets) {
+            // apply all calculated positions and velocities
+            planet.getLocation().set(PhysicsUtils.coordinates_nextState[planet.getId()]);
+            planet.getVelocity().set(PhysicsUtils.velocities_nextState[planet.getId()]);
+
+            game.shape.setColor(planet.getColor());
+            game.shape.ellipse((float) (centerScreenCords.x + (planet.getLocation().x / scaleFactor) - (planet.getWidth() / 2)), (float) (centerScreenCords.y + (planet.getLocation().y / scaleFactor) - (planet.getHeight()) / 2), planet.getWidth(), planet.getHeight());
+        }
+    }
+
+
+    public void updateProbes() {
+        for (Probe probe : SolarSystem.probes) { // updates positions for probes
+            PhysicsUtils.updateBody(probe);
+
+            game.shape.setColor(Color.VIOLET);
+            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - 5),
+                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - 5),
+                    10, 10);
+
+            Vector dist_v = PhysicsUtils.distanceToTitan(probe, titan);
+            double dist = dist_v.magnitude();
+
+
+            if (dist <= 100 * (titan.getRadius() + 300)) {
+                titanReached = true;
+                System.out.println(probe.getVStart());
+            }
+        }
     }
 
     /**

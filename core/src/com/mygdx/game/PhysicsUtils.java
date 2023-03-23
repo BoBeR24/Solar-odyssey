@@ -4,10 +4,10 @@ package com.mygdx.game;
  * class with methods for calculating and updating physical processes of bodies presented in the system
  * */
 public class PhysicsUtils{
-    //Still have to change
+    //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
-    public final static int STEPSIZE = 3600;
 //    private final static int STEPSIZE = 86400;
+    public final static int STEPSIZE = 30;
     private final static Vector[] velocities = SystemProperties.velocities;
     private final static Vector[] coordinates = SystemProperties.coordinates;
     private final static double[] masses = SystemProperties.masses;
@@ -15,16 +15,16 @@ public class PhysicsUtils{
     public final static Vector[] coordinates_nextState = coordinates.clone();
     public final static Vector[] velocities_nextState = velocities.clone();
 
-    /**
-     * Calculates sum of the forces and initializes methods for updating velocity and coordinates
-     * */
+   /**
+    * Calculates sum of the forces and initializes methods for updating velocity and coordinates
+    * @param body object that the forces are being exerted on
+    */
     public static void updateBody(Body body){
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
 
-        for (Body planet : SolarSystem.planets){
-            // skips iteration where body and body are the same object, because object can't affect itself
-            // skip Probes because they don't affect other bodies
-            if (planet == body || planet.getClass().getName().equals("Probe")) {
+        //Loops through all celestial bodies except itself and the probe since an object cant affect itself
+        for (celestialBody planet : SolarSystem.planets){
+            if (planet.getName().equals(body.getName()) || planet.getClass().getSimpleName().equals("Probe")) {
                 continue;
             }
 
@@ -33,12 +33,14 @@ public class PhysicsUtils{
             Vector planetVector = planet.getLocation();
             Vector bodyVector = body.getLocation();
 
+            //Difference between the vectors of the two celestial bodies
             Vector force = bodyVector.subtract(planetVector);
 
             double magnitude = Math.pow(force.magnitude(), 3);
 
             force = force.multiply(scalingFactor / magnitude);
 
+            //adds forces by all bodies exerted on body
             forcesSum = forcesSum.add(force);
         }
 

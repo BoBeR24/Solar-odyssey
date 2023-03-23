@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
+import com.badlogic.gdx.math.Matrix3;
 
 import java.util.ArrayList;
 
@@ -29,10 +30,11 @@ public class SolarSystemScreen implements Screen {
     private final celestialBody titan;
     private final celestialBody neptune;
     private final celestialBody uranus;
-//    private final celestialBody probe;
+//    private final Probe probe;
 
     private ArrayList<celestialBody> bodies = SolarSystem.planets; // list of all bodies
-    
+    private ArrayList<Probe> probes = SolarSystem.probes; // list of all bodies
+
 
 
     public SolarSystemScreen(final Odyssey game) {
@@ -92,6 +94,14 @@ public class SolarSystemScreen implements Screen {
         this.uranus = new celestialBody("Uranus");
         uranus.setColor(Color.valueOf("#5b5ddf"));
         bodies.add(uranus);
+
+        for (int i = 0; i < 1; i++) {
+            ProbeLauncher.launch(new Vector(40.0, -15.038462175, -3.168796));
+        }
+
+//        ProbeLauncher.launch(new Vector(40.0, -15.1, -3.1));
+//        ProbeLauncher.launch(new Vector(45.0, -17.1, -5.1));
+
 //
 //        this.probe = new celestialBody("Probe");
 //        probe.setLocation(earth.getLocation().x + earth.getRadius(), earth.getLocation().y - earth.getRadius(), earth.getLocation().z);
