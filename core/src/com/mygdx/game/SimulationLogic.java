@@ -18,6 +18,8 @@ public class SimulationLogic {
     private int range = 0;
     private boolean titanReached = false;
     private celestialBody titan = new celestialBody("Titan");
+    private Probe best_Probe;
+    double distance;
 
 
     public SimulationLogic(final Odyssey game) {
@@ -43,7 +45,7 @@ public class SimulationLogic {
      * updates the current state of the simulation. Draws all objects
      * */
     public void update(){
-        for (int i = 0; i < 1200; i++) {
+        for (int i = 0; i < 600; i++) { // amount of calculations per frame(to speed up the simulation)
             //Determines what happens when the Solar System is PAUSED or RUNNING
             switch (SolarSystemScreen.state) {
 
@@ -62,18 +64,31 @@ public class SimulationLogic {
                         double dist = dist_v.magnitude();
 
 
-                        if (dist <= 100 * (titan.getRadius() + 300)) {
+
+                        if (dist <= titan.getRadius() + 300) {
                             titanReached = true;
-                            System.out.println(probe.getVStart());
+                            best_Probe = probe; // saves probe which did reach Titan(for testing with multiple probes)
                         }
+
                     }
 
                     //Pauses when point in time is reached and displays information about probe
                     if ((counter == timeDesired) || (counter + range == timeDesired) || (counter - range == timeDesired)) {
                         System.out.println("Calender is Same");
-//                        SolarSystemScreen.state = State.PAUSED;
+                        SolarSystemScreen.state = State.PAUSED;
+//                        System.out.println(best_dist);
+//                        System.out.println(best_distV + " v");
+//                        System.out.println(best_Probe.getVStart() + "start");
                         System.out.println("The Position of the Probe is: " + SolarSystem.probes.get(0).getLocation());
                         System.out.println("The Velocity of the Probe is: " + SolarSystem.probes.get(0).getVelocity());
+                    } else if (titanReached) {
+                        SolarSystemScreen.state = State.PAUSED;
+                        System.out.println("Time taken(in seconds): " + counter);
+                        System.out.println("Distance to Titan center: " + distance);
+                        System.out.println("The Position of the Probe is: " + best_Probe.getLocation());
+                        System.out.println("The Velocity of the Probe is: " + best_Probe.getVelocity());
+                        System.out.println("Initial position(relative to the Sun): " + best_Probe.getPStart());
+                        System.out.println("Initial velocity(relative to Earth): " + best_Probe.getVStart());
                     }
 
                 default:

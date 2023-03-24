@@ -10,14 +10,14 @@ public class Probe implements Body{
     private double distanceToTitan; // closest the probe has gotten to titan
     
 
-    Probe() {
+    Probe(Vector starterVelocity) {
         this.name = "Probe";
         this.mass = 50000;
         this.location = SystemProperties.coordinates[3].add(new Vector(SystemProperties.radii[3], 0, 0)); // default position
         this.velocity = SystemProperties.velocities[3]; // default velocity
 
         this.pStart = new Vector(this.location);
-        this.vStart = new Vector(this.velocity);
+        this.vStart = new Vector(starterVelocity);
     }
 
     @Override
