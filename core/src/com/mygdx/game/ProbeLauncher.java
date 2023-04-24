@@ -1,7 +1,5 @@
 package com.mygdx.game;
 
-import java.util.ArrayList;
-
 public class ProbeLauncher {
     /**
      * @param velocity to add to earth velocity

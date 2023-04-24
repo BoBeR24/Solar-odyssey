@@ -1,12 +1,14 @@
 package com.mygdx.game;
 
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class SystemProperties {
-    final public static Hashtable<String, Integer> entities = new Hashtable<String, Integer>(){
+    final public static HashMap<String, Integer> entities = new HashMap<String, Integer>(){
         {put("Sun", 0); put("Mercury", 1); put("Venus", 2);put("Earth", 3);put("Moon", 4);put("Mars", 5);put("Jupiter", 6);put("Saturn", 7);put("Titan", 8);
             put("Neptune", 9); put("Uranus", 10);}
-    }; // hashtable with all entities presented in the system. Key is represented by the name and value is index of the entity
+    }; // hashmap with all entities presented in the system. Key is represented by the name and value is index of the entity
 
     //BELOW GO ARRAYS OF ENTITY PROPERTIES(they're placed in an array relatively to their index)//
     final public static Vector[] coordinates ={
