@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 import com.badlogic.gdx.math.Matrix3;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 public class SolarSystemScreen implements Screen {
 
     private final Odyssey game;
-    private final OrthographicCamera camera;
+    public static final OrthographicCamera camera = new OrthographicCamera();
     private final SimulationLogic logic;
     public static State state = State.RUNNING;
 
@@ -30,19 +31,15 @@ public class SolarSystemScreen implements Screen {
     private final celestialBody titan;
     private final celestialBody neptune;
     private final celestialBody uranus;
-//    private final Probe probe;
 
     private ArrayList<celestialBody> bodies = SolarSystem.planets; // list of all bodies
-    private ArrayList<Probe> probes = SolarSystem.probes; // list of all bodies
-
 
 
     public SolarSystemScreen(final Odyssey game) {
         this.game = game;
 
-        this.camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // create a camera
-        camera.zoom = 5f;
+        camera.zoom = 2f;
         camera.update(); // update camera
 
         game.shape.setProjectionMatrix(camera.combined);
@@ -95,25 +92,15 @@ public class SolarSystemScreen implements Screen {
         uranus.setColor(Color.valueOf("#5b5ddf"));
         bodies.add(uranus);
 
-        for (int i = 0; i < 1; i++) {
-            ProbeLauncher.launch(new Vector(40.0, -15.038462175, -3.168796));
-        }
+//        for (double x = 0.2360; x < 0.2410; x = x + 0.0002) {
+//            for (double y = 0.006862175; y < 0.007162175; y = y + 0.0002) {
+//                for (double z = 0.08; z < 0.086736; z = z + 0.001) {
+//                    ProbeLauncher.launch(new Vector(41.0 + x, -15.0 - y, -3.1 - z));
+//                }
+//            }
+//        }
 
-//        ProbeLauncher.launch(new Vector(40.0, -15.1, -3.1));
-//        ProbeLauncher.launch(new Vector(45.0, -17.1, -5.1));
-
-//
-//        this.probe = new celestialBody("Probe");
-//        probe.setLocation(earth.getLocation().x + earth.getRadius(), earth.getLocation().y - earth.getRadius(), earth.getLocation().z);
-////        probe.setVelocity(earth.getVelocity().x + 40.0, earth.getVelocity().y - 15, earth.getVelocity().z);
-//        probe.setVelocity(earth.getVelocity().x + 40.0, earth.getVelocity().y - 15, earth.getVelocity().z);
-//        probe.setColor(Color.GREEN);
-//        probe.setHeight(10);
-//        probe.setWidth(10);
-//        bodies.add(probe);
-//        Launch.launchBunch(100, earth, new Vector(earth.getLocation().x + 1, earth.getLocation().y-1,0),
-//                new Vector(earth.getLocation().x + 1, earth.getLocation().y - 1, 0),
-//                Math.PI / 180, new Vector(40.0, -15.0, 0));
+        ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // probe that hits titan
 
     }
 
@@ -130,19 +117,17 @@ public class SolarSystemScreen implements Screen {
      * */
     @Override
     public void render(float delta) {
-//        ScreenUtils.clear(0, 0, 0, 1); // trails on/off
+        ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
+        logic.moveCamera(camera); // if you want to make camera follow the probe - uncomment this
         game.shape.setProjectionMatrix(camera.combined);
 
-//        logic.moveCamera(camera); // if you want to make camera follow the probe - uncomment this
+        game.shape.begin(ShapeType.Filled);
 
-            game.shape.begin(ShapeType.Filled);
+        logic.update();
 
-            logic.update();
-    
-            game.shape.end();
+        game.shape.end();
 
-        
     }
 
     /**
