@@ -31,10 +31,8 @@ public class SolarSystemScreen implements Screen {
     private final celestialBody titan;
     private final celestialBody neptune;
     private final celestialBody uranus;
-//    private final Probe probe;
 
     private ArrayList<celestialBody> bodies = SolarSystem.planets; // list of all bodies
-
 
 
     public SolarSystemScreen(final Odyssey game) {
@@ -130,8 +128,6 @@ public class SolarSystemScreen implements Screen {
 
         game.shape.end();
 
-
-        
     }
 
     /**
