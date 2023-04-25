@@ -12,63 +12,107 @@ public class SimulationLogic {
     private Odyssey game;
     private final int scaleFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
-    private int counter = 0;
-    private int timeDesired = 31536000;
+//    private int timeCounter = 0;
+//    private int timeDesired = 31536000;
     //31536000 seconds in 1 year
+    private Timer timer;
     private int range = 0;
-    private boolean titanReached = false;
-    private celestialBody titan = new celestialBody("Titan");
+    private Probe best_Probe;
+    private double minTitanDistance = Double.MAX_VALUE;
 
 
     public SimulationLogic(final Odyssey game) {
         this.game = game;
+        this.timer = new Timer(31536000); // set up timer for 1 year by default
+//        this.timer = new Timer(90); // set up timer for 1 year by default
 
-        int temp = timeDesired/PhysicsUtils.STEPSIZE;
-
-        //Calculates range in case the step size is not a multiple of the point in time
-        range = timeDesired - PhysicsUtils.STEPSIZE*temp;
+//        int temp = timeDesired / PhysicsUtils.STEPSIZE;
+                //Calculates range in case the step size is not a multiple of the point in time
+//        range = timeDesired - PhysicsUtils.STEPSIZE * temp; (do we need this range approach?)
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
-
-        for (celestialBody planet : SolarSystem.planets) {
-            if (planet.getName().equals("Titan")) {
-                this.titan = planet;
-                break;
-            }
-        }
     }
 
     /**
      * updates the current state of the simulation. Draws all objects
      * */
     public void update(){
-        for (int i = 0; i < 1200; i++) {
-            //Determines what happens when the Solar System is PAUSED or RUNNING
+        for (int i = 0; i < 600; i++) { // amount of calculations per frame(to speed up the simulation)
+            // Determines what happens when the Solar System is PAUSED or RUNNING
             switch (SolarSystemScreen.state) {
 
                 case RUNNING:
-                    counter += PhysicsUtils.STEPSIZE;
+//                    timeCounter += PhysicsUtils.STEPSIZE;
+                    timer.iterate(PhysicsUtils.STEPSIZE);
 
-                    updatePlanets();
-                    updateProbes();
-
-                    //Pauses when point in time is reached and displays information about probe
-                    if ((counter == timeDesired) || (counter + range == timeDesired) || (counter - range == timeDesired)) {
-                        System.out.println("Calender is Same");
-//                        SolarSystemScreen.state = State.PAUSED;
-                        System.out.println("The Position of the Probe is: " + SolarSystem.probes.get(0).getLocation());
-                        System.out.println("The Velocity of the Probe is: " + SolarSystem.probes.get(0).getVelocity());
+                    for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
+                        PhysicsUtils.calculateNextState(planet);
                     }
+
+                    for (Probe probe : SolarSystem.probes) { // calculates next positions for probes
+                        PhysicsUtils.calculateNextState(probe);
+
+                        // I still don't like this part, so if someone have any ideas how to make it better
+                        // please enlighten me
+                        if (probe.getDistanceToTitan() < minTitanDistance) {
+                            minTitanDistance = probe.getDistanceToTitan(); // updates best distance to titan so far
+                            best_Probe = probe; // saves probe which reached best distance to the Titan
+                        }
+                    }
+
+//                    if ((timeCounter == timeDesired) || (timeCounter + range == timeDesired) || (timeCounter - range == timeDesired)) {
+                    // Pauses when point in time is reached and displays information about probe
+                    if (timer.isTimeReached() || best_Probe.isTitanReached()) {
+                        System.out.println("Time taken(in seconds): " + timer.getTimePassed());
+                        System.out.println("Minimal distance to Titan center " + minTitanDistance);
+                        best_Probe.displayData();
+                        pause();
+                    }
+
+                    applyNewState(); // update states of objects
 
                 default:
                     break;
 
             }
         }
+
+        redrawScene(); // redraw all entities of the system
+
     }
 
-    public void moveCamera(OrthographicCamera camera){
+    /** apply previously calculated states to all objects at the same time(to be sure that all
+     calculations happen in one state)
+     * */
+    public void applyNewState() {
+        // apply all calculated positions and velocities
+        for (celestialBody planet : SolarSystem.planets) {
+            planet.setLocation(SystemProperties.coordinates_nextState[planet.getId()]);
+            planet.setVelocity(SystemProperties.velocities_nextState[planet.getId()]);
+        }
+    }
+
+
+    /** redraws all sprites and objects
+     * */
+    public void redrawScene() {
+        for (celestialBody planet : SolarSystem.planets) {
+            game.shape.setColor(planet.getColor());
+            game.shape.ellipse((float) (centerScreenCords.x + (planet.getLocation().x / scaleFactor) - (planet.getWidth() / 2)), (float) (centerScreenCords.y + (planet.getLocation().y / scaleFactor) - (planet.getHeight()) / 2), planet.getWidth(), planet.getHeight());
+        }
+
+        for (Probe probe : SolarSystem.probes) {
+            game.shape.setColor(Color.VIOLET);
+            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - 5),
+                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - 5),
+                    10, 10);
+        }
+    }
+
+    /** method to keep camera centered at the first probe position(so camera follows the first probe)
+     * */
+    public void moveCameraToProbe(OrthographicCamera camera){
         Vector toFollow = SolarSystem.probes.get(0).getLocation(); // our custom vector
         Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / scaleFactor), centerScreenCords.y + (float) (toFollow.y / scaleFactor), 0);
 
@@ -76,40 +120,16 @@ public class SimulationLogic {
         camera.update();
     }
 
-    public void updatePlanets() {
-        for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
-            PhysicsUtils.updateBody(planet);
-        }
-
-        for (celestialBody planet : SolarSystem.planets) {
-            // apply all calculated positions and velocities
-            planet.getLocation().set(PhysicsUtils.coordinates_nextState[planet.getId()]);
-            planet.getVelocity().set(PhysicsUtils.velocities_nextState[planet.getId()]);
-
-            game.shape.setColor(planet.getColor());
-            game.shape.ellipse((float) (centerScreenCords.x + (planet.getLocation().x / scaleFactor) - (planet.getWidth() / 2)), (float) (centerScreenCords.y + (planet.getLocation().y / scaleFactor) - (planet.getHeight()) / 2), planet.getWidth(), planet.getHeight());
-        }
+    /** method to pause the simulation by switching current state of the game to paused
+     * */
+    public void pause() {
+        SolarSystemScreen.state = State.PAUSED;
     }
 
-
-    public void updateProbes() {
-        for (Probe probe : SolarSystem.probes) { // updates positions for probes
-            PhysicsUtils.updateBody(probe);
-
-            game.shape.setColor(Color.VIOLET);
-            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - 5),
-                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - 5),
-                    10, 10);
-
-            Vector dist_v = PhysicsUtils.distanceToTitan(probe, titan);
-            double dist = dist_v.magnitude();
-
-
-            if (dist <= 100 * (titan.getRadius() + 300)) {
-                titanReached = true;
-                System.out.println(probe.getVStart());
-            }
-        }
+    /** method to unpause the simulation by switching current state of the game to running
+     * */
+    public void unpause() {
+        SolarSystemScreen.state = State.RUNNING;
     }
 
     /**
