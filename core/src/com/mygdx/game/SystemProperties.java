@@ -1,17 +1,39 @@
 package com.mygdx.game;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class SystemProperties {
-    final public static HashMap<String, Integer> entities = new HashMap<String, Integer>(){
-        {put("Sun", 0); put("Mercury", 1); put("Venus", 2);put("Earth", 3);put("Moon", 4);put("Mars", 5);put("Jupiter", 6);put("Saturn", 7);put("Titan", 8);
-            put("Neptune", 9); put("Uranus", 10);}
-    }; // hashmap with all entities presented in the system. Key is represented by the name and value is index of the entity
+    // BELOW GO CONSTANTS WHICH CONTAIN CORRESPONDING TO EACH PLANET INDEX
+    final public static int SUN = 0;
+    final public static int MERCURY = 1;
+    final public static int VENUS = 2;
+    final public static int EARTH = 3;
+    final public static int MOON = 4;
+    final public static int MARS = 5;
+    final public static int JUPITER = 6;
+    final public static int SATURN = 7;
+    final public static int TITAN = 8;
+    final public static int NEPTUNE = 9;
+    final public static int URANUS = 10;
+    final public static int PROBE = 11;
+//    final public static HashMap<String, Integer> entities = new HashMap<String, Integer>() {
+//        {
+//            put("Sun", 0);
+//            put("Mercury", 1);
+//            put("Venus", 2);
+//            put("Earth", 3);
+//            put("Moon", 4);
+//            put("Mars", 5);
+//            put("Jupiter", 6);
+//            put("Saturn", 7);
+//            put("Titan", 8);
+//            put("Neptune", 9);
+//            put("Uranus", 10);
+//        }
+//    }; // hashmap with all entities presented in the system. Key is represented by the name and value is index of the entity
 
     //BELOW GO ARRAYS OF ENTITY PROPERTIES(they're placed in an array relatively to their index)//
-    final public static Vector[] coordinates ={
+    final public static Vector[] coordinates = {
         new Vector(0,0,0), new Vector(7833268.43923962,44885949.3703908, 2867693.20054382),new Vector(-28216773.9426889,103994008.541512,3012326.64296788 ),
         new Vector(-148186906.893642,-27823158.5715694,33746.8987977113 ),new Vector(-148458048.395164,-27524868.1841142,70233.6499287411 ),
         new Vector(-159116303.422552,189235671.561057,7870476.08522969 ),new Vector(692722875.928222,258560760.813524,-16570817.7105996 ),
@@ -32,5 +54,22 @@ public class SystemProperties {
 
     final public static double[] masses = {1.9885e30, 3.302e23, 48.685e23, 5.97219e24, 7.349e22, 6.4171e23, 1.89818722e19, 5.6834e26, 13455.3e19, 102.409e24, 86.813e24};
     final public static int[] radii = {696340, 2440, 6052, 6370, 1737, 3390, 69911, 58232, 2575, 24622, 25362};
+
+    public final static Vector[] coordinates_nextState = {
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0)
+    };
+    public final static Vector[] velocities_nextState = {
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0), new Vector(0,0,0),
+            new Vector(0,0,0)
+    };
 
 }

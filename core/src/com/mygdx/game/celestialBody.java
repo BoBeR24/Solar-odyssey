@@ -8,21 +8,24 @@ import java.util.Objects;
  * Class representing all bodies in simulated system
  * */
 public class celestialBody implements Body{
-    private final String name; // name of the body
+//    private final String name; // name of the body
     private final int id; // id which represents position in the list of bodies
     private Color color; // color of the body
     private int width; // width of the image of the body
     private int height; // height of the image of the body
 
 
-    celestialBody(String name){
-        this.name = name;
+    celestialBody(int index){
+//        this.name = name;
 
-        this.id = SystemProperties.entities.get(name);
+//        this.id = SystemProperties.entities.get(name);
+
+        this.id = index;
 
         this.color = Color.WHITE; // default color
 
-        if (Objects.equals(this.name, "Sun")) {
+        // if object id refers to the Sun scaling factor differs, otherwise sun is too big
+        if (this.id == 0) {
             this.width = SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8); // default width and height
             this.height = SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8);
 
@@ -52,6 +55,10 @@ public class celestialBody implements Body{
         SystemProperties.coordinates[id].z = z;
     }
 
+    public void setLocation(Vector vector) {
+        this.setLocation(vector.x, vector.y, vector.z);
+    }
+
     @Override
     public void setVelocity(double x, double y, double z) {
          SystemProperties.velocities[id].x = x;
@@ -59,11 +66,15 @@ public class celestialBody implements Body{
          SystemProperties.velocities[id].z = z;
     }
 
-    @Override
-    public String getName(){
-        return name;
+    public void setVelocity(Vector vector) {
+        this.setVelocity(vector.x, vector.y, vector.z);
     }
 
+//    public String getName(){
+//        return name;
+//    }
+
+    @Override
     public int getId() {
         return id;
     }

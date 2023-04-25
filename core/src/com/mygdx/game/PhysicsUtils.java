@@ -6,25 +6,18 @@ package com.mygdx.game;
 public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
-//    private final static int STEPSIZE = 86400;
     public final static int STEPSIZE = 30;
-    private final static Vector[] velocities = SystemProperties.velocities;
-    private final static Vector[] coordinates = SystemProperties.coordinates;
-    private final static double[] masses = SystemProperties.masses;
-
-    public final static Vector[] coordinates_nextState = coordinates.clone();
-    public final static Vector[] velocities_nextState = velocities.clone();
 
    /**
     * Calculates sum of the forces and initializes methods for updating velocity and coordinates
     * @param body object that the forces are being exerted on
     */
-    public static void updateBody(Body body){
+    public static void calculateNextState(Body body){
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
 
-        //Loops through all celestial bodies except itself and the probe since an object cant affect itself
+        // Loops through all celestial bodies except itself and the probe since an object cant affect itself
         for (Body planet : SolarSystem.planets){
-            if (planet.getName().equals(body.getName()) || planet.getClass().getSimpleName().equals("Probe")) {
+            if (planet.getId() == body.getId() || planet.getId() == SystemProperties.PROBE) {
                 continue;
             }
 
@@ -50,12 +43,13 @@ public class PhysicsUtils{
     }
     
     private static void updateVelocity(Body body, Vector forcesSum){
-        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
-        if (!body.getClass().getSimpleName().equals("Probe")) {
-            int index = ((celestialBody) body).getId(); // hate myself for having to do that
+        int index = body.getId();
 
-            velocities_nextState[index].set(velocities[index].x + (forcesSum.x * STEPSIZE) / masses[index], velocities[index].y +
-                    (forcesSum.y * STEPSIZE) / masses[index], velocities[index].z + (forcesSum.z * STEPSIZE) / masses[index]);
+        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
+        if (index != SystemProperties.PROBE) {
+
+            SystemProperties.velocities_nextState[index].set(body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(), body.getVelocity().y +
+                    (forcesSum.y * STEPSIZE) / body.getMass(), body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass());
 
             return;
         }
@@ -65,25 +59,19 @@ public class PhysicsUtils{
     }
 
     private static void updateCoordinate(Body body){
-       if (!body.getClass().getSimpleName().equals("Probe")) {
-           int index = ((celestialBody) body).getId();
+        int index = body.getId();
 
-           coordinates_nextState[index].set((coordinates[index].x + velocities[index].x * STEPSIZE), (coordinates[index].y +
-                   velocities[index].y * STEPSIZE), (coordinates[index].z + velocities[index].z * STEPSIZE));
+        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
+        if (index != SystemProperties.PROBE) {
 
-           return;
-       }
+            SystemProperties.coordinates_nextState[index].set((body.getLocation().x + body.getVelocity().x * STEPSIZE), (body.getLocation().y +
+                    body.getVelocity().y * STEPSIZE), (body.getLocation().z + body.getVelocity().z * STEPSIZE));
 
-       body.setLocation((body.getLocation().x + body.getVelocity().x * STEPSIZE), (body.getLocation().y +
+            return;
+        }
+
+        body.setLocation((body.getLocation().x + body.getVelocity().x * STEPSIZE), (body.getLocation().y +
                body.getVelocity().y * STEPSIZE), (body.getLocation().z + body.getVelocity().z * STEPSIZE));
-    }
-
-    public static Vector distanceToTitan(Probe probe, celestialBody target) {
-        Vector probe_location = probe.getLocation();
-        Vector target_location = target.getLocation();
-
-//        return probe_location.subtract(target_location).magnitude();
-        return probe_location.subtract(target_location);
     }
 
 }

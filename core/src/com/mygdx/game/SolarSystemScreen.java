@@ -32,6 +32,7 @@ public class SolarSystemScreen implements Screen {
 
         this.logic = new SimulationLogic(game); // class which updates state of the game
 
+        SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
 
 //        for (double x = 0.2360; x < 0.2410; x = x + 0.0002) {
 //            for (double y = 0.006862175; y < 0.007162175; y = y + 0.0002) {
@@ -41,7 +42,6 @@ public class SolarSystemScreen implements Screen {
 //            }
 //        }
 
-        SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
 
         ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // probe that hits titan
 
@@ -62,7 +62,7 @@ public class SolarSystemScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
-        logic.moveCamera(camera); // if you want to make camera follow the probe - uncomment this
+        logic.moveCameraToProbe(camera); // if you want to make camera follow the probe - uncomment this
         game.shape.setProjectionMatrix(camera.combined);
 
         game.shape.begin(ShapeType.Filled);
