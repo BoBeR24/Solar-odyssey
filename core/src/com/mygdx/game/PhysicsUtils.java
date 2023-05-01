@@ -86,4 +86,75 @@ public class PhysicsUtils{
         return probe_location.subtract(target_location);
     }
 
+    public static void Ralston (Body body, int stepSize){
+        Body copy1 = body.copy();
+        Body copy2 = body.copy();
+        Body copy3 = body.copy();
+        Vector k1 = calculateForce(copy1).multiply(stepSize);
+        //TO-DO my problem is that i am updating copy but at the same time my steps depends on on the initial positions of the body so i dont
+        // know how to connect it if i calculate it for the body at certain position
+        updateVelocityRalston(copy1, k1.multiply(0.5));
+        updateCoordinateRalston(copy1, stepSize/2);
+        // update position and velocity to calculate next step (here h/2)
+        Vector k2 = calculateForce(copy1).multiply(stepSize);
+        updateVelocityRalston(copy2, k1.multiply(0.5));
+        updateCoordinateRalston(copy2, stepSize/2);
+        Vector k3 = calculateForce(copy2).multiply(stepSize);
+        updateVelocityRalston(copy3, k3);
+        updateCoordinateRalston(copy3, stepSize);
+        Vector k4 = calculateForce(copy3).multiply(stepSize);
+        Vector finalForce = k1.multiply(1/6).add(k2.multiply(1/3)).add(k3.multiply(1/3)).add(k4.multiply(1/6));
+        updateVelocityRalston(body, finalForce);
+        updateCoordinateRalston(body, stepSize);
+
+
+        // k1 h * force calculated based on initial body positions
+        // then I update the the body based on k1/2 so step size h/2 so we call it b1
+        // then k2 h * force calculated based on b1
+        // then I update the body based on k2/2 so h/2 so we call it b2
+        // then k3 h * force calculated based on b2
+        // then I update the body based on k3 so h so we call it b3
+        // then k4 h * force caculated based on b3 
+        // then I can finally update the proper body based on 1/6(k1 + 2*k2 + 2*k3 + k4)
+
+
+
+        
+    }
+
+    public static Vector calculateForce(Body body){
+        Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
+
+        //Loops through all celestial bodies except itself and the probe since an object cant affect itself
+        for (Body planet : SolarSystem.planets){
+            if (planet.getName().equals(body.getName()) || planet.getClass().getSimpleName().equals("Probe")) {
+                continue;
+            }
+            double scalingFactor = gravitationalConstant * planet.getMass() * body.getMass() * (-1);
+
+            Vector planetVector = planet.getLocation();
+            Vector bodyVector = body.getLocation();
+
+            //Difference between the vectors of the two celestial bodies
+            Vector force = bodyVector.subtract(planetVector);
+
+            double magnitude = Math.pow(force.magnitude(), 3);
+
+            force = force.multiply(scalingFactor / magnitude);
+
+            //adds forces by all bodies exerted on body
+            forcesSum = forcesSum.add(force);
+        }
+        return forcesSum;
+    }
+
+    private static void updateVelocityRalston(Body body, Vector forcesSum){
+        body.setVelocity(body.getVelocity().x + (forcesSum.x) / body.getMass(), body.getVelocity().y +
+                (forcesSum.y ) / body.getMass(), body.getVelocity().z + (forcesSum.z ) / body.getMass());
+    }
+
+    private static void updateCoordinateRalston(Body body, int stepSize){
+       body.setLocation((body.getLocation().x + body.getVelocity().x * stepSize), (body.getLocation().y +
+               body.getVelocity().y * stepSize), (body.getLocation().z + body.getVelocity().z * stepSize));
+    }
 }
