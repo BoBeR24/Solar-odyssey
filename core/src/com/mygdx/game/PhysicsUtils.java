@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import MathematicalSolver.Euler;
+import MathematicalSolver.MathematicalSolver;
+
 /**
  * class with methods for calculating and updating physical processes of bodies presented in the system
  * */
@@ -14,7 +17,8 @@ public class PhysicsUtils{
     */
     public static void calculateNextState(Body body){
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
-
+        //could also pass as an arg for the type of Mathematicalsolver, declare wich solver we need line 20
+        MathematicalSolver solver = new Euler();
         // Loops through all celestial bodies except itself and the probe since an object cant affect itself
         for (Body planet : SolarSystem.planets){
             if (planet.getId() == body.getId() || planet.getId() == SystemProperties.PROBE) {
@@ -23,8 +27,8 @@ public class PhysicsUtils{
 
             double scalingFactor = gravitationalConstant * planet.getMass() * body.getMass() * (-1);
 
-            Vector planetVector = planet.getLocation();
-            Vector bodyVector = body.getLocation();
+            Vector planetVector = planet.getLocation(3);
+            Vector bodyVector = body.getLocation(3);
 
             //Difference between the vectors of the two celestial bodies
             Vector force = bodyVector.subtract(planetVector);
@@ -37,12 +41,12 @@ public class PhysicsUtils{
             forcesSum = forcesSum.add(force);
         }
 
-        updateVelocity(body, forcesSum);
-        updateCoordinate(body);
+        solver.updateVelocities(body, forcesSum);
+        solver.updatePositions(body);
         
     }
     
-    private static void updateVelocity(Body body, Vector forcesSum){
+    /*private static void updateVelocity(Body body, Vector forcesSum){
         int index = body.getId();
 
         // if body is a probe update its properties immediately, if it is a planet write them to nextState array
@@ -72,6 +76,6 @@ public class PhysicsUtils{
 
         body.setLocation((body.getLocation().x + body.getVelocity().x * STEPSIZE), (body.getLocation().y +
                body.getVelocity().y * STEPSIZE), (body.getLocation().z + body.getVelocity().z * STEPSIZE));
-    }
+    }*/
 
 }

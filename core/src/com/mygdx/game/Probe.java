@@ -15,41 +15,41 @@ public class Probe implements Body{
     Probe(Vector starterVelocity) {
 //        this.name = "Probe";
         this.mass = 50000;
-        this.location = SystemProperties.coordinates[3].add(new Vector(SystemProperties.radii[3], 0, 0)); // default position
-        this.velocity = SystemProperties.velocities[3]; // default velocity
+        this.location = SystemProperties.globalCoordinates[3][id].add(new Vector(SystemProperties.radii[3], 0, 0)); // default position
+        this.velocity = SystemProperties.globalVelocities[3][id]; // default velocity
 
         this.pStart = new Vector(this.location);
         this.vStart = new Vector(starterVelocity);
     }
 
     @Override
-    public void setLocation(double x, double y, double z){
+    public void setLocation(double x, double y, double z, int a){
         this.location = new Vector(x, y, z);
 
         // if the location of the probe changes - distance to Titan also changes
         updateDistanceToTitan();
     }
 
-    public void setLocation(Vector vector){
-        this.setLocation(vector.x, vector.y, vector.z);
+    public void setLocation(Vector vector, int a){
+        this.setLocation(vector.x, vector.y, vector.z, a);
     }
 
     @Override
-    public void setVelocity(double x, double y, double z){
+    public void setVelocity(double x, double y, double z, int a){
         this.velocity = new Vector(x, y, z);
     }
 
-    public void setVelocity(Vector vector){
-        this.setVelocity(vector.x, vector.y, vector.z);
+    public void setVelocity(Vector vector, int a){
+        this.setVelocity(vector.x, vector.y, vector.z, a);
     }
 
     @Override
-    public Vector getLocation(){
+    public Vector getLocation(int a){
         return this.location;
     }
 
     @Override
-    public Vector getVelocity(){
+    public Vector getVelocity(int a){
         return this.velocity;
     }
 
@@ -91,7 +91,7 @@ public class Probe implements Body{
         // gets titan object
         celestialBody titan = SolarSystem.planets.get(SystemProperties.TITAN);
 
-        this.distanceToTitan = this.location.subtract(titan.getLocation()).magnitude();
+        this.distanceToTitan = this.location.subtract(titan.getLocation(3)).magnitude();
 
         // if distance to titans surface is less or equal to 300 km we consider that titan is reached
         if (distanceToTitan <= titan.getRadius() + 300) {

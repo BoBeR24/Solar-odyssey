@@ -22,6 +22,8 @@ public class SimulationLogic {
 
 
     public SimulationLogic(final Odyssey game) {
+
+        SystemProperties.generateState();
         this.game = game;
         this.timer = new Timer(31536000); // set up timer for 1 year by default
 //        this.timer = new Timer(90); // set up timer for 1 year by default
@@ -32,6 +34,7 @@ public class SimulationLogic {
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
+
     }
 
     /**
@@ -87,9 +90,16 @@ public class SimulationLogic {
      * */
     public void applyNewState() {
         // apply all calculated positions and velocities
+        for (int i = 0; i < 3; i++) {
+            for (celestialBody planet : SolarSystem.planets) {
+                planet.setLocation(planet.getLocation(i+1), i);
+                planet.setVelocity(planet.getVelocity(i+1), i);
+            
+            }
+        }
         for (celestialBody planet : SolarSystem.planets) {
-            planet.setLocation(SystemProperties.coordinates_nextState[planet.getId()]);
-            planet.setVelocity(SystemProperties.velocities_nextState[planet.getId()]);
+            planet.setLocation(SystemProperties.coordinates_nextState[planet.getId()],3);
+            planet.setVelocity(SystemProperties.velocities_nextState[planet.getId()],3);
         }
     }
 
@@ -99,13 +109,13 @@ public class SimulationLogic {
     public void redrawScene() {
         for (celestialBody planet : SolarSystem.planets) {
             game.shape.setColor(planet.getColor());
-            game.shape.ellipse((float) (centerScreenCords.x + (planet.getLocation().x / scaleFactor) - (planet.getWidth() / 2)), (float) (centerScreenCords.y + (planet.getLocation().y / scaleFactor) - (planet.getHeight()) / 2), planet.getWidth(), planet.getHeight());
+            game.shape.ellipse((float) (centerScreenCords.x + (planet.getLocation(3).x / scaleFactor) - (planet.getWidth() / 2)), (float) (centerScreenCords.y + (planet.getLocation(3).y / scaleFactor) - (planet.getHeight()) / 2), planet.getWidth(), planet.getHeight());
         }
 
         for (Probe probe : SolarSystem.probes) {
             game.shape.setColor(Color.VIOLET);
-            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - 5),
-                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - 5),
+            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation(3).x / scaleFactor) - 5),
+                    (float) (centerScreenCords.y + (probe.getLocation(3).y / scaleFactor) - 5),
                     10, 10);
         }
     }
@@ -113,7 +123,7 @@ public class SimulationLogic {
     /** method to keep camera centered at the first probe position(so camera follows the first probe)
      * */
     public void moveCameraToProbe(OrthographicCamera camera){
-        Vector toFollow = SolarSystem.probes.get(0).getLocation(); // our custom vector
+        Vector toFollow = SolarSystem.probes.get(0).getLocation(3); // our custom vector
         Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / scaleFactor), centerScreenCords.y + (float) (toFollow.y / scaleFactor), 0);
 
         camera.position.set(toFollow_gdx);
