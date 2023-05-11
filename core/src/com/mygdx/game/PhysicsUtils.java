@@ -37,9 +37,9 @@ public class PhysicsUtils{
             forcesSum = forcesSum.add(force);
         }
 
-        updateVelocity(body, forcesSum);
         updateCoordinate(body);
-        
+        updateVelocity(body, forcesSum);
+
     }
     
     private static void updateVelocity(Body body, Vector forcesSum){
