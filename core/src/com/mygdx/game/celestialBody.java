@@ -18,22 +18,18 @@ public class celestialBody implements Body{
 
 
     celestialBody(int index){
-//        this.name = name;
-
-//        this.id = SystemProperties.entities.get(name);
-
         this.id = index;
 
         this.color = Color.WHITE; // default color
 
-        this.location = new Vector(SystemProperties.coordinates[id]);
-        this.velocity = new Vector(SystemProperties.velocities[id]);
+        this.location = new Vector(SystemProperties.initCoordinates[id]);
+        this.velocity = new Vector(SystemProperties.initVelocities[id]);
 
         this.radius = SystemProperties.radii[id];
 
         this.mass = SystemProperties.masses[id];
 
-        // if object id refers to the Sun scaling factor differs, otherwise sun is too big
+        // if object id refers to the Sun scaling factor differs, to avoid sun being too big
         if (this.id == 0) {
             this.width = SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8); // default width and height
             this.height = SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8);
@@ -98,6 +94,7 @@ public class celestialBody implements Body{
     public double getMass(){
         return this.mass;
     }
+
 
     @Override
     public celestialBody clone() {

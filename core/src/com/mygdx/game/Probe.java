@@ -18,8 +18,8 @@ public class Probe implements Body{
     Probe(Vector starterVelocity, Vector starterLocation){
         this.mass = 50000;
         // add relative location and velocity to Earths initial condition to get absolute values
-        this.velocity = SystemProperties.velocities[SystemProperties.EARTH].add(starterVelocity);
-        this.location = SystemProperties.coordinates[SystemProperties.EARTH].add(starterLocation);
+        this.velocity = SystemProperties.initVelocities[SystemProperties.EARTH].add(starterVelocity);
+        this.location = SystemProperties.initCoordinates[SystemProperties.EARTH].add(starterLocation);
 
         this.pStart = new Vector(this.location);
         this.vStart = new Vector(this.velocity);
