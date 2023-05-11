@@ -2,14 +2,16 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
 
-import java.util.Objects;
-
 /**
  * Class representing all bodies in simulated system
  * */
 public class celestialBody implements Body{
 //    private final String name; // name of the body
     private final int id; // id which represents position in the list of bodies
+    private Vector location;
+    private Vector velocity;
+    private int radius;
+    private double mass;
     private Color color; // color of the body
     private int width; // width of the image of the body
     private int height; // height of the image of the body
@@ -23,6 +25,13 @@ public class celestialBody implements Body{
         this.id = index;
 
         this.color = Color.WHITE; // default color
+
+        this.location = new Vector(SystemProperties.coordinates[id]);
+        this.velocity = new Vector(SystemProperties.velocities[id]);
+
+        this.radius = SystemProperties.radii[id];
+
+        this.mass = SystemProperties.masses[id];
 
         // if object id refers to the Sun scaling factor differs, otherwise sun is too big
         if (this.id == 0) {
@@ -50,9 +59,9 @@ public class celestialBody implements Body{
 
     @Override
     public void setLocation(double x, double y, double z) {
-        SystemProperties.coordinates[id].x = x;
-        SystemProperties.coordinates[id].y = y;
-        SystemProperties.coordinates[id].z = z;
+        this.location.x = x;
+        this.location.y = y;
+        this.location.z = z;
     }
 
     public void setLocation(Vector vector) {
@@ -61,18 +70,14 @@ public class celestialBody implements Body{
 
     @Override
     public void setVelocity(double x, double y, double z) {
-         SystemProperties.velocities[id].x = x;
-         SystemProperties.velocities[id].y = y;
-         SystemProperties.velocities[id].z = z;
+         this.velocity.x = x;
+         this.velocity.y = y;
+         this.velocity.z = z;
     }
 
     public void setVelocity(Vector vector) {
         this.setVelocity(vector.x, vector.y, vector.z);
     }
-
-//    public String getName(){
-//        return name;
-//    }
 
     @Override
     public int getId() {
@@ -81,18 +86,31 @@ public class celestialBody implements Body{
 
     @Override
     public Vector getLocation(){
-        return SystemProperties.coordinates[id];
+        return this.location;
     }
+
     @Override
     public Vector getVelocity(){
-        return SystemProperties.velocities[id];
+        return this.velocity;
     }
+
     @Override
     public double getMass(){
-        return SystemProperties.masses[id];
+        return this.mass;
     }
+
+    @Override
+    public celestialBody clone() {
+        celestialBody cloned_body = new celestialBody(this.id);
+
+        cloned_body.setLocation(new Vector(this.location));
+        cloned_body.setVelocity(new Vector(this.velocity));
+
+        return cloned_body;
+    }
+
     public double getRadius(){
-        return SystemProperties.radii[id];
+        return this.radius;
     }
 
     public Color getColor() {

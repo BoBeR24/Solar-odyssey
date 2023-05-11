@@ -2,13 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
-import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import java.util.ArrayList;
 
 /**
  * Screen in which solar system simulation happens

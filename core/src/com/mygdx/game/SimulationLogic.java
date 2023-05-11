@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.Arrays;
+
 /**
  * class which contains all logics for simulation running process
  * */
@@ -63,13 +65,14 @@ public class SimulationLogic {
 
 //                    if ((timeCounter == timeDesired) || (timeCounter + range == timeDesired) || (timeCounter - range == timeDesired)) {
                     // Pauses when point in time is reached and displays information about probe
-                    if (timer.isTimeReached() || best_Probe.isTitanReached()) {
+                    if (timer.isTimeReached() || (best_Probe != null && best_Probe.isTitanReached())) {
                         System.out.println("Time taken(in seconds): " + timer.getTimePassed());
                         System.out.println("Minimal distance to Titan center " + minTitanDistance);
                         best_Probe.displayData();
                         pause();
                     }
 
+                    System.out.println(SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
                     applyNewState(); // update states of objects
 
                 default:
@@ -86,6 +89,7 @@ public class SimulationLogic {
      calculations happen in one state)
      * */
     public void applyNewState() {
+
         // apply all calculated positions and velocities
         for (celestialBody planet : SolarSystem.planets) {
             planet.setLocation(SystemProperties.coordinates_nextState[planet.getId()]);
@@ -113,11 +117,14 @@ public class SimulationLogic {
     /** method to keep camera centered at the first probe position(so camera follows the first probe)
      * */
     public void moveCameraToProbe(OrthographicCamera camera){
-        Vector toFollow = SolarSystem.probes.get(0).getLocation(); // our custom vector
-        Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / scaleFactor), centerScreenCords.y + (float) (toFollow.y / scaleFactor), 0);
+        if (SolarSystem.probes.size() > 0) {
+            Vector toFollow = SolarSystem.probes.get(0).getLocation(); // our custom vector
+            Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / scaleFactor), centerScreenCords.y + (float) (toFollow.y / scaleFactor), 0);
 
-        camera.position.set(toFollow_gdx);
-        camera.update();
+            camera.position.set(toFollow_gdx);
+            camera.update();
+        }
+
     }
 
     /** method to pause the simulation by switching current state of the game to paused
