@@ -35,7 +35,9 @@ public class Probe implements Body{
 
     @Override
     public void setLocation(double x, double y, double z){
-        this.location = new Vector(x, y, z);
+        this.location.x = x;
+        this.location.y = y;
+        this.location.z = z;
 
         // if the location of the probe changes - distance to Titan also changes
         updateDistanceToTitan();
@@ -47,7 +49,9 @@ public class Probe implements Body{
 
     @Override
     public void setVelocity(double x, double y, double z){
-        this.velocity = new Vector(x, y, z);
+        this.velocity.x = x;
+        this.velocity.y = y;
+        this.velocity.z = z;
     }
 
     public void setVelocity(Vector vector){
