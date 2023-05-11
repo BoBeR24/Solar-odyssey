@@ -6,7 +6,6 @@ public class ProbeLauncher {
      * */
     public static void launch(Vector velocity){
         Probe probe = new Probe(velocity);
-        probe.setVelocity(probe.getVelocity().add(velocity)); // add initial velocity
         SolarSystem.probes.add(probe);
     }
 }

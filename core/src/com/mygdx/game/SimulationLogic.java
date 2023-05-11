@@ -72,7 +72,6 @@ public class SimulationLogic {
                         pause();
                     }
 
-                    System.out.println(SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
                     applyNewState(); // update states of objects
 
                 default:

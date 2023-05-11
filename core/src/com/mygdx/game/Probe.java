@@ -12,14 +12,14 @@ public class Probe implements Body{
     private boolean titanReached;
 
     /** Creating Probe with specified starter velocity and location
-     * @param starterVelocity - initial velocity of the probe
-     * @param starterLocation - initial location of the probe
+     * @param starterVelocity - initial velocity of the probe relative to Earth
+     * @param starterLocation - initial location of the probe relative to Earth
      * */
     Probe(Vector starterVelocity, Vector starterLocation){
         this.mass = 50000;
-        this.velocity = starterVelocity;
-        this.location = starterLocation;
-//        this.velocity = SystemProperties.velocities[3]; // default velocity
+        // add relative location and velocity to Earths initial condition to get absolute values
+        this.velocity = SystemProperties.velocities[SystemProperties.EARTH].add(starterVelocity);
+        this.location = SystemProperties.coordinates[SystemProperties.EARTH].add(starterLocation);
 
         this.pStart = new Vector(this.location);
         this.vStart = new Vector(this.velocity);
@@ -30,9 +30,7 @@ public class Probe implements Body{
      * @param starterVelocity - initial velocity of the probe
      * */
     Probe(Vector starterVelocity) {
-        this(starterVelocity, SystemProperties.coordinates[SystemProperties.EARTH].add(
-                new Vector(SystemProperties.radii[SystemProperties.EARTH], 0, 0))
-        );
+        this(starterVelocity, new Vector(SystemProperties.radii[SystemProperties.EARTH], 0, 0));
     }
 
     @Override
