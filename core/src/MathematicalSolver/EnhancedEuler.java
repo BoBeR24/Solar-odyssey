@@ -7,7 +7,7 @@ public class EnhancedEuler implements MathematicalSolver {
     //TODO implement these methods with enhanced euler solver
     @Override
     public void updateVelocities(Body body, Vector forceSum) {
-        // TODO Auto-generated method stub
+        // TODO Auto-generated method stub jj
         throw new UnsupportedOperationException("Unimplemented method 'setVelocities'");
     }
 
