@@ -10,16 +10,20 @@ public class Probe implements Body{
     private Vector vStart; // To track the starting velocity of the probe
     private double distanceToTitan; // closest the probe has gotten to titan
     private boolean titanReached;
-    
 
-    Probe(Vector starterVelocity) {
-//        this.name = "Probe";
+
+    Probe(Vector starterVelocity, Vector starterLocation){
         this.mass = 50000;
         this.location = SystemProperties.coordinates[3].add(new Vector(SystemProperties.radii[3], 0, 0)); // default position
-        this.velocity = SystemProperties.velocities[3]; // default velocity
+        this.velocity = starterLocation; // default velocity
+//        this.velocity = SystemProperties.velocities[3]; // default velocity
 
         this.pStart = new Vector(this.location);
         this.vStart = new Vector(starterVelocity);
+    }
+
+    Probe(Vector starterVelocity) {
+        this(starterVelocity, SystemProperties.velocities[3]);
     }
 
     @Override
@@ -63,9 +67,10 @@ public class Probe implements Body{
         return id;
     }
 
-//    public String getName() {
-//        return this.name;
-//    }
+    @Override
+    public Probe clone(){
+        return new Probe(new Vector(this.velocity), new Vector(this.location));
+    }
 
     public Vector getPStart(){
         return pStart;

@@ -9,7 +9,8 @@ public class celestialBody implements Body{
 //    private final String name; // name of the body
     private final int id; // id which represents position in the list of bodies
     private Vector location;
-    private Vector velocities;
+    private Vector velocity;
+    private int radius;
     private Color color; // color of the body
     private int width; // width of the image of the body
     private int height; // height of the image of the body
@@ -25,7 +26,9 @@ public class celestialBody implements Body{
         this.color = Color.WHITE; // default color
 
         this.location = new Vector(SystemProperties.coordinates[id]);
-        this.velocities = new Vector(SystemProperties.velocities[id]);
+        this.velocity = new Vector(SystemProperties.velocities[id]);
+
+        this.radius = SystemProperties.radii[id];
 
         // if object id refers to the Sun scaling factor differs, otherwise sun is too big
         if (this.id == 0) {
@@ -64,18 +67,14 @@ public class celestialBody implements Body{
 
     @Override
     public void setVelocity(double x, double y, double z) {
-         this.velocities.x = x;
-         this.velocities.y = y;
-         this.velocities.z = z;
+         this.velocity.x = x;
+         this.velocity.y = y;
+         this.velocity.z = z;
     }
 
     public void setVelocity(Vector vector) {
         this.setVelocity(vector.x, vector.y, vector.z);
     }
-
-//    public String getName(){
-//        return name;
-//    }
 
     @Override
     public int getId() {
@@ -86,16 +85,29 @@ public class celestialBody implements Body{
     public Vector getLocation(){
         return SystemProperties.coordinates[id];
     }
+
     @Override
     public Vector getVelocity(){
         return SystemProperties.velocities[id];
     }
+
     @Override
     public double getMass(){
         return SystemProperties.masses[id];
     }
+
+    @Override
+    public celestialBody clone() {
+        celestialBody cloned_body = new celestialBody(this.id);
+
+        cloned_body.setLocation(new Vector(this.location));
+        cloned_body.setVelocity(new Vector(this.velocity));
+
+        return cloned_body;
+    }
+
     public double getRadius(){
-        return SystemProperties.radii[id];
+        return this.radius;
     }
 
     public Color getColor() {
