@@ -10,18 +10,22 @@ public class Rk4 {
         Vector initialVel;
 
         //Calculated with current time
+        //Calculate Force Vector with initial values
         k1Vel = updateVelocity(body, forceSum, initialVel);
         k1Pos = updateCoordinate(body, initialVel, initialPos);
 
         //Change time = time + stepsize/2, calculate with k1 values
+        //Calculate Force Vector with k1
         k2Vel = updateVelocity(body, forceSum, initialVel.add(k1Vel.multiply(0.5)));
         k2Pos = updateCoordinate(body, initialVel.add(k1Vel.multiply(0.5)), initialPos.add(k1Pos.multiply(0.5)));
 
         //Keep same time as k2, but calculate with k2 values
+        //Calculate Force Vector with k2
         k3Vel = updateVelocity(body, forceSum, initialVel.add(k2Vel.multiply(0.5)));
         k3Pos = updateCoordinate(body, initialVel.add(k2Vel.multiply(0.5)), initialPos.add(k2Pos.multiply(0.5)));
 
         //Change time = time + stepsize
+        //Calculate Force Vector with k3
         k4Vel = updateVelocity(body, forceSum, initialVel.add(k3Vel));
         k4Pos = updateCoordinate(body, initialVel.add(k3Vel), initialPos.add(k3Pos));
 
@@ -31,10 +35,10 @@ public class Rk4 {
     }
 
     private static Vector updateVelocity(Body body, Vector forcesSum, Vector velocity){
-        //Same as physicsUTIL but dont change state yet
+        //Same as physicsUTIL but dont change state yet and return a vector instead
     }
     private static Vector updateCoordinate(Body body, Vector velocity, Vector position){
-        //Same as physicsUTIL but dont change state yet
+        //Same as physicsUTIL but dont change state yet and return a vector instead
     }
 
 }
