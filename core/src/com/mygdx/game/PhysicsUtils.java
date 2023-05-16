@@ -9,10 +9,22 @@ public class PhysicsUtils{
     public final static int STEPSIZE = 30;
 
    /**
-    * Calculates sum of the forces and initializes methods for updating velocity and coordinates
+    * initializes methods for updating velocity and coordinates
     * @param body object that the forces are being exerted on
     */
     public static void calculateNextState(Body body){
+        Vector force = calcForce(body);
+
+        updateCoordinate(body);
+        updateVelocity(body, force);
+
+    }
+
+    // TODO we need to decide for RK4 method, do we need to update whole system for k1, k2, etc. steps or only current body
+    // TODO if we need to update whole system, then following method should be changed
+    /** Calculates sum of the forces
+     * */
+    public static Vector calcForce(Body body) {
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
 
         // Loops through all celestial bodies except itself and the probe since an object cant affect itself
@@ -37,31 +49,7 @@ public class PhysicsUtils{
             forcesSum = forcesSum.add(force);
         }
 
-        updateCoordinate(body);
-        updateVelocity(body, forcesSum);
-
-    }
-    
-    private static void updateVelocity(Body body, Vector forcesSum){
-        int index = body.getId();
-
-        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
-        if (index != SystemProperties.PROBE) {
-
-            SystemProperties.velocities_nextState[index].set(
-                    body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
-                    body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-                    body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
-            );
-
-            return;
-        }
-
-        body.setVelocity(
-                body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
-                body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-                body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
-        );
+        return forcesSum;
     }
 
     private static void updateCoordinate(Body body){
@@ -85,5 +73,28 @@ public class PhysicsUtils{
                 (body.getLocation().z + body.getVelocity().z * STEPSIZE)
         );
     }
+
+    private static void updateVelocity(Body body, Vector forcesSum){
+        int index = body.getId();
+
+        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
+        if (index != SystemProperties.PROBE) {
+
+            SystemProperties.velocities_nextState[index].set(
+                    body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
+                    body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
+                    body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
+            );
+
+            return;
+        }
+
+        body.setVelocity(
+                body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
+                body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
+                body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
+        );
+    }
+
 
 }
