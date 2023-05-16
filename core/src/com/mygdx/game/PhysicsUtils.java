@@ -53,47 +53,55 @@ public class PhysicsUtils{
     }
 
     private static void updateCoordinate(Body body){
-        int index = body.getId();
+//        int index = body.getId();
+//
+//        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
+//        if (index != SystemProperties.PROBE) {
+//
+//            SystemProperties.coordinates_nextState[index].set(
+//                    (body.getLocation().x + body.getVelocity().x * STEPSIZE),
+//                    (body.getLocation().y + body.getVelocity().y * STEPSIZE),
+//                    (body.getLocation().z + body.getVelocity().z * STEPSIZE)
+//            );
+//
+//            return;
+//        }
+//
+//        body.setLocation(
+//                (body.getLocation().x + body.getVelocity().x * STEPSIZE),
+//                (body.getLocation().y + body.getVelocity().y * STEPSIZE),
+//                (body.getLocation().z + body.getVelocity().z * STEPSIZE)
+//        );
 
-        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
-        if (index != SystemProperties.PROBE) {
-
-            SystemProperties.coordinates_nextState[index].set(
-                    (body.getLocation().x + body.getVelocity().x * STEPSIZE),
-                    (body.getLocation().y + body.getVelocity().y * STEPSIZE),
-                    (body.getLocation().z + body.getVelocity().z * STEPSIZE)
-            );
-
-            return;
-        }
-
-        body.setLocation(
-                (body.getLocation().x + body.getVelocity().x * STEPSIZE),
+        body.setNextLocation((body.getLocation().x + body.getVelocity().x * STEPSIZE),
                 (body.getLocation().y + body.getVelocity().y * STEPSIZE),
-                (body.getLocation().z + body.getVelocity().z * STEPSIZE)
-        );
+                (body.getLocation().z + body.getVelocity().z * STEPSIZE));
     }
 
     private static void updateVelocity(Body body, Vector forcesSum){
-        int index = body.getId();
+//        int index = body.getId();
+//
+//        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
+//        if (index != SystemProperties.PROBE) {
+//
+//            SystemProperties.velocities_nextState[index].set(
+//                    body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
+//                    body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
+//                    body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
+//            );
+//
+//            return;
+//        }
+//
+//        body.setVelocity(
+//                body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
+//                body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
+//                body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
+//        );
 
-        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
-        if (index != SystemProperties.PROBE) {
-
-            SystemProperties.velocities_nextState[index].set(
-                    body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
-                    body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-                    body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
-            );
-
-            return;
-        }
-
-        body.setVelocity(
-                body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
+        body.setNextVelocity(body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
                 body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-                body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
-        );
+                body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass());
     }
 
 

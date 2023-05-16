@@ -9,7 +9,9 @@ public class celestialBody implements Body{
 //    private final String name; // name of the body
     private final int id; // id which represents position in the list of bodies
     private Vector location;
+    private Vector nextLocation; // location to which planet will be moved in the next state of the system
     private Vector velocity;
+    private Vector nextVelocity; // velocity of the current object in the next state of the system
     private int radius;
     private double mass;
     private Color color; // color of the body
@@ -24,6 +26,10 @@ public class celestialBody implements Body{
 
         this.location = new Vector(SystemProperties.initCoordinates[id]);
         this.velocity = new Vector(SystemProperties.initVelocities[id]);
+
+        // let next states initially be same as current(they will be changed anyway)
+        this.nextLocation = new Vector(this.location);
+        this.nextVelocity = new Vector(this.velocity);
 
         this.radius = SystemProperties.radii[id];
 
@@ -41,16 +47,23 @@ public class celestialBody implements Body{
         }
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+
+    // example of cloning Earth:
+    // Body new_body = SolarSystem.planets.get(SystemProperties.EARTH).clone();
+    @Override
+    public celestialBody clone() {
+        celestialBody cloned_body = new celestialBody(this.id);
+
+        cloned_body.setLocation(new Vector(this.location));
+        cloned_body.setVelocity(new Vector(this.velocity));
+
+        return cloned_body;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
+    @Override
+    public void update() {
+        this.location = this.nextLocation;
+        this.velocity = this.nextVelocity;
     }
 
     @Override
@@ -76,6 +89,39 @@ public class celestialBody implements Body{
     }
 
     @Override
+    public void setNextLocation(double x, double y, double z) {
+        this.nextLocation.x = x;
+        this.nextLocation.y = y;
+        this.nextLocation.z = z;
+    }
+
+    public void setNextLocation(Vector vector) {
+        this.setNextLocation(vector.x, vector.y, vector.z);
+    }
+    @Override
+    public void setNextVelocity(double x, double y, double z) {
+        this.nextVelocity.x = x;
+        this.nextVelocity.y = y;
+        this.nextVelocity.z = z;
+    }
+
+    public void setNextVelocity(Vector vector) {
+        this.setNextVelocity(vector.x, vector.y, vector.z);
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    @Override
     public int getId() {
         return id;
     }
@@ -95,17 +141,6 @@ public class celestialBody implements Body{
         return this.mass;
     }
 
-
-    @Override
-    public celestialBody clone() {
-        celestialBody cloned_body = new celestialBody(this.id);
-
-        cloned_body.setLocation(new Vector(this.location));
-        cloned_body.setVelocity(new Vector(this.velocity));
-
-        return cloned_body;
-    }
-
     public double getRadius(){
         return this.radius;
     }
@@ -121,4 +156,7 @@ public class celestialBody implements Body{
     public int getWidth() {
         return width;
     }
+
+
+
 }

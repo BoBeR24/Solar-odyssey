@@ -6,6 +6,10 @@ package com.mygdx.game;
 public interface Body {
     void setLocation(double x, double y, double z);
     void setVelocity(double x, double y, double z);
+
+    void setNextLocation(double x, double y, double z);
+    void setNextVelocity(double x, double y, double z);
+
     Vector getLocation();
 
     Vector getVelocity();
@@ -17,4 +21,8 @@ public interface Body {
      * @return cloned object
      * */
     Body clone();
+
+    /** method which updates object to the next state
+     * */
+    void update();
 }

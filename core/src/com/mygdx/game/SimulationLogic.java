@@ -26,14 +26,22 @@ public class SimulationLogic {
     public SimulationLogic(final Odyssey game) {
         this.game = game;
         this.timer = new Timer(31536000); // set up timer for 1 year by default
-//        this.timer = new Timer(90); // set up timer for 1 year by default
-
-//        int temp = timeDesired / PhysicsUtils.STEPSIZE;
-                //Calculates range in case the step size is not a multiple of the point in time
-//        range = timeDesired - PhysicsUtils.STEPSIZE * temp; (do we need this range approach?)
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
+
+        SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
+
+//        for (double x = 0.2360; x < 0.2410; x = x + 0.0002) {
+//            for (double y = 0.006862175; y < 0.007162175; y = y + 0.0002) {
+//                for (double z = 0.08; z < 0.086736; z = z + 0.001) {
+//                    ProbeLauncher.launch(new Vector(41.0 + x, -15.0 - y, -3.1 - z));
+//                }
+//            }
+//        }
+
+        ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // probe that hits titan(it doesn't)
+
     }
 
     /**
@@ -45,7 +53,6 @@ public class SimulationLogic {
             switch (SolarSystemScreen.state) {
 
                 case RUNNING:
-//                    timeCounter += PhysicsUtils.STEPSIZE;
                     timer.iterate(PhysicsUtils.STEPSIZE);
 
                     for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
@@ -63,7 +70,6 @@ public class SimulationLogic {
                         }
                     }
 
-//                    if ((timeCounter == timeDesired) || (timeCounter + range == timeDesired) || (timeCounter - range == timeDesired)) {
                     // Pauses when point in time is reached and displays information about probe
                     if (timer.isTimeReached() || (best_Probe != null && best_Probe.isTitanReached())) {
                         System.out.println("Time taken(in seconds): " + timer.getTimePassed());
@@ -88,11 +94,14 @@ public class SimulationLogic {
      calculations happen in one state)
      * */
     public void applyNewState() {
+        for (Probe probe : SolarSystem.probes) {
+            probe.update();
+        }
 
-        // apply all calculated positions and velocities
         for (celestialBody planet : SolarSystem.planets) {
-            planet.setLocation(SystemProperties.coordinates_nextState[planet.getId()]);
-            planet.setVelocity(SystemProperties.velocities_nextState[planet.getId()]);
+//            planet.setLocation(SystemProperties.coordinates_nextState[planet.getId()]);
+//            planet.setVelocity(SystemProperties.velocities_nextState[planet.getId()]);
+            planet.update();
         }
     }
 
