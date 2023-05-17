@@ -14,13 +14,10 @@ public class Pathfinding {
         
         // figure out if speed adjustment is needed
         double maxAcceleration = 0;
-        double maxVelocityPotential = probe.getVelocity().magnitude() + maxAccelerationPossible;
-        boolean needToSlowDown = false;
         if(maxAccelerationPossible <= distanceToGoal*maxVelocity){
             maxAcceleration = maxAccelerationPossible;
         } else {
             maxAcceleration = (maxAccelerationPossible/distanceToGoal) - velocity;
-            needToSlowDown = true;
         }
         probe.setVelocity(probe.getVelocity().add(maxAcceleration));
     }
