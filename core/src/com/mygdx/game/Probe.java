@@ -11,6 +11,7 @@ public class Probe implements Body{
     private Vector vStart; // To track the starting velocity of the probe
     private double distanceToTitan; // closest the probe has gotten to titan
     private boolean titanReached;
+    private double feul; // feul measured in Delta-v
 
     /** Creating Probe with specified starter velocity and location
      * @param starterVelocity - initial velocity of the probe relative to Earth
@@ -162,5 +163,13 @@ public class Probe implements Body{
     @Override
     public int getId() {
         return id;
+    }
+
+    public double getFeul(){
+        return feul;
+    }
+
+    public void setfeul(double feul){
+        this.feul = feul;
     }
 }

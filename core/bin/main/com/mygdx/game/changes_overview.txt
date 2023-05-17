@@ -1,0 +1,65 @@
+All changes by files:
+
+Body interface:
+slightly changed according to new way of getting objects(getName() replaced with getId())
+
+
+celestialBody class:
+field name is not used anymore.
+
+id is now used to represent which body do we work with
+
+setLocation and setVelocity now also accept vectors
+
+
+PhysicsUtils class:
+all fields with properties are removed. Now only SystemProperties instance of these arrays are used
+
+rewrote updateVelocity and updateLocation methods a little bit(logically they are the same as before, just written in a different way)
+
+distanceToTitan method moved to a Probe class
+
+updateBody method renamed to calculateNextState
+
+
+Probe class:
+name field is not used anymore
+
+now id is used to identify probe among others Body objects(all probes have the same id which is specified as a constant in SystemProperties)
+
+new field titanReached introduced
+
+now each time we update location of a probe it also updates distanceToTitan with help of updateDistanceToTitan method
+
+method displayData introduced. It prints all necessary information about the probe
+
+
+SimulationLogic class:
+timeCounter removed
+
+functionality of timeCounter is now implemented in Timer class
+
+new field minDistanceToTitan introduce to save best distance to titan
+
+if-else statement where we decide to stop simulation is reduced to one block now
+
+applyNewState method introduced(which updates current state of all planets to the next state) - thanks to this feature bug I described in whatsapp is fixed (now we actually use values only from one state at the same time)
+
+moveCamera method is renamed to moveCameraToProbe
+
+
+SystemInitializer class:
+class which I created to add all planets to our system. Now it uses constant ids from SystemProperties to specify planet type
+
+
+SystemProperties class:
+hashmap entities removed
+now different constants contain different ids of different planets which makes it easier to receive index of a planet and thus easier to get planet instances from SolarSystem.planets arraylist
+
+next states of coordinates and velocities are moved here. Now they initially store zero-vectors
+
+Timer class:
+
+new class which is now used instead of counter. Information about its methods can be found in comments of the code
+
+
