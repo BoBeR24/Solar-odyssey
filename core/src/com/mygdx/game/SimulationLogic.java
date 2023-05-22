@@ -25,22 +25,17 @@ public class SimulationLogic {
 
     public SimulationLogic(final Odyssey game) {
         this.game = game;
-        this.timer = new Timer(31536000); // set up timer for 1 year by default
+        this.timer = new Timer(31536000 * 2); // set up timer for 1 * 2 years by default 
+        // this.timer = new Timer(10);
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
 
         SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
 
-//        for (double x = 0.2360; x < 0.2410; x = x + 0.0002) {
-//            for (double y = 0.006862175; y < 0.007162175; y = y + 0.0002) {
-//                for (double z = 0.08; z < 0.086736; z = z + 0.001) {
-//                    ProbeLauncher.launch(new Vector(41.0 + x, -15.0 - y, -3.1 - z));
-//                }
-//            }
-//        }
+//      ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // probe that hits titan(it doesn't)
 
-        ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // probe that hits titan(it doesn't)
+        ProbeLauncher.launch(new Vector(1,1,1));
 
     }
 
@@ -48,25 +43,26 @@ public class SimulationLogic {
      * updates the current state of the simulation. Draws all objects
      * */
     public void update(){
+        boolean hasCompletedItteration = false;
         for (int i = 0; i < 600; i++) { // amount of calculations per frame(to speed up the simulation)
             // Determines what happens when the Solar System is PAUSED or RUNNING
             switch (SolarSystemScreen.state) {
 
                 case RUNNING:
                     timer.iterate(PhysicsUtils.STEPSIZE);
-
+                
                     for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
                         PhysicsUtils.calculateNextState(planet);
                     }
-
+                 
                     for (Probe probe : SolarSystem.probes) { // calculates next positions for probes
                         PhysicsUtils.calculateNextState(probe);
+                    }
 
-                        // I still don't like this part, so if someone have any ideas how to make it better
-                        // please enlighten me
-                        if (probe.getDistanceToTitan() < minTitanDistance) {
-                            minTitanDistance = probe.getDistanceToTitan(); // updates best distance to titan so far
-                            best_Probe = probe; // saves probe which reached best distance to the Titan
+                    // gives the probe a thrust
+                    if (hasCompletedItteration){
+                        for (Probe probe : SolarSystem.probes) {
+                        Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.TITAN), 50, 50);
                         }
                     }
 
@@ -84,6 +80,7 @@ public class SimulationLogic {
                     break;
 
             }
+            hasCompletedItteration = true;
         }
 
         redrawScene(); // redraw all entities of the system

@@ -127,6 +127,10 @@ public class Probe implements Body{
         this.nextLocation.z = z;
     }
 
+    public Vector getNextVelocity(){
+        return nextVelocity;
+    }
+
     public void setNextLocation(Vector vector) {
         this.setNextLocation(vector.x, vector.y, vector.z);
     }
