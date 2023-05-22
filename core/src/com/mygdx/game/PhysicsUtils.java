@@ -86,27 +86,16 @@ public class PhysicsUtils{
         return probe_location.subtract(target_location);
     }
 
-    public static void Ralston (Body body, int stepSize){
-        Body copy1 = body.copy();
-        Body copy2 = body.copy();
-        Body copy3 = body.copy();
+    public static Vector Ralston (Body body, int stepSize){
+        Body copy1 = body.clone();
         Vector k1 = calculateForce(copy1).multiply(stepSize);
         //TO-DO my problem is that i am updating copy but at the same time my steps depends on on the initial positions of the body so i dont
         // know how to connect it if i calculate it for the body at certain position
-        updateVelocityRalston(copy1, k1.multiply(0.5));
-        updateCoordinateRalston(copy1, stepSize/2);
+        //updateVelocityRalston(copy1, k1.multiply(0.75));
+        updateCoordinateRalston(copy1, stepSize*3/4);
         // update position and velocity to calculate next step (here h/2)
         Vector k2 = calculateForce(copy1).multiply(stepSize);
-        updateVelocityRalston(copy2, k1.multiply(0.5));
-        updateCoordinateRalston(copy2, stepSize/2);
-        Vector k3 = calculateForce(copy2).multiply(stepSize);
-        updateVelocityRalston(copy3, k3);
-        updateCoordinateRalston(copy3, stepSize);
-        Vector k4 = calculateForce(copy3).multiply(stepSize);
-        Vector finalForce = k1.multiply(1/6).add(k2.multiply(1/3)).add(k3.multiply(1/3)).add(k4.multiply(1/6));
-        updateVelocityRalston(body, finalForce);
-        updateCoordinateRalston(body, stepSize);
-
+        Vector finalForce = k1.multiply(1/3).add(k2.multiply(2/3));
 
         // k1 h * force calculated based on initial body positions
         // then I update the the body based on k1/2 so step size h/2 so we call it b1
@@ -117,9 +106,7 @@ public class PhysicsUtils{
         // then k4 h * force caculated based on b3 
         // then I can finally update the proper body based on 1/6(k1 + 2*k2 + 2*k3 + k4)
 
-
-
-        
+        return finalForce;
     }
 
     public static Vector calculateForce(Body body){
