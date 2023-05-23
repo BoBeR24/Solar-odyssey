@@ -6,7 +6,7 @@ package com.mygdx.game;
 public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
-    public final static int STEPSIZE = 30;
+    public final static int STEPSIZE = 1;
 
    /**
     * initializes methods for updating velocity and coordinates

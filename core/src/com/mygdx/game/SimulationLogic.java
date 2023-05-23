@@ -62,7 +62,10 @@ public class SimulationLogic {
                     // gives the probe a thrust
                     if (hasCompletedItteration){
                         for (Probe probe : SolarSystem.probes) {
-                        Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.TITAN), 50, 50);
+                        Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.SATURN),0.01, 70);
+                        if (probe.getDistanceToTitan() <= 5000){
+                            pause();
+                        }
                         }
                     }
 
