@@ -5,7 +5,7 @@ package com.mygdx.game;
  * */
 public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared
-    private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
+    public final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
 //    private final static int STEPSIZE = 86400;
     public final static int STEPSIZE = 30;
     private final static Vector[] velocities = SystemProperties.velocities;
@@ -111,29 +111,37 @@ public class PhysicsUtils{
 
     public static Vector calculateForce(Body body){
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
-
         //Loops through all celestial bodies except itself and the probe since an object cant affect itself
         for (Body planet : SolarSystem.planets){
             if (planet.getName().equals(body.getName()) || planet.getClass().getSimpleName().equals("Probe")) {
                 continue;
             }
-            double scalingFactor = gravitationalConstant * planet.getMass() * body.getMass() * (-1);
-
-            Vector planetVector = planet.getLocation();
-            Vector bodyVector = body.getLocation();
-
-            //Difference between the vectors of the two celestial bodies
-            Vector force = bodyVector.subtract(planetVector);
-
-            double magnitude = Math.pow(force.magnitude(), 3);
-
-            force = force.multiply(scalingFactor / magnitude);
-
+            Vector force = singleForce(body, planet);
+            
             //adds forces by all bodies exerted on body
             forcesSum = forcesSum.add(force);
         }
         return forcesSum;
     }
+
+    public static Vector singleForce (Body body, Body planet){
+        Vector forcesSum = new Vector(0.0, 0.0, 0.0);
+
+        double scalingFactor = gravitationalConstant * planet.getMass() * body.getMass() * (-1);
+            Vector planetVector = planet.getLocation();
+            Vector bodyVector = body.getLocation();
+
+            //Difference between the vectors of the two celestial bodies
+            Vector force = bodyVector.subtract(planetVector);
+            double magnitude = Math.pow(force.magnitude(), 3);
+            force = force.multiply(scalingFactor / magnitude);
+
+            //adds forces by all bodies exerted on body
+            forcesSum = forcesSum.add(force);
+
+        return forcesSum;
+    }
+
 
     private static void updateVelocityRalston(Body body, Vector forcesSum){
         body.setVelocity(body.getVelocity().x + (forcesSum.x) / body.getMass(), body.getVelocity().y +
