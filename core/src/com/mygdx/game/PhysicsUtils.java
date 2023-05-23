@@ -13,7 +13,7 @@ public class PhysicsUtils{
     * @param body object that the forces are being exerted on
     */
     public static void calculateNextState(Body body){
-        Vector force = calcForce(body);
+        Vector force = allForce(body);
 
         updateCoordinate(body);
         updateVelocity(body, force);
@@ -24,7 +24,7 @@ public class PhysicsUtils{
     // TODO if we need to update whole system, then following method should be changed
     /** Calculates sum of the forces
      * */
-    public static Vector calcForce(Body body) {
+    public static Vector allForce(Body body) {
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
 
         // Loops through all celestial bodies except itself and the probe since an object cant affect itself
@@ -50,6 +50,27 @@ public class PhysicsUtils{
         }
 
         return forcesSum;
+    }
+
+    //Calculates the force exerted from the planet on the body
+    public static Vector singleForce(Body body, Body planet){
+        if (planet.getId() == body.getId() || planet.getId() == SystemProperties.PROBE) {
+            System.err.println("Error: Either both bodies inputted in singleForce method are the same body or the probe was inputted as a body");
+            return null;
+        }
+
+        Vector force = new Vector(0.0, 0.0, 0.0);
+
+        double scalingFactor = gravitationalConstant * planet.getMass() * body.getMass() * (-1);
+        Vector planetVector = planet.getLocation();
+        Vector bodyVector = body.getLocation();
+
+        //Difference between the vectors of the two celestial bodies
+        force = bodyVector.subtract(planetVector);
+        double magnitude = Math.pow(force.magnitude(), 3);
+        force = force.multiply(scalingFactor / magnitude);
+
+        return force;
     }
 
     private static void updateCoordinate(Body body){
