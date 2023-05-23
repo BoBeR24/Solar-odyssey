@@ -13,11 +13,11 @@ public class PhysicsUtils{
     * @param body object that the forces are being exerted on
     */
     public static void calculateNextState(Body body){
-        Vector force = allForce(body);
 
-        updateCoordinate(body);
-        updateVelocity(body, force);
+        Vector[] newValues = eulersSolver(body, STEPSIZE);
 
+        body.setNextLocation(newValues[0].x, newValues[0].y, newValues[0].z);
+        body.setNextVelocity(newValues[1].x, newValues[1].y, newValues[1].z);
     }
 
     // TODO we need to decide for RK4 method, do we need to update whole system for k1, k2, etc. steps or only current body
@@ -72,7 +72,7 @@ public class PhysicsUtils{
 
         return force;
     }
-
+/* 
     private static void updateCoordinate(Body body){
 //        int index = body.getId();
 //
@@ -97,9 +97,9 @@ public class PhysicsUtils{
         body.setNextLocation((body.getLocation().x + body.getVelocity().x * STEPSIZE),
                 (body.getLocation().y + body.getVelocity().y * STEPSIZE),
                 (body.getLocation().z + body.getVelocity().z * STEPSIZE));
-    }
+    } */
 
-    private static void updateVelocity(Body body, Vector forcesSum){
+/*   private static void updateVelocity(Body body, Vector forcesSum){
 //        int index = body.getId();
 //
 //        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
@@ -123,7 +123,32 @@ public class PhysicsUtils{
         body.setNextVelocity(body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
                 body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
                 body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass());
+    }*/
+
+
+    public static Vector[] eulersSolver(Body body, int STEPSIZE){
+        Vector force = allForce(body);
+
+        Vector[] newValues = new Vector[2];
+
+        newValues[0] = updateCoordinate(body, STEPSIZE);
+        newValues[1] = updateVelocity(body, force, STEPSIZE);
+
+        return newValues;
     }
 
+    private static Vector updateCoordinate(Body body, int STEPSIZE){
+        return new Vector(
+        (body.getLocation().x + body.getVelocity().x * STEPSIZE),
+        (body.getLocation().y + body.getVelocity().y * STEPSIZE),
+        (body.getLocation().z + body.getVelocity().z * STEPSIZE));
+    }
+
+    private static Vector updateVelocity(Body body, Vector forcesSum, int STEPSIZE){
+        return new Vector(
+        body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
+        body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
+        body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass());
+    }
 
 }
