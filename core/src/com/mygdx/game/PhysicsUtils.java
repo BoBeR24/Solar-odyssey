@@ -33,20 +33,7 @@ public class PhysicsUtils{
                 continue;
             }
 
-            double scalingFactor = gravitationalConstant * planet.getMass() * body.getMass() * (-1);
-
-            Vector planetVector = planet.getLocation();
-            Vector bodyVector = body.getLocation();
-
-            //Difference between the vectors of the two celestial bodies
-            Vector force = bodyVector.subtract(planetVector);
-
-            double magnitude = Math.pow(force.magnitude(), 3);
-
-            force = force.multiply(scalingFactor / magnitude);
-
-            //adds forces by all bodies exerted on body
-            forcesSum = forcesSum.add(force);
+            forcesSum = forcesSum.add(singleForce(body, planet));
         }
 
         return forcesSum;
@@ -54,10 +41,10 @@ public class PhysicsUtils{
 
     //Calculates the force exerted from the planet on the body
     public static Vector singleForce(Body body, Body planet){
-        if (planet.getId() == body.getId() || planet.getId() == SystemProperties.PROBE) {
-            System.err.println("Error: Either both bodies inputted in singleForce method are the same body or the probe was inputted as a body");
-            return null;
-        }
+//        if (planet.getId() == body.getId() || planet.getId() == SystemProperties.PROBE) {
+//            System.err.println("Error: Either both bodies inputted in singleForce method are the same body or the probe was inputted as a body");
+//            return null;
+//        }
 
         Vector force = new Vector(0.0, 0.0, 0.0);
 
