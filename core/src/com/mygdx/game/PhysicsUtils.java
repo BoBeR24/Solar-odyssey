@@ -12,6 +12,8 @@ public class PhysicsUtils{
     * initializes methods for updating velocity and coordinates
     * @param body object that the forces are being exerted on
     */
+   // one of the ways may be to move for loop for all planets to solvers themselves,
+   // so each call of solver would calculate next state for all bodies
     public static void calculateNextState(Body body){
 
         Vector[] newValues = EulerSolver.solve(body, STEPSIZE);
