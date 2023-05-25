@@ -14,7 +14,7 @@ public class PhysicsUtils{
     */
     public static void calculateNextState(Body body){
 
-        Vector[] newValues = eulersSolver(body, STEPSIZE);
+        Vector[] newValues = EulerSolver.solve(body, STEPSIZE);
 
         body.setNextLocation(newValues[0].x, newValues[0].y, newValues[0].z);
         body.setNextVelocity(newValues[1].x, newValues[1].y, newValues[1].z);
@@ -41,11 +41,6 @@ public class PhysicsUtils{
 
     //Calculates the force exerted from the planet on the body
     public static Vector singleForce(Body body, Body planet){
-//        if (planet.getId() == body.getId() || planet.getId() == SystemProperties.PROBE) {
-//            System.err.println("Error: Either both bodies inputted in singleForce method are the same body or the probe was inputted as a body");
-//            return null;
-//        }
-
         Vector force = new Vector(0.0, 0.0, 0.0);
 
         double scalingFactor = gravitationalConstant * planet.getMass() * body.getMass() * (-1);
@@ -59,83 +54,4 @@ public class PhysicsUtils{
 
         return force;
     }
-/* 
-    private static void updateCoordinate(Body body){
-//        int index = body.getId();
-//
-//        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
-//        if (index != SystemProperties.PROBE) {
-//
-//            SystemProperties.coordinates_nextState[index].set(
-//                    (body.getLocation().x + body.getVelocity().x * STEPSIZE),
-//                    (body.getLocation().y + body.getVelocity().y * STEPSIZE),
-//                    (body.getLocation().z + body.getVelocity().z * STEPSIZE)
-//            );
-//
-//            return;
-//        }
-//
-//        body.setLocation(
-//                (body.getLocation().x + body.getVelocity().x * STEPSIZE),
-//                (body.getLocation().y + body.getVelocity().y * STEPSIZE),
-//                (body.getLocation().z + body.getVelocity().z * STEPSIZE)
-//        );
-
-        body.setNextLocation((body.getLocation().x + body.getVelocity().x * STEPSIZE),
-                (body.getLocation().y + body.getVelocity().y * STEPSIZE),
-                (body.getLocation().z + body.getVelocity().z * STEPSIZE));
-    } */
-
-/*   private static void updateVelocity(Body body, Vector forcesSum){
-//        int index = body.getId();
-//
-//        // if body is a probe update its properties immediately, if it is a planet write them to nextState array
-//        if (index != SystemProperties.PROBE) {
-//
-//            SystemProperties.velocities_nextState[index].set(
-//                    body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
-//                    body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-//                    body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
-//            );
-//
-//            return;
-//        }
-//
-//        body.setVelocity(
-//                body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
-//                body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-//                body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass()
-//        );
-
-        body.setNextVelocity(body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
-                body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-                body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass());
-    }*/
-
-
-    public static Vector[] eulersSolver(Body body, int STEPSIZE){
-        Vector force = allForce(body);
-
-        Vector[] newValues = new Vector[2];
-
-        newValues[0] = updateCoordinate(body, STEPSIZE);
-        newValues[1] = updateVelocity(body, force, STEPSIZE);
-
-        return newValues;
-    }
-
-    private static Vector updateCoordinate(Body body, int STEPSIZE){
-        return new Vector(
-        (body.getLocation().x + body.getVelocity().x * STEPSIZE),
-        (body.getLocation().y + body.getVelocity().y * STEPSIZE),
-        (body.getLocation().z + body.getVelocity().z * STEPSIZE));
-    }
-
-    private static Vector updateVelocity(Body body, Vector forcesSum, int STEPSIZE){
-        return new Vector(
-        body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
-        body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-        body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass());
-    }
-
 }

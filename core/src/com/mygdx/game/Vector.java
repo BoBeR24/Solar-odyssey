@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
-import static java.lang.Math.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /** Implementation of Vector class for double data type */
 public class Vector {
@@ -9,9 +11,9 @@ public class Vector {
     double z;
 
     public Vector(double x, double y,double z){
-        this.x=x;
-        this.y=y;
-        this.z=z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
     public Vector(Vector vector){
         this.x = vector.x;
