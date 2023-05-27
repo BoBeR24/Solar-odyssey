@@ -55,9 +55,11 @@ public class SimulationLogic {
                 case RUNNING:
                     timer.iterate(PhysicsUtils.STEPSIZE);
 
+                    RK4.calculate(PhysicsUtils.STEPSIZE);
+ /* 
                     for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
                         PhysicsUtils.calculateNextState(planet);
-                    }
+                    }*/
 
                     for (Probe probe : SolarSystem.probes) { // calculates next positions for probes
                         PhysicsUtils.calculateNextState(probe);

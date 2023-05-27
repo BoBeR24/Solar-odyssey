@@ -71,6 +71,13 @@ public class Vector {
            return multiply(vector.x);
     }
 
+    /**
+     * Copies the value of a vector
+    * */
+    public Vector copy(){
+        return new Vector(this.x, this.y, this.z);
+    }
+
 
     /**
      * Calculates magnitude of the current vector
