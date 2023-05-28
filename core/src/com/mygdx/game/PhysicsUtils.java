@@ -7,7 +7,7 @@ public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
     public final static int STEPSIZE = 30;
-
+    static int increment = 0;
    /**
     * initializes methods for updating velocity and coordinates
     * @param body object that the forces are being exerted on
@@ -20,6 +20,11 @@ public class PhysicsUtils{
 
         body.setNextLocation(newValues[0].x, newValues[0].y, newValues[0].z);
         body.setNextVelocity(newValues[1].x, newValues[1].y, newValues[1].z);
+        if(increment < 13){
+            System.out.println(body.getLocation());
+            System.out.println(body.getId());
+            increment++;
+        }
     }
 
     // TODO we need to decide for RK4 method, do we need to update whole system for k1, k2, etc. steps or only current body

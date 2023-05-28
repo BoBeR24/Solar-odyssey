@@ -6,8 +6,6 @@ public class RK4 {
     private static Vector zVector = new Vector(0,0,0);
     static int increment = 0;
 
-    //TODO Pass by Value, Check whether at final equation, it is times stepsize
-
     public static void calculate(int Stepsize){
 
         double STEPSIZE = (double) Stepsize;
@@ -42,7 +40,7 @@ public class RK4 {
         }
 
         for (celestialBody planet : SolarSystem.planets) {
-            k4calculate(planet, STEPSIZE*2.0);
+            k4calculate(planet, STEPSIZE);
         }
         for (celestialBody planet : SolarSystem.planets) {
             planet.setLocation(k_Values[planet.getId()][6]);
@@ -50,12 +48,16 @@ public class RK4 {
         }
 
         for (celestialBody planet : SolarSystem.planets) {
-
-            Vector kEquationPos = k_Values[planet.getId()][0].add(k_Values[planet.getId()][2].multiply(2.0)).add(k_Values[planet.getId()][4].multiply(2.0).add(k_Values[planet.getId()][6])).multiply(0.16666666666*STEPSIZE);
-            Vector kEquationVel = k_Values[planet.getId()][1].add(k_Values[planet.getId()][3].multiply(2.0)).add(k_Values[planet.getId()][5].multiply(2.0).add(k_Values[planet.getId()][7])).multiply(0.16666666666*STEPSIZE);
+            
+            Vector kEquationPos = k_Values[planet.getId()][0].add(k_Values[planet.getId()][2].multiply(2.0)).add(k_Values[planet.getId()][4].multiply(2.0)).add(k_Values[planet.getId()][6]).multiply(0.16666666666*STEPSIZE);
+            Vector kEquationVel = k_Values[planet.getId()][1].add(k_Values[planet.getId()][3].multiply(2.0)).add(k_Values[planet.getId()][5].multiply(2.0)).add(k_Values[planet.getId()][7]).multiply(0.16666666666*STEPSIZE);
             planet.setLocation(kEquationPos.add(k_Values[planet.getId()][8]));
             planet.setVelocity(kEquationVel.add(k_Values[planet.getId()][9]));
-
+            if(increment < 2){
+                System.out.println(planet.getLocation());
+                System.out.println(planet.getId());
+                increment++;
+            }
         }
 
     }
@@ -80,8 +82,8 @@ public class RK4 {
 
     public static void k4calculate(Body body, double STEPSIZE){
         Vector force = PhysicsUtils.allForce(body);
-        k_Values[body.getId()][6] = updateCoordinate(body, STEPSIZE*2, k_Values[body.getId()][4], 1.0);
-        k_Values[body.getId()][7] = updateVelocity(body, force, STEPSIZE*2, k_Values[body.getId()][5], 1.0);
+        k_Values[body.getId()][6] = updateCoordinate(body, STEPSIZE, k_Values[body.getId()][4], 1.0);
+        k_Values[body.getId()][7] = updateVelocity(body, force, STEPSIZE, k_Values[body.getId()][5], 1.0);
     }
 
     /** update coordinates of the body
