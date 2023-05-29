@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 public class EnhancedEuler {
 
-static int increment = 0;
     public static Vector[] solve(Body body, int STEPSIZE){
     
         Body body_clone = body.clone();
