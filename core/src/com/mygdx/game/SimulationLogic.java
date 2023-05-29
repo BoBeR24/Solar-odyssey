@@ -21,6 +21,7 @@ public class SimulationLogic {
     private int range = 0;
     private Probe best_Probe;
     private double minTitanDistance = Double.MAX_VALUE;
+    private int count = 0;
 
 
     public SimulationLogic(final Odyssey game) {
@@ -53,16 +54,21 @@ public class SimulationLogic {
             switch (SolarSystemScreen.state) {
 
                 case RUNNING:
+                    count++;
                     timer.iterate(PhysicsUtils.STEPSIZE);
+//                    System.out.println("a" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
+                    RK4_new.calculate();
+////                    System.out.println("b" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
+//                    for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
+//                        PhysicsUtils.calculateNextState(planet);
+//                    }
 
-                    RK4.calculate(PhysicsUtils.STEPSIZE);
- /* 
-                    for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
-                        PhysicsUtils.calculateNextState(planet);
-                    }*/
+//                    if (count == 2) {
+//                        pause();
+//                    }
 
                     for (Probe probe : SolarSystem.probes) { // calculates next positions for probes
-                        PhysicsUtils.calculateNextState(probe);
+//                        PhysicsUtils.calculateNextState(probe);
 
                         // I still don't like this part, so if someone have any ideas how to make it better
                         // please enlighten me
@@ -81,6 +87,7 @@ public class SimulationLogic {
                     }
 
                     applyNewState(); // update states of objects
+//                    System.out.println("b" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
 
                 default:
                     break;
@@ -101,8 +108,6 @@ public class SimulationLogic {
         }
 
         for (celestialBody planet : SolarSystem.planets) {
-//            planet.setLocation(SystemProperties.coordinates_nextState[planet.getId()]);
-//            planet.setVelocity(SystemProperties.velocities_nextState[planet.getId()]);
             planet.update();
         }
     }

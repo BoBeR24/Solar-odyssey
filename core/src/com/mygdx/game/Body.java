@@ -5,14 +5,19 @@ package com.mygdx.game;
  * */
 public interface Body {
     void setLocation(double x, double y, double z);
+    void setLocation(Vector vector);
     void setVelocity(double x, double y, double z);
-
+    void setVelocity(Vector vector);
     void setNextLocation(double x, double y, double z);
+    void setNextLocation(Vector vector);
     void setNextVelocity(double x, double y, double z);
+    void setNextVelocity(Vector vector);
 
     Vector getLocation();
 
     Vector getVelocity();
+    Vector getNextLocation();
+    Vector getNextVelocity();
 
     double getMass();
     int getId();

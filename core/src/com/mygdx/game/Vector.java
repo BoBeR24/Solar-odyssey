@@ -61,14 +61,7 @@ public class Vector {
      * Applies mathematical operation of the vector and scalar value
      **/
     public Vector multiply(double scalingFactor){
-        return new Vector((this.x * scalingFactor), (this.y * scalingFactor), (this.z * scalingFactor)); // - both changes values and returns them
-    }
-
-    /**
-     * Applies mathematical operation of multiplying two vectors
-    * */
-    public Vector multiply(Vector vector) {
-           return multiply(vector.x);
+        return new Vector((this.x * scalingFactor), (this.y * scalingFactor), (this.z * scalingFactor));
     }
 
     /**

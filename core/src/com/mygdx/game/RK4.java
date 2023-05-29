@@ -6,10 +6,10 @@ public class RK4 {
     private static Vector zVector = new Vector(0,0,0);
     static int increment = 0;
 
-    public static void calculate(int Stepsize){
+    //TODO Pass by Value, Check whether at final equation, it is times stepsize
 
-        double STEPSIZE = (double) Stepsize;
-        
+    public static void calculate(double STEPSIZE){
+
         k_Values = new Vector[11][10];
 
         for (celestialBody planet : SolarSystem.planets) {
@@ -17,6 +17,9 @@ public class RK4 {
             k_Values[planet.getId()][9] = planet.getVelocity().copy();
             k1calculate(planet, STEPSIZE);
         }
+
+        System.out.println(SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
+
         for (celestialBody planet : SolarSystem.planets) {
             planet.setLocation(k_Values[planet.getId()][0]);
             planet.setVelocity(k_Values[planet.getId()][1]);
@@ -24,7 +27,7 @@ public class RK4 {
         }
 
         for (celestialBody planet : SolarSystem.planets) {
-            k2calculate(planet, STEPSIZE/2.0);
+            k2calculate(planet, STEPSIZE / 2.0);
         }
         for (celestialBody planet : SolarSystem.planets) {
             planet.setLocation(k_Values[planet.getId()][2]);
@@ -32,7 +35,7 @@ public class RK4 {
         }
 
         for (celestialBody planet : SolarSystem.planets) {
-            k3calculate(planet, STEPSIZE/2.0);
+            k3calculate(planet, STEPSIZE / 2.0);
         }
         for (celestialBody planet : SolarSystem.planets) {
             planet.setLocation(k_Values[planet.getId()][4]);
@@ -48,17 +51,34 @@ public class RK4 {
         }
 
         for (celestialBody planet : SolarSystem.planets) {
-            
-            Vector kEquationPos = k_Values[planet.getId()][0].add(k_Values[planet.getId()][2].multiply(2.0)).add(k_Values[planet.getId()][4].multiply(2.0)).add(k_Values[planet.getId()][6]).multiply(0.16666666666*STEPSIZE);
-            Vector kEquationVel = k_Values[planet.getId()][1].add(k_Values[planet.getId()][3].multiply(2.0)).add(k_Values[planet.getId()][5].multiply(2.0)).add(k_Values[planet.getId()][7]).multiply(0.16666666666*STEPSIZE);
+
+            Vector kEquationPos = k_Values[planet.getId()][0].add(
+                    k_Values[planet.getId()][2].multiply(2.0)
+                    ).add(
+                            k_Values[planet.getId()][4].multiply(2.0)
+                        ).add(
+                                k_Values[planet.getId()][6]
+                            ).multiply(
+                                    STEPSIZE / 6
+            );
+
+            Vector kEquationVel = k_Values[planet.getId()][1].add(
+                    k_Values[planet.getId()][3].multiply(2.0)
+                    ).add(
+                            k_Values[planet.getId()][5].multiply(2.0)
+                        ).add(
+                                k_Values[planet.getId()][7]
+                            ).multiply(
+                                    STEPSIZE / 6
+            );
+
+            System.out.println("b" + kEquationPos);
+
             planet.setLocation(kEquationPos.add(k_Values[planet.getId()][8]));
             planet.setVelocity(kEquationVel.add(k_Values[planet.getId()][9]));
-            if(increment < 2){
-                System.out.println(planet.getLocation());
-                System.out.println(planet.getId());
-                increment++;
-            }
+
         }
+        System.out.println(SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
 
     }
 
@@ -82,26 +102,27 @@ public class RK4 {
 
     public static void k4calculate(Body body, double STEPSIZE){
         Vector force = PhysicsUtils.allForce(body);
-        k_Values[body.getId()][6] = updateCoordinate(body, STEPSIZE, k_Values[body.getId()][4], 1.0);
-        k_Values[body.getId()][7] = updateVelocity(body, force, STEPSIZE, k_Values[body.getId()][5], 1.0);
+        k_Values[body.getId()][6] = updateCoordinate(body, STEPSIZE*2, k_Values[body.getId()][4], 1.0);
+        k_Values[body.getId()][7] = updateVelocity(body, force, STEPSIZE*2, k_Values[body.getId()][5], 1.0);
     }
 
     /** update coordinates of the body
      * */
     private static Vector updateCoordinate(Body body, double STEPSIZE, Vector addVector, double scale){
         return new Vector(
-                ((body.getLocation().x + (addVector.x/scale)) + body.getVelocity().x * STEPSIZE),
-                ((body.getLocation().y + (addVector.y/scale)) + body.getVelocity().y * STEPSIZE),
-                ((body.getLocation().z + (addVector.z/scale)) + body.getVelocity().z * STEPSIZE));
+                ((body.getLocation().x + (addVector.x / scale)) + body.getVelocity().x * STEPSIZE),
+                ((body.getLocation().y + (addVector.y / scale)) + body.getVelocity().y * STEPSIZE),
+                ((body.getLocation().z + (addVector.z / scale)) + body.getVelocity().z * STEPSIZE));
     }
 
-    /** update velocity of the body
-     * */
-    private static Vector updateVelocity(Body body, Vector forcesSum, double STEPSIZE, Vector addVector, double scale){
+    /**
+     * update velocity of the body
+     */
+    private static Vector updateVelocity(Body body, Vector forcesSum, double STEPSIZE, Vector addVector, double scale) {
         return new Vector(
-                ((body.getVelocity().x + (addVector.x/scale)) + (forcesSum.x * STEPSIZE) / body.getMass()),
-                ((body.getVelocity().y + (addVector.y/scale)) + (forcesSum.y * STEPSIZE) / body.getMass()),
-                ((body.getVelocity().z + (addVector.z/scale)) + (forcesSum.z * STEPSIZE) / body.getMass()));
+                ((body.getVelocity().x + (addVector.x / scale)) + (forcesSum.x * STEPSIZE) / body.getMass()),
+                ((body.getVelocity().y + (addVector.y / scale)) + (forcesSum.y * STEPSIZE) / body.getMass()),
+                ((body.getVelocity().z + (addVector.z / scale)) + (forcesSum.z * STEPSIZE) / body.getMass()));
     }
 
 }

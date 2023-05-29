@@ -57,13 +57,16 @@ public class celestialBody implements Body{
         cloned_body.setLocation(new Vector(this.location));
         cloned_body.setVelocity(new Vector(this.velocity));
 
+        cloned_body.setNextLocation(new Vector(this.nextLocation));
+        cloned_body.setNextVelocity(new Vector(this.nextVelocity));
+
         return cloned_body;
     }
 
     @Override
     public void update() {
-        this.location = this.nextLocation;
-        this.velocity = this.nextVelocity;
+        this.setLocation(this.nextLocation);
+        this.setVelocity(this.nextVelocity);
     }
 
     @Override
@@ -134,6 +137,16 @@ public class celestialBody implements Body{
     @Override
     public Vector getVelocity(){
         return this.velocity;
+    }
+
+    @Override
+    public Vector getNextLocation() {
+        return this.nextLocation;
+    }
+
+    @Override
+    public Vector getNextVelocity() {
+        return this.nextVelocity;
     }
 
     @Override

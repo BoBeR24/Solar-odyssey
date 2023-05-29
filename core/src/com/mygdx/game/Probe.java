@@ -40,9 +40,24 @@ public class Probe implements Body{
         this(starterVelocity, new Vector(SystemProperties.radii[SystemProperties.EARTH], 0, 0));
     }
 
+    Probe() {
+        this.mass = 50000;
+    }
+
+    /** !!!This clone method doesn't do a full copy, it only transfers essential characteristics,
+     *  such as location and velocity
+     * */
     @Override
     public Probe clone(){
-        return new Probe(new Vector(this.velocity), new Vector(this.location));
+        Probe cloned_probe = new Probe();
+
+        cloned_probe.setLocation(new Vector(this.location));
+        cloned_probe.setVelocity(new Vector(this.velocity));
+
+        cloned_probe.setNextLocation(new Vector(this.nextLocation));
+        cloned_probe.setNextVelocity(new Vector(this.nextVelocity));
+
+        return cloned_probe;
     }
 
     @Override
@@ -152,6 +167,16 @@ public class Probe implements Body{
     @Override
     public Vector getVelocity(){
         return this.velocity;
+    }
+
+    @Override
+    public Vector getNextLocation() {
+        return this.nextLocation;
+    }
+
+    @Override
+    public Vector getNextVelocity() {
+        return this.nextVelocity;
     }
 
     @Override
