@@ -91,7 +91,6 @@ public class RK4_new {
             final_state(probe);
         }
 
-        System.out.println(SolarSystem.planets.get(SystemProperties.EARTH).getNextLocation());
 
     }
 
@@ -167,7 +166,7 @@ public class RK4_new {
         next_location = next_location.add(k_positions[1][body.getId()].multiply(2.0)); // k1 + 2 * k2
         next_location = next_location.add(k_positions[2][body.getId()].multiply(2.0)); // k1 + 2 * k2 + 2 * k3
         next_location = next_location.add(k_positions[3][body.getId()]); // k1 + 2 * k2 + 2 * k3 + k4
-        next_location = next_location.multiply(STEPSIZE / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        next_location = next_location.multiply(1.0 / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
         next_location = next_location.add(body.getLocation()); // Yn + h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
 
         body.setNextLocation(next_location);
@@ -177,7 +176,7 @@ public class RK4_new {
         next_velocity = next_velocity.add(k_velocities[1][body.getId()].multiply(2.0)); // k1 + 2 * k2
         next_velocity = next_velocity.add(k_velocities[2][body.getId()].multiply(2.0)); // k1 + 2 * k2 + 2 * k3
         next_velocity = next_velocity.add(k_velocities[3][body.getId()]); // k1 + 2 * k2 + 2 * k3 + k4
-        next_velocity = next_velocity.multiply(STEPSIZE / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        next_velocity = next_velocity.multiply(1.0 / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
         next_velocity = next_velocity.add(body.getVelocity()); // Yn + h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
 
         body.setNextLocation(next_location);

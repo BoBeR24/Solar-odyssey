@@ -26,7 +26,7 @@ public class SimulationLogic {
 
     public SimulationLogic(final Odyssey game) {
         this.game = game;
-        this.timer = new Timer(31536000 * 5); // set up timer for 1 year by default
+        this.timer = new Timer(31536000); // set up timer for 1 year by default
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
