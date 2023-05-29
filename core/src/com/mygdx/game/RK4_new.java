@@ -40,42 +40,42 @@ public class RK4_new {
 
         // calculate k1 for planets
         for (celestialBody planet : SolarSystem.planets) {
-            k1State(planet);
+            k1State(planet.clone());
         }
 
         // for probes
         for (Probe probe : SolarSystem.probes) {
-            k1State(probe);
+            k1State(probe.clone());
         }
 
         // calculate k2 for planets
         for (celestialBody planet: SolarSystem.planets) {
-            k2State(planet);
+            k2State(planet.clone());
         }
 
 //        // for probes
         for (Probe probe : SolarSystem.probes) {
-            k2State(probe);
+            k2State(probe.clone());
         }
 
         // calculate k3 for planets
         for (celestialBody planet: SolarSystem.planets) {
-            k3State(planet);
+            k3State(planet.clone());
         }
 
 //        // for probes
         for (Probe probe : SolarSystem.probes) {
-            k3State(probe);
+            k3State(probe.clone());
         }
 
         // calculate k4 for planets
         for (celestialBody planet : SolarSystem.planets) {
-            k4State(planet);
+            k4State(planet.clone());
         }
 
 //        // for probes
         for (Probe probe : SolarSystem.probes) {
-            k4State(probe);
+            k4State(probe.clone());
         }
 
 //        System.out.println(k_positions[3][SystemProperties.EARTH]);
@@ -117,7 +117,7 @@ public class RK4_new {
                 k_velocities[0][body.getId()].multiply(STEPSIZE / 2.0))
         );
 
-//        body.update();
+        body.update();
 
         Vector force = PhysicsUtils.allForce(body);
 
@@ -135,7 +135,7 @@ public class RK4_new {
                 k_velocities[1][body.getId()].multiply(STEPSIZE / 2.0))
         );
 
-//        body.update();
+        body.update();
 
         Vector force = PhysicsUtils.allForce(body);
 
@@ -154,7 +154,7 @@ public class RK4_new {
                 k_velocities[2][body.getId()].multiply(STEPSIZE))
         );
 
-//        body.update();
+        body.update();
 
         Vector force = PhysicsUtils.allForce(body);
 
