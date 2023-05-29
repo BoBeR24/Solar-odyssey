@@ -7,84 +7,92 @@ public class RK4_new {
     private static int STEPSIZE = PhysicsUtils.STEPSIZE;
     private static Vector[][] k_positions;
     private static Vector[][] k_velocities;
-    private static ArrayList<Body> bodies = new ArrayList<>();
+//    private static ArrayList<Body> clonedBodies = new ArrayList<>();
+//    private static ArrayList<Body> bodies = new ArrayList<>();
 
     public static void calculate() {
         //TODO make code compatible of working with more than one probe(may require changing id in Probe class)
 //        celestialBody[] initPlanets = new celestialBody[SolarSystem.planets.size()];
 //        ArrayList<Probe> initProbes = new ArrayList<>(); // use arraylist for probes because their initial amount may vary
 
-        bodies.clear();
+//        clonedBodies.clear();
+//        bodies.clear();
 
-        // save initial state of all planets and probes
-        for (celestialBody planet : SolarSystem.planets) {
-//            initPlanets[planet.getId()] = planet.clone();
-            bodies.add(planet.clone());
-        }
+//        // save initial state of all planets and probes
+//        for (celestialBody planet : SolarSystem.planets) {
+////            initPlanets[planet.getId()] = planet.clone();
+//            clonedBodies.add(planet.clone());
+//        }
+//
+//        for (Probe probe : SolarSystem.probes) {
+//            clonedBodies.add(probe.clone());
+//        }
+//
+//        bodies.addAll(SolarSystem.planets);
+//        bodies.addAll(SolarSystem.probes);
 
-        for (Probe probe : SolarSystem.probes) {
-            bodies.add(probe.clone());
-        }
-
-//        Vector[][] k_positions = new Vector[4][initPlanets.length + initProbes.size()];
-//        Vector[][] k_velocities = new Vector[4][initPlanets.length + initProbes.size()];
-
-        k_positions = new Vector[4][bodies.size()];
-        k_velocities = new Vector[4][bodies.size()];
+        k_positions = new Vector[4][SolarSystem.planets.size() + SolarSystem.probes.size()];
+        k_velocities = new Vector[4][SolarSystem.planets.size() + SolarSystem.probes.size()];
+//
+//        k_positions = new Vector[4][clonedBodies.size()];
+//        k_velocities = new Vector[4][clonedBodies.size()];
 
 
         // calculate k1 for planets
-        for (Body body : bodies) {
-            k1State(body);
+        for (celestialBody planet : SolarSystem.planets) {
+            k1State(planet);
         }
 
         // for probes
-//        for (Probe probe : SolarSystem.probes) {
-//            k1State(probe);
-//        }
+        for (Probe probe : SolarSystem.probes) {
+            k1State(probe);
+        }
 
         // calculate k2 for planets
-        for (Body body : bodies) {
-            k2State(body);
+        for (celestialBody planet: SolarSystem.planets) {
+            k2State(planet);
         }
 
 //        // for probes
-//        for (Probe probe : SolarSystem.probes) {
-//            k2State(probe);
-//        }
+        for (Probe probe : SolarSystem.probes) {
+            k2State(probe);
+        }
 
         // calculate k3 for planets
-        for (Body body : bodies) {
-            k3State(body);
+        for (celestialBody planet: SolarSystem.planets) {
+            k3State(planet);
         }
 
 //        // for probes
-//        for (Probe probe : SolarSystem.probes) {
-//            k3State(probe);
-//        }
+        for (Probe probe : SolarSystem.probes) {
+            k3State(probe);
+        }
 
         // calculate k4 for planets
-        for (Body body : bodies) {
-            k4State(body);
+        for (celestialBody planet : SolarSystem.planets) {
+            k4State(planet);
         }
 
 //        // for probes
-//        for (Probe probe : SolarSystem.probes) {
-//            k4State(probe);
-//        }
+        for (Probe probe : SolarSystem.probes) {
+            k4State(probe);
+        }
 
 //        System.out.println(k_positions[3][SystemProperties.EARTH]);
 
         // calculate final new state for planets
-        for (Body body : bodies) {
-            final_state(body);
+        for (celestialBody planet: SolarSystem.planets) {
+            final_state(planet);
         }
 
 //        System.out.println(SolarSystem.probes.get(0).getLocation());
         // for probes
-//        for (Probe probe : SolarSystem.probes) {
-//            final_state(probe);
-//        }
+        for (Probe probe : SolarSystem.probes) {
+            final_state(probe);
+        }
+
+        System.out.println(SolarSystem.planets.get(SystemProperties.EARTH).getNextLocation());
+
     }
 
     /** Calculates k1 state of given body
@@ -100,7 +108,7 @@ public class RK4_new {
     }
 
     private static void k2State(Body body) {
-        // update location and velocity to Yn + h * k1 / 2 position
+        // update location and velocity of a cloned body to Yn + h * k1 / 2 position to calculate force in that position
         body.setNextLocation(body.getLocation().add(
                 k_positions[0][body.getId()].multiply(STEPSIZE / 2.0))
         );
@@ -118,7 +126,7 @@ public class RK4_new {
     }
 
     private static void k3State(Body body) {
-        // update location and velocity to Yn + h * k2 / 2 position
+        // update location and velocity of a cloned body to Yn + h * k2 / 2 position to calculate force in that position
         body.setNextLocation(body.getLocation().add(
                 k_positions[1][body.getId()].multiply(STEPSIZE / 2.0))
         );
@@ -155,39 +163,45 @@ public class RK4_new {
     }
 
     private static void final_state(Body body) {
-        body.setNextLocation(
-            body.getLocation().add
-            (
-                k_positions[0][body.getId()].add
-                (
-                    k_positions[1][body.getId()].add
-                    (
-                        k_positions[2][body.getId()].add
-                        (
-                            k_positions[3][body.getId()]
-                        )
-                    )
-                ).multiply(STEPSIZE / 6.0)
-            )
-        );
+        Vector next_location = k_positions[0][body.getId()]; // k1
+        next_location = next_location.add(k_positions[1][body.getId()].multiply(2.0)); // k1 + 2 * k2
+        next_location = next_location.add(k_positions[2][body.getId()].multiply(2.0)); // k1 + 2 * k2 + 2 * k3
+        next_location = next_location.add(k_positions[3][body.getId()]); // k1 + 2 * k2 + 2 * k3 + k4
+        next_location = next_location.multiply(STEPSIZE / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        next_location = next_location.add(body.getLocation()); // Yn + h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
 
-        body.setNextVelocity(
-            body.getVelocity().add
-            (
-                k_velocities[0][body.getId()].add
-                (
-                    k_velocities[1][body.getId()].add
-                        (
-                            k_velocities[2][body.getId()].add
-                            (
-                                k_velocities[3][body.getId()]
-                            )
-                        )
-                ).multiply(STEPSIZE / 6.0)
-            )
-        );
+        body.setNextLocation(next_location);
 
-//        body.update();
+
+        Vector next_velocity = k_velocities[0][body.getId()]; // k1
+        next_velocity = next_velocity.add(k_velocities[1][body.getId()].multiply(2.0)); // k1 + 2 * k2
+        next_velocity = next_velocity.add(k_velocities[2][body.getId()].multiply(2.0)); // k1 + 2 * k2 + 2 * k3
+        next_velocity = next_velocity.add(k_velocities[3][body.getId()]); // k1 + 2 * k2 + 2 * k3 + k4
+        next_velocity = next_velocity.multiply(STEPSIZE / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        next_velocity = next_velocity.add(body.getVelocity()); // Yn + h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+
+        body.setNextLocation(next_location);
+        body.setNextVelocity(next_velocity);
+
+        // BELOW IS INCORRECT FORMULA(BUT WORKS BETTER)
+
+//        Vector next_location = k_positions[0][body.getId()]; // k1
+//        next_location = next_location.add(k_positions[1][body.getId()]); // k1 + k2
+//        next_location = next_location.add(k_positions[2][body.getId()]); // k1 + k2 + k3
+//        next_location = next_location.add(k_positions[3][body.getId()]); // k1 + k2 + k3 + k4
+//        next_location = next_location.multiply(STEPSIZE / 6.0); // h / 6 * (k1 + k2 + k3 + k4)
+//        next_location = next_location.add(body.getLocation()); //Yn + h / 6 * (k1 + k2 + k3 + k4)
+//
+//        Vector next_velocity = k_velocities[0][body.getId()]; // k1
+//        next_velocity = next_velocity.add(k_velocities[1][body.getId()]); // k1 + k2
+//        next_velocity = next_velocity.add(k_velocities[2][body.getId()]); // k1 + k2 + k3
+//        next_velocity = next_velocity.add(k_velocities[3][body.getId()]); // k1 + k2 + k3 + k4
+//        next_velocity = next_velocity.multiply(STEPSIZE / 6.0); // h / 6 * (k1 + k2 + k3 + k4)
+//        next_velocity = next_velocity.add(body.getVelocity()); //Yn + h / 6 * (k1 + k2 + k3 + k4)
+//
+//        body.setNextLocation(next_location);
+//        body.setNextVelocity(next_velocity);
+
     }
 
     /** calculate new coordinates of the body. In fact if we look at the formula of RK4 method this can be considered as

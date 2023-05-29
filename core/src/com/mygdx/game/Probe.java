@@ -49,7 +49,7 @@ public class Probe implements Body{
      * */
     @Override
     public Probe clone(){
-        Probe cloned_probe = new Probe();
+        Probe cloned_probe = new Probe(new Vector(0.0, 0.0, 0.0));
 
         cloned_probe.setLocation(new Vector(this.location));
         cloned_probe.setVelocity(new Vector(this.velocity));
