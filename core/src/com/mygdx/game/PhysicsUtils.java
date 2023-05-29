@@ -16,8 +16,10 @@ public class PhysicsUtils{
    // so each call of solver would calculate next state for all bodies
     public static void calculateNextState(Body body){
 
+        //Run Eulers Method
         // Vector[] newValues = EulerSolver.solve(body, STEPSIZE);
 
+        //Run Enhanced Eulers method (Heuns method)
         Vector[] newValues = EnhancedEuler.solve(body, STEPSIZE);
 
         body.setNextLocation(newValues[0].x, newValues[0].y, newValues[0].z);

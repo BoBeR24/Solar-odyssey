@@ -7,19 +7,21 @@ static int increment = 0;
     
         Body body_clone = body.clone();
 
+        //Calculate next set of values with normal euler solver
         Vector[] data = EulerSolver.solve(body_clone, STEPSIZE);
+        //Update state of cloned body with new values
         body_clone.setLocation(data[0].x, data[0].y, data[0].z);
         body_clone.setVelocity(data[1].x, data[1].y, data[1].z);
 
-
+        //Calculate forces with old and new body
         Vector forceClone = PhysicsUtils.allForce(body_clone);
         Vector forceOriginal = PhysicsUtils.allForce(body);
 
-        // Vector forceSum = (force2.add(force1))multiply(0.5);
-
+        //Average the force vector previously calculated
         Vector forceSum = (forceClone.add(forceOriginal)).multiply(0.5);
  
-        Vector[] finalValues = {updateCoordinate(body_clone, STEPSIZE), updateVelocity(body_clone, forceSum, STEPSIZE)}; 
+        //Calculate velocity and position with old body and new average force vector
+        Vector[] finalValues = {updateCoordinate(body, STEPSIZE), updateVelocity(body, forceSum, STEPSIZE)}; 
 
         return finalValues;
     }   
