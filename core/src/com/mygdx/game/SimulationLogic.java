@@ -56,9 +56,7 @@ public class SimulationLogic {
                 case RUNNING:
                     count++;
                     timer.iterate(PhysicsUtils.STEPSIZE);
-                    System.out.println("a" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
                     RK4.calculate();
-////                    System.out.println("b" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
 //                    for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
 //                        PhysicsUtils.calculateNextState(planet);
 //                    }
@@ -75,9 +73,9 @@ public class SimulationLogic {
                         }
                     }
 
-                    if (count == 2) {
-                        pause();
-                    }
+//                    if (count == 2) {
+//                        pause();
+//                    }
                     // Pauses when point in time is reached and displays information about probe
                     if (timer.isTimeReached() || (best_Probe != null && best_Probe.isTitanReached())) {
                         System.out.println("Time taken(in seconds): " + timer.getTimePassed());
@@ -87,7 +85,6 @@ public class SimulationLogic {
                     }
 
                     applyNewState(); // update states of objects
-                    System.out.println("b" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
 
                 default:
                     break;

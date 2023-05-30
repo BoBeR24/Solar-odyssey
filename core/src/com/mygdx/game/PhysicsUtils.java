@@ -9,7 +9,7 @@ public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
     public final static int STEPSIZE = 30;
-    static int increment = 0;
+
    /**
     * initializes methods for updating velocity and coordinates
     * @param body object that the forces are being exerted on
@@ -25,8 +25,6 @@ public class PhysicsUtils{
 
     }
 
-    // TODO we need to decide for RK4 method, do we need to update whole system for k1, k2, etc. steps or only current body
-    // TODO if we need to update whole system, then following method should be changed
     /** Calculates sum of the forces
      * */
     public static Vector allForce(Body body, ArrayList<Body> universe) {

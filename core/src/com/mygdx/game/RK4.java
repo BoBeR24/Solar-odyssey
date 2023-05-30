@@ -60,17 +60,13 @@ public class RK4 {
 
         updateUniverse();
 
-        for (int i = 1; i < 5; i++) {
-            System.out.println(i + " " + k_positions[i-1][SystemProperties.EARTH]);
-        }
-
         // calculate final new state for planets
         for (Body body: init_universe) {
             final_state(body);
         }
     }
 
-    // k_State methods move clone of our bodies
+    // k_State methods move clone of our bodies not actual bodies themselves
 
     /** Calculates k1 state of given body
      * */
@@ -82,7 +78,6 @@ public class RK4 {
         // save k1 for position and velocity
         k_positions[0][body.getId()] = calculateCoordinate(body, STEPSIZE);
         k_velocities[0][body.getId()] = calculateVelocity(body, force, STEPSIZE);
-        //TODO problem may be in formula, which time step do we use to calculate next k
 
         // update location and velocity of a cloned body to Yn + h * k1 / 2 position to calculate force in next position
         body.setNextLocation(init_universe.get(body.getId()).getLocation().add(
@@ -136,49 +131,23 @@ public class RK4 {
 
     private static void final_state(Body body) {
         Vector next_location = k_positions[0][body.getId()]; // k1
-        next_location = next_location.add(k_positions[1][init_universe.get(body.getId()).getId()].multiply(2.0)); // k1 + 2 * k2
-        next_location = next_location.add(k_positions[2][init_universe.get(body.getId()).getId()].multiply(2.0)); // k1 + 2 * k2 + 2 * k3
-        next_location = next_location.add(k_positions[3][init_universe.get(body.getId()).getId()]); // k1 + 2 * k2 + 2 * k3 + k4
-        // Adrian idea
-//         next_location = next_location.multiply(1 / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
-        //
+        next_location = next_location.add(k_positions[1][body.getId()].multiply(2.0)); // k1 + 2 * k2
+        next_location = next_location.add(k_positions[2][body.getId()].multiply(2.0)); // k1 + 2 * k2 + 2 * k3
+        next_location = next_location.add(k_positions[3][body.getId()]); // k1 + 2 * k2 + 2 * k3 + k4
         next_location = next_location.multiply(STEPSIZE / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
         next_location = next_location.add(init_universe.get(body.getId()).getLocation()); // Yn + h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
 
-        init_universe.get(body.getId()).setNextLocation(next_location);
+        body.setNextLocation(next_location);
 
 
         Vector next_velocity = k_velocities[0][init_universe.get(body.getId()).getId()]; // k1
         next_velocity = next_velocity.add(k_velocities[1][init_universe.get(body.getId()).getId()].multiply(2.0)); // k1 + 2 * k2
         next_velocity = next_velocity.add(k_velocities[2][init_universe.get(body.getId()).getId()].multiply(2.0)); // k1 + 2 * k2 + 2 * k3
         next_velocity = next_velocity.add(k_velocities[3][init_universe.get(body.getId()).getId()]); // k1 + 2 * k2 + 2 * k3 + k4
-        // change
-//        next_velocity = next_velocity.multiply(1 / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
-        //
         next_velocity = next_velocity.multiply(STEPSIZE / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
         next_velocity = next_velocity.add(init_universe.get(body.getId()).getVelocity()); // Yn + h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
 
-        init_universe.get(body.getId()).setNextVelocity(next_velocity);
-
-        // BELOW IS INCORRECT FORMULA(BUT WORKS BETTER)
-
-//        Vector next_location = k_positions[0][body.getId()]; // k1
-//        next_location = next_location.add(k_positions[1][body.getId()]); // k1 + k2
-//        next_location = next_location.add(k_positions[2][body.getId()]); // k1 + k2 + k3
-//        next_location = next_location.add(k_positions[3][body.getId()]); // k1 + k2 + k3 + k4
-//        next_location = next_location.multiply(STEPSIZE / 6.0); // h / 6 * (k1 + k2 + k3 + k4)
-//        next_location = next_location.add(body.getLocation()); //Yn + h / 6 * (k1 + k2 + k3 + k4)
-//
-//        Vector next_velocity = k_velocities[0][body.getId()]; // k1
-//        next_velocity = next_velocity.add(k_velocities[1][body.getId()]); // k1 + k2
-//        next_velocity = next_velocity.add(k_velocities[2][body.getId()]); // k1 + k2 + k3
-//        next_velocity = next_velocity.add(k_velocities[3][body.getId()]); // k1 + k2 + k3 + k4
-//        next_velocity = next_velocity.multiply(STEPSIZE / 6.0); // h / 6 * (k1 + k2 + k3 + k4)
-//        next_velocity = next_velocity.add(body.getVelocity()); //Yn + h / 6 * (k1 + k2 + k3 + k4)
-//
-//        body.setNextLocation(next_location);
-//        body.setNextVelocity(next_velocity);
-
+        body.setNextVelocity(next_velocity);
     }
 
     /** calculate new coordinates of the body. In fact if we look at the formula of RK4 method this can be considered as
