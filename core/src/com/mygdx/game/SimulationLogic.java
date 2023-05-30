@@ -38,13 +38,13 @@ public class SimulationLogic {
         ProbeLauncher.launch(new Vector(1,1,1));
 
     }
+    int step = 1;
+    boolean hasCompletedItteration = false;
 
     /**
      * updates the current state of the simulation. Draws all objects
      * */
     public void update(){
-        boolean hasCompletedItteration = false;
-        int step = 1;
         for (int i = 0; i < 600; i++) { // amount of calculations per frame(to speed up the simulation)
             // Determines what happens when the Solar System is PAUSED or RUNNING
             switch (SolarSystemScreen.state) {
@@ -63,15 +63,27 @@ public class SimulationLogic {
                     // gives the probe a thrust
                     if (hasCompletedItteration && step == 1){
                         for (Probe probe : SolarSystem.probes) {
-                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.TITAN),10);
+                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.TITAN),10000, 400000);
                             if (Math.abs(probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.TITAN).getLocation()).magnitude()) < 10000){
                                 step++;
                             }
                         }
                     }
-                    if (step ==2){
+                    else if (step ==2){
                         for (Probe probe : SolarSystem.probes) {
                             Pathfinding.inOrbit(probe, SolarSystem.planets.get(SystemProperties.TITAN));
+                        }
+                        if (timer.getTimePassed() >= 5256000){     //31536000                        
+                                step++;
+                        }
+                    }
+                    else if (step == 3){
+                        for (Probe probe : SolarSystem.probes){
+                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.EARTH), 10000, 1000);
+                            if (probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.EARTH).getLocation()).magnitude() < 6371){
+                                close();
+                                System.out.println(Rocketry.fuel);
+                            }
                         }
                     }
 
@@ -124,7 +136,7 @@ public class SimulationLogic {
             game.shape.setColor(Color.VIOLET);
             game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - 5),
                     (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - 5),
-                    10, 10);
+                    1, 1);
         }
     }
 

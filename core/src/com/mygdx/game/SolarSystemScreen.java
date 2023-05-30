@@ -22,7 +22,7 @@ public class SolarSystemScreen implements Screen {
         this.game = game;
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // create a camera
-        camera.zoom = 2f;
+        camera.zoom = 0.5f;
         camera.update(); // update camera
 
         game.shape.setProjectionMatrix(camera.combined);
