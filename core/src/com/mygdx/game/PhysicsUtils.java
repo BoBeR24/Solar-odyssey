@@ -9,7 +9,8 @@ public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
     public final static int STEPSIZE = 30;
-
+    //Nasa Coordinates after 1 year
+    private final static Vector NASA_Earth = new Vector(-146525538.264264, -29597910.637783, 2927.15182555466);
    /**
     * initializes methods for updating velocity and coordinates
     * @param body object that the forces are being exerted on
@@ -18,7 +19,11 @@ public class PhysicsUtils{
    // so each call of solver would calculate next state for all bodies
     public static void calculateNextState(Body body){
 
-        Vector[] newValues = EulerSolver.solve(body, STEPSIZE);
+        //Run Eulers Method
+        // Vector[] newValues = EulerSolver.solve(body, STEPSIZE);
+
+        //Run Enhanced Eulers method (Heuns method)
+        Vector[] newValues = EnhancedEuler.solve(body, STEPSIZE);
 
         body.setNextLocation(newValues[0].x, newValues[0].y, newValues[0].z);
         body.setNextVelocity(newValues[1].x, newValues[1].y, newValues[1].z);
@@ -56,5 +61,17 @@ public class PhysicsUtils{
         force = force.multiply(scalingFactor / magnitude);
 
         return force;
+    }
+
+    public static double relativeError(Vector Location){
+        Vector Error = Location.subtract(NASA_Earth);
+        Error.x = Math.abs(Error.x * (1.0/ NASA_Earth.x));
+        Error.y = Math.abs(Error.y * (1.0/ NASA_Earth.y));
+        Error.z = Math.abs(Error.z * (1.0/NASA_Earth.z));
+
+        Error.multiply(100);
+
+        double averageError = (Error.x + Error.y + Error.z)/3;
+        return averageError;
     }
 }
