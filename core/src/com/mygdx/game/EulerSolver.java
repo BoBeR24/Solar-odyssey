@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
 /** One of several different ODE solver methods based on classic 1st order Euler's method.
  *
  * */
@@ -9,7 +11,11 @@ public class EulerSolver {
      * @param STEPSIZE step size for the solver
      * */
     public static Vector[] solve(Body body, int STEPSIZE){
-        Vector force = PhysicsUtils.allForce(body);
+        ArrayList<Body> universe = new ArrayList<>();
+        universe.addAll(SolarSystem.planets);
+        universe.addAll(SolarSystem.probes);
+
+        Vector force = PhysicsUtils.allForce(body, universe);
 
         Vector[] newValues = new Vector[2];
 

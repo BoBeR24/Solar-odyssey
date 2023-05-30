@@ -30,4 +30,6 @@ public interface Body {
     /** method which updates object to the next state
      * */
     void update();
+    /** method which updates all objects of this type to the next state
+     * */
 }

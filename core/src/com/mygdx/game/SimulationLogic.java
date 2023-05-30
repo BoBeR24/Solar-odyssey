@@ -12,7 +12,7 @@ import java.util.Arrays;
  * */
 public class SimulationLogic {
     private Odyssey game;
-    private final int scaleFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
+    private final int distFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
 //    private int timeCounter = 0;
 //    private int timeDesired = 31536000;
@@ -56,16 +56,13 @@ public class SimulationLogic {
                 case RUNNING:
                     count++;
                     timer.iterate(PhysicsUtils.STEPSIZE);
-//                    System.out.println("a" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
-                    RK4_new.calculate();
+                    System.out.println("a" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
+                    RK4.calculate();
 ////                    System.out.println("b" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
 //                    for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
 //                        PhysicsUtils.calculateNextState(planet);
 //                    }
 
-//                    if (count == 2) {
-//                        pause();
-//                    }
 
                     for (Probe probe : SolarSystem.probes) { // calculates next positions for probes
 //                        PhysicsUtils.calculateNextState(probe);
@@ -78,6 +75,9 @@ public class SimulationLogic {
                         }
                     }
 
+                    if (count == 2) {
+                        pause();
+                    }
                     // Pauses when point in time is reached and displays information about probe
                     if (timer.isTimeReached() || (best_Probe != null && best_Probe.isTitanReached())) {
                         System.out.println("Time taken(in seconds): " + timer.getTimePassed());
@@ -87,7 +87,7 @@ public class SimulationLogic {
                     }
 
                     applyNewState(); // update states of objects
-//                    System.out.println("b" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
+                    System.out.println("b" + SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
 
                 default:
                     break;
@@ -118,13 +118,13 @@ public class SimulationLogic {
     public void redrawScene() {
         for (celestialBody planet : SolarSystem.planets) {
             game.shape.setColor(planet.getColor());
-            game.shape.ellipse((float) (centerScreenCords.x + (planet.getLocation().x / scaleFactor) - (planet.getWidth() / 2)), (float) (centerScreenCords.y + (planet.getLocation().y / scaleFactor) - (planet.getHeight()) / 2), planet.getWidth(), planet.getHeight());
+            game.shape.ellipse((float) (centerScreenCords.x + (planet.getLocation().x / distFactor) - (planet.getWidth() / 2)), (float) (centerScreenCords.y + (planet.getLocation().y / distFactor) - (planet.getHeight()) / 2), planet.getWidth(), planet.getHeight());
         }
 
         for (Probe probe : SolarSystem.probes) {
             game.shape.setColor(Color.VIOLET);
-            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / scaleFactor) - 5),
-                    (float) (centerScreenCords.y + (probe.getLocation().y / scaleFactor) - 5),
+            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / distFactor) - 5),
+                    (float) (centerScreenCords.y + (probe.getLocation().y / distFactor) - 5),
                     10, 10);
         }
     }
@@ -133,8 +133,8 @@ public class SimulationLogic {
      * */
     public void moveCameraToProbe(OrthographicCamera camera){
         if (SolarSystem.probes.size() > 0) {
-            Vector toFollow = SolarSystem.probes.get(0).getLocation(); // our custom vector
-            Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / scaleFactor), centerScreenCords.y + (float) (toFollow.y / scaleFactor), 0);
+            Vector toFollow = SolarSystem.planets.get(SystemProperties.SUN).getLocation(); // our custom vector
+            Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / distFactor), centerScreenCords.y + (float) (toFollow.y / distFactor), 0);
 
             camera.position.set(toFollow_gdx);
             camera.update();
