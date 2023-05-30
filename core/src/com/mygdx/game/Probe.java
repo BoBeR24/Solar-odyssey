@@ -11,6 +11,7 @@ public class Probe implements Body{
     private Vector vStart; // To track the starting velocity of the probe
     private double distanceToTitan; // closest the probe has gotten to titan
     private boolean titanReached;
+    private double feul; // feul measured in Delta-v
 
     /** Creating Probe with specified starter velocity and location
      * @param starterVelocity - initial velocity of the probe relative to Earth
@@ -94,7 +95,7 @@ public class Probe implements Body{
 
         // if distance to titans surface is less or equal to 300 km we consider that titan is reached
         if (dist <= titan.getRadius() + 300) {
-            titanReached = true;
+            //titanReached = true;
         }
 
         return dist;
@@ -139,6 +140,10 @@ public class Probe implements Body{
         this.nextLocation.x = x;
         this.nextLocation.y = y;
         this.nextLocation.z = z;
+    }
+
+    public Vector getNextVelocity(){
+        return nextVelocity;
     }
 
     public void setNextLocation(Vector vector) {
@@ -187,5 +192,13 @@ public class Probe implements Body{
     @Override
     public int getId() {
         return id;
+    }
+
+    public double getFeul(){
+        return feul;
+    }
+
+    public void setfeul(double feul){
+        this.feul = feul;
     }
 }

@@ -37,6 +37,8 @@ public class SimulationLogic {
         ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // probe that hits titan(it doesn't)
 
     }
+    int step = 1;
+    boolean hasCompletedItteration = false;
 
     /**
      * updates the current state of the simulation. Draws all objects
@@ -52,13 +54,40 @@ public class SimulationLogic {
 //                    EnhancedEuler.calculateNextState(SolarSystem.bodies);
                     EulerSolver.calculateNextState(SolarSystem.bodies);
 
-                    // I still don't like this part, so if someone have any ideas how to make it better
-                    // please enlighten me
+
+                    // gives the probe a thrust
+                    if (hasCompletedItteration && step == 1){
+                        for (Probe probe : SolarSystem.probes) {
+                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.TITAN), 400000);
+                            if (Math.abs(probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.TITAN).getLocation()).magnitude()) < 3000){
+                                step++;
+                            }
+                        }
+                    }
+                    else if (step ==2){
+                        for (Probe probe : SolarSystem.probes) {
+                            Pathfinding.inOrbit(probe, SolarSystem.planets.get(SystemProperties.TITAN));
+                        }
+                        if (timer.getTimePassed() >= 5256000){     //31536000
+                                step++;
+                        }
+                    }
+                    else if (step == 3){
+                        for (Probe probe : SolarSystem.probes){
+                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.EARTH), 0);
+                            if (probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.EARTH).getLocation()).magnitude() < 6371){
+                                close();
+                                System.out.println(Rocketry.fuel);
+                            }
+                        }
+                    }
 
                     // Pauses when point in time is reached and displays information about probe
 
                     applyNewState(); // update states of objects
 
+                    // I still don't like this part, so if someone have any ideas how to make it better
+                    // please enlighten me
                     if (SolarSystem.probe.getDistanceToTitan() < minTitanDistance) {
                         minTitanDistance = SolarSystem.probe.getDistanceToTitan(); // updates best distance to titan so far
                     }
@@ -76,6 +105,7 @@ public class SimulationLogic {
                     break;
 
             }
+            hasCompletedItteration = true;
         }
 
         redrawScene(); // redraw all entities of the system
