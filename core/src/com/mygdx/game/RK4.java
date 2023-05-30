@@ -1,128 +1,209 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
 public class RK4 {
+    private static final int STEPSIZE = PhysicsUtils.STEPSIZE;
+    private static Vector[][] k_positions;
+    private static Vector[][] k_velocities;
+    private static ArrayList<Body> cloned_universe;
+    private static ArrayList<Body> init_universe;
+//    private static ArrayList<Body> clonedBodies = new ArrayList<>();
+//    private static ArrayList<Body> bodies = new ArrayList<>();
 
-    private static Vector[][] k_Values;
-    private static Vector zVector = new Vector(0,0,0);
-    static int increment = 0;
+    public static void calculate() {
+        //TODO make code compatible of working with more than one probe(may require changing id in Probe class)
 
-    //TODO Pass by Value, Check whether at final equation, it is times stepsize
+        cloned_universe = new ArrayList<>();
+        init_universe = new ArrayList<>();
 
-    public static void calculate(double STEPSIZE){
-
-        k_Values = new Vector[11][10];
-
+        // save initial state of all planets and probes and fill cloned universe
         for (celestialBody planet : SolarSystem.planets) {
-            k_Values[planet.getId()][8] = planet.getLocation().copy();
-            k_Values[planet.getId()][9] = planet.getVelocity().copy();
-            k1calculate(planet, STEPSIZE);
+            init_universe.add(planet);
+            cloned_universe.add(planet.clone());
         }
 
-        System.out.println(SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
-
-        for (celestialBody planet : SolarSystem.planets) {
-            planet.setLocation(k_Values[planet.getId()][0]);
-            planet.setVelocity(k_Values[planet.getId()][1]);
-
+        for (Probe probe : SolarSystem.probes) {
+            init_universe.add(probe);
+            cloned_universe.add(probe.clone());
         }
 
-        for (celestialBody planet : SolarSystem.planets) {
-            k2calculate(planet, STEPSIZE / 2.0);
-        }
-        for (celestialBody planet : SolarSystem.planets) {
-            planet.setLocation(k_Values[planet.getId()][2]);
-            planet.setVelocity(k_Values[planet.getId()][3]);
-        }
+        k_positions = new Vector[4][init_universe.size()];
+        k_velocities = new Vector[4][init_universe.size()];
 
-        for (celestialBody planet : SolarSystem.planets) {
-            k3calculate(planet, STEPSIZE / 2.0);
-        }
-        for (celestialBody planet : SolarSystem.planets) {
-            planet.setLocation(k_Values[planet.getId()][4]);
-            planet.setVelocity(k_Values[planet.getId()][5]);
+        // calculate k1
+        for (Body body : cloned_universe) {
+            k1State(body);
         }
 
-        for (celestialBody planet : SolarSystem.planets) {
-            k4calculate(planet, STEPSIZE);
+        updateUniverse();
+
+        // calculate k2
+        for (Body body : cloned_universe) {
+            k2State(body);
         }
-        for (celestialBody planet : SolarSystem.planets) {
-            planet.setLocation(k_Values[planet.getId()][6]);
-            planet.setVelocity(k_Values[planet.getId()][7]);
+
+        updateUniverse();
+
+        // calculate k3
+        for (Body body : cloned_universe) {
+            k3State(body);
         }
 
-        for (celestialBody planet : SolarSystem.planets) {
+        updateUniverse();
 
-            Vector kEquationPos = k_Values[planet.getId()][0].add(
-                    k_Values[planet.getId()][2].multiply(2.0)
-                    ).add(
-                            k_Values[planet.getId()][4].multiply(2.0)
-                        ).add(
-                                k_Values[planet.getId()][6]
-                            ).multiply(
-                                    STEPSIZE / 6
-            );
 
-            Vector kEquationVel = k_Values[planet.getId()][1].add(
-                    k_Values[planet.getId()][3].multiply(2.0)
-                    ).add(
-                            k_Values[planet.getId()][5].multiply(2.0)
-                        ).add(
-                                k_Values[planet.getId()][7]
-                            ).multiply(
-                                    STEPSIZE / 6
-            );
-
-            System.out.println("b" + kEquationPos);
-
-            planet.setLocation(kEquationPos.add(k_Values[planet.getId()][8]));
-            planet.setVelocity(kEquationVel.add(k_Values[planet.getId()][9]));
-
+        // calculate k4
+        for (Body body : cloned_universe) {
+            k4State(body);
         }
-        System.out.println(SolarSystem.planets.get(SystemProperties.EARTH).getLocation());
 
+        updateUniverse();
+
+        for (int i = 1; i < 5; i++) {
+            System.out.println(i + " " + k_positions[i-1][SystemProperties.EARTH]);
+        }
+
+        // calculate final new state for planets
+        for (Body body: init_universe) {
+            final_state(body);
+        }
     }
 
-    public static void k1calculate(Body body, double STEPSIZE){
-        Vector force = PhysicsUtils.allForce(body);
-        k_Values[body.getId()][0] = updateCoordinate(body, STEPSIZE, zVector, 1.0);
-        k_Values[body.getId()][1] = updateVelocity(body, force, STEPSIZE, zVector, 1.0);
-    }
+    // k_State methods move clone of our bodies
 
-    public static void k2calculate(Body body, double STEPSIZE){
-        Vector force = PhysicsUtils.allForce(body);
-        k_Values[body.getId()][2] = updateCoordinate(body, STEPSIZE,  k_Values[body.getId()][0], 2.0);
-        k_Values[body.getId()][3] = updateVelocity(body, force, STEPSIZE, k_Values[body.getId()][1], 2.0);
-    }
-
-    public static void k3calculate(Body body, double STEPSIZE){
-        Vector force = PhysicsUtils.allForce(body);
-        k_Values[body.getId()][4] = updateCoordinate(body, STEPSIZE, k_Values[body.getId()][2], 2.0);
-        k_Values[body.getId()][5] = updateVelocity(body, force, STEPSIZE, k_Values[body.getId()][3], 2.0);
-    }
-
-    public static void k4calculate(Body body, double STEPSIZE){
-        Vector force = PhysicsUtils.allForce(body);
-        k_Values[body.getId()][6] = updateCoordinate(body, STEPSIZE*2, k_Values[body.getId()][4], 1.0);
-        k_Values[body.getId()][7] = updateVelocity(body, force, STEPSIZE*2, k_Values[body.getId()][5], 1.0);
-    }
-
-    /** update coordinates of the body
+    /** Calculates k1 state of given body
      * */
-    private static Vector updateCoordinate(Body body, double STEPSIZE, Vector addVector, double scale){
-        return new Vector(
-                ((body.getLocation().x + (addVector.x / scale)) + body.getVelocity().x * STEPSIZE),
-                ((body.getLocation().y + (addVector.y / scale)) + body.getVelocity().y * STEPSIZE),
-                ((body.getLocation().z + (addVector.z / scale)) + body.getVelocity().z * STEPSIZE));
+    //TODO we need to update whole cloned universe instead of one cloned object
+    private static void k1State(Body body) {
+        // calculate k1 for planets
+        Vector force = PhysicsUtils.allForce(body, cloned_universe);
+
+        // save k1 for position and velocity
+        k_positions[0][body.getId()] = calculateCoordinate(body, STEPSIZE);
+        k_velocities[0][body.getId()] = calculateVelocity(body, force, STEPSIZE);
+        //TODO problem may be in formula, which time step do we use to calculate next k
+
+        // update location and velocity of a cloned body to Yn + h * k1 / 2 position to calculate force in next position
+        body.setNextLocation(init_universe.get(body.getId()).getLocation().add(
+                k_positions[0][body.getId()].multiply(STEPSIZE / 2.0))
+        );
+
+        body.setNextVelocity(init_universe.get(body.getId()).getVelocity().add(
+                k_velocities[0][body.getId()].multiply(STEPSIZE / 2.0))
+        );
     }
 
-    /**
-     * update velocity of the body
-     */
-    private static Vector updateVelocity(Body body, Vector forcesSum, double STEPSIZE, Vector addVector, double scale) {
-        return new Vector(
-                ((body.getVelocity().x + (addVector.x / scale)) + (forcesSum.x * STEPSIZE) / body.getMass()),
-                ((body.getVelocity().y + (addVector.y / scale)) + (forcesSum.y * STEPSIZE) / body.getMass()),
-                ((body.getVelocity().z + (addVector.z / scale)) + (forcesSum.z * STEPSIZE) / body.getMass()));
+    private static void k2State(Body body) {
+        Vector force = PhysicsUtils.allForce(body, cloned_universe);
+
+        k_positions[1][body.getId()] = calculateCoordinate(body, STEPSIZE / 2.0);
+        k_velocities[1][body.getId()] = calculateVelocity(body, force, STEPSIZE / 2.0);
+
+        // update location and velocity of a cloned body to Yn + h * k2 / 2 position to calculate force in that position
+        body.setNextLocation(init_universe.get(body.getId()).getLocation().add(
+                k_positions[1][body.getId()].multiply(STEPSIZE / 2.0))
+        );
+
+        body.setNextVelocity(init_universe.get(body.getId()).getVelocity().add(
+                k_velocities[1][body.getId()].multiply(STEPSIZE / 2.0))
+        );
     }
 
+    private static void k3State(Body body) {
+        Vector force = PhysicsUtils.allForce(body, cloned_universe);
+
+
+        k_positions[2][body.getId()] = calculateCoordinate(body, STEPSIZE / 2.0);
+        k_velocities[2][body.getId()] = calculateVelocity(body, force, STEPSIZE / 2.0);
+
+        // update location and velocity of a cloned body to Yn + h * k3 position to calculate force in that position
+        body.setNextLocation(init_universe.get(body.getId()).getLocation().add(
+                k_positions[2][body.getId()].multiply(STEPSIZE))
+        );
+
+        body.setNextVelocity(init_universe.get(body.getId()).getVelocity().add(
+                k_velocities[2][body.getId()].multiply(STEPSIZE))
+        );
+    }
+
+    private static void k4State(Body body) {
+        Vector force = PhysicsUtils.allForce(body, cloned_universe);
+
+        k_positions[3][body.getId()] = calculateCoordinate(body, STEPSIZE);
+        k_velocities[3][body.getId()] = calculateVelocity(body, force, STEPSIZE);
+    }
+
+    private static void final_state(Body body) {
+        Vector next_location = k_positions[0][body.getId()]; // k1
+        next_location = next_location.add(k_positions[1][init_universe.get(body.getId()).getId()].multiply(2.0)); // k1 + 2 * k2
+        next_location = next_location.add(k_positions[2][init_universe.get(body.getId()).getId()].multiply(2.0)); // k1 + 2 * k2 + 2 * k3
+        next_location = next_location.add(k_positions[3][init_universe.get(body.getId()).getId()]); // k1 + 2 * k2 + 2 * k3 + k4
+        // Adrian idea
+//         next_location = next_location.multiply(1 / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        //
+        next_location = next_location.multiply(STEPSIZE / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        next_location = next_location.add(init_universe.get(body.getId()).getLocation()); // Yn + h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+
+        init_universe.get(body.getId()).setNextLocation(next_location);
+
+
+        Vector next_velocity = k_velocities[0][init_universe.get(body.getId()).getId()]; // k1
+        next_velocity = next_velocity.add(k_velocities[1][init_universe.get(body.getId()).getId()].multiply(2.0)); // k1 + 2 * k2
+        next_velocity = next_velocity.add(k_velocities[2][init_universe.get(body.getId()).getId()].multiply(2.0)); // k1 + 2 * k2 + 2 * k3
+        next_velocity = next_velocity.add(k_velocities[3][init_universe.get(body.getId()).getId()]); // k1 + 2 * k2 + 2 * k3 + k4
+        // change
+//        next_velocity = next_velocity.multiply(1 / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        //
+        next_velocity = next_velocity.multiply(STEPSIZE / 6.0); // h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        next_velocity = next_velocity.add(init_universe.get(body.getId()).getVelocity()); // Yn + h/6 * (k1 + 2 * k2 + 2 * k3 + k4)
+
+        init_universe.get(body.getId()).setNextVelocity(next_velocity);
+
+        // BELOW IS INCORRECT FORMULA(BUT WORKS BETTER)
+
+//        Vector next_location = k_positions[0][body.getId()]; // k1
+//        next_location = next_location.add(k_positions[1][body.getId()]); // k1 + k2
+//        next_location = next_location.add(k_positions[2][body.getId()]); // k1 + k2 + k3
+//        next_location = next_location.add(k_positions[3][body.getId()]); // k1 + k2 + k3 + k4
+//        next_location = next_location.multiply(STEPSIZE / 6.0); // h / 6 * (k1 + k2 + k3 + k4)
+//        next_location = next_location.add(body.getLocation()); //Yn + h / 6 * (k1 + k2 + k3 + k4)
+//
+//        Vector next_velocity = k_velocities[0][body.getId()]; // k1
+//        next_velocity = next_velocity.add(k_velocities[1][body.getId()]); // k1 + k2
+//        next_velocity = next_velocity.add(k_velocities[2][body.getId()]); // k1 + k2 + k3
+//        next_velocity = next_velocity.add(k_velocities[3][body.getId()]); // k1 + k2 + k3 + k4
+//        next_velocity = next_velocity.multiply(STEPSIZE / 6.0); // h / 6 * (k1 + k2 + k3 + k4)
+//        next_velocity = next_velocity.add(body.getVelocity()); //Yn + h / 6 * (k1 + k2 + k3 + k4)
+//
+//        body.setNextLocation(next_location);
+//        body.setNextVelocity(next_velocity);
+
+    }
+
+    /** calculate new coordinates of the body. In fact if we look at the formula of RK4 method this can be considered as
+     * f(y) for coordinates
+     * */
+    private static Vector calculateCoordinate(Body body, double step){
+        return new Vector(
+                (body.getVelocity().x * step),
+                (body.getVelocity().y * step),
+                (body.getVelocity().z * step));
+    }
+
+    /** calculate new velocity of the body. In fact if we look at the formula of RK4 method this can be considered as
+     * f() for velocities
+     * */
+    private static Vector calculateVelocity(Body body, Vector forcesSum, double step){
+        return new Vector(
+                (forcesSum.x * step) / body.getMass(),
+                (forcesSum.y * step) / body.getMass(),
+                (forcesSum.z * step) / body.getMass());
+    }
+
+    private static void updateUniverse(){
+        for (Body body : cloned_universe) {
+            body.update();
+        }
+    }
 }
