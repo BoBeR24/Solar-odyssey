@@ -19,6 +19,7 @@ public class SimulationLogic {
     //31536000 seconds in 1 year
     private Timer timer;
     private double minTitanDistance = Double.MAX_VALUE;
+    private Probe probe;
 
 
     public SimulationLogic(final Odyssey game) {
@@ -35,6 +36,7 @@ public class SimulationLogic {
         SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
 
         ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // probe that hits titan(it doesn't)
+        probe = SolarSystem.probe;
 
     }
     int step = 1;
@@ -55,43 +57,16 @@ public class SimulationLogic {
                     EulerSolver.calculateNextState(SolarSystem.bodies);
 
 
-                    // gives the probe a thrust
-                    if (hasCompletedItteration && step == 1){
-                        for (Probe probe : SolarSystem.probes) {
-                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.TITAN), 400000);
-                            if (Math.abs(probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.TITAN).getLocation()).magnitude()) < 3000){
-                                step++;
-                            }
-                        }
-                    }
-                    else if (step ==2){
-                        for (Probe probe : SolarSystem.probes) {
-                            Pathfinding.inOrbit(probe, SolarSystem.planets.get(SystemProperties.TITAN));
-                        }
-                        if (timer.getTimePassed() >= 5256000){     //31536000
-                                step++;
-                        }
-                    }
-                    else if (step == 3){
-                        for (Probe probe : SolarSystem.probes){
-                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.EARTH), 0);
-                            if (probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.EARTH).getLocation()).magnitude() < 6371){
-                                close();
-                                System.out.println(Rocketry.fuel);
-                            }
-                        }
-                    }
+                    hillClimb();
 
-                    // Pauses when point in time is reached and displays information about probe
 
                     applyNewState(); // update states of objects
 
-                    // I still don't like this part, so if someone have any ideas how to make it better
-                    // please enlighten me
                     if (SolarSystem.probe.getDistanceToTitan() < minTitanDistance) {
                         minTitanDistance = SolarSystem.probe.getDistanceToTitan(); // updates best distance to titan so far
                     }
 
+                    // Pauses when point in time is reached and displays information about probe
                     if (timer.isTimeReached() || (SolarSystem.probe.isTitanReached())) {
                         SolarSystem.probe.displayData();
                         System.out.println("Minimal distance to Titan during whole simulation: " + minTitanDistance);
@@ -115,16 +90,41 @@ public class SimulationLogic {
     /** apply previously calculated states to all objects at the same time(to be sure that all
      calculations happen in one state)
      * */
-    public void applyNewState() {
+    private void applyNewState() {
         for (Body body : SolarSystem.bodies) {
             body.update();
+        }
+    }
+
+    private void hillClimb() {
+        // gives the probe a thrust
+        if (hasCompletedItteration && step == 1) {
+            Pathfinding.toBody(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN), 400000);
+
+            if (Math.abs(probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.TITAN).getLocation()).magnitude()) < 3000) {
+                step++;
+            }
+
+        } else if (step == 2) {
+            Pathfinding.inOrbit(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN));
+
+            if (timer.getTimePassed() >= 5256000) {     //31536000
+                step++;
+            }
+        } else if (step == 3) {
+            Pathfinding.toBody(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.EARTH), 0);
+
+            if (probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation()).magnitude() < 6371) {
+                close();
+                System.out.println(Rocketry.fuel);
+            }
         }
     }
 
 
     /** redraws all sprites and objects
      * */
-    public void redrawScene() {
+    private void redrawScene() {
         // for all bodies except the last one(which is probe)
         for (int i = 0; i < SolarSystem.bodies.size() - 1; i++) {
             celestialBody planet = (celestialBody) SolarSystem.bodies.get(i);
@@ -143,7 +143,7 @@ public class SimulationLogic {
      * */
     public void moveCameraToProbe(OrthographicCamera camera){
         if (SolarSystem.probe != null) {
-            Vector toFollow = SolarSystem.bodies.get(SystemProperties.SUN).getLocation(); // our custom vector
+            Vector toFollow = SolarSystem.bodies.get(SystemProperties.PROBE).getLocation(); // our custom vector
             Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / distFactor), centerScreenCords.y + (float) (toFollow.y / distFactor), 0);
 
             camera.position.set(toFollow_gdx);

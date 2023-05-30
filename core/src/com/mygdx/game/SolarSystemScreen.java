@@ -22,7 +22,7 @@ public class SolarSystemScreen implements Screen {
         this.game = game;
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // create a camera
-        camera.zoom = 0.5f;
+        camera.zoom = 2f;
         camera.update(); // update camera
 
         game.shape.setProjectionMatrix(camera.combined);
@@ -44,7 +44,7 @@ public class SolarSystemScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
-        //logic.moveCameraToProbe(camera); // if you want to make camera follow the probe - uncomment this
+        logic.moveCameraToProbe(camera); // if you want to make camera follow the probe - uncomment this
         game.shape.setProjectionMatrix(camera.combined);
 
         game.shape.begin(ShapeType.Filled);

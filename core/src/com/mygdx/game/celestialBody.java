@@ -102,9 +102,6 @@ public class celestialBody implements Body{
         this.setNextLocation(vector.x, vector.y, vector.z);
     }
 
-    public Vector getNextLocation(){
-        return nextLocation;
-    }
     @Override
     public void setNextVelocity(double x, double y, double z) {
         this.nextVelocity.x = x;
