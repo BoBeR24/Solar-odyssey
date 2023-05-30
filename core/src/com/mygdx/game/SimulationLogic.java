@@ -31,7 +31,7 @@ public class SimulationLogic {
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
 
-        // You can specify name for the file to read. By default it is set to be "values.txt"
+        // You can specify path to the file to read. By default it is set to be path to "values.txt"
         DataReader dataReader = new DataReader();
         dataReader.read();
 
