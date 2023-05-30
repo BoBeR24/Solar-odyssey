@@ -18,7 +18,6 @@ public class SimulationLogic {
 
     //31536000 seconds in 1 year
     private Timer timer;
-    private Probe best_Probe;
     private double minTitanDistance = Double.MAX_VALUE;
 
 
@@ -49,23 +48,29 @@ public class SimulationLogic {
 
                 case RUNNING:
                     timer.iterate(PhysicsUtils.STEPSIZE);
-                    RK4.calculateNextState(SolarSystem.bodies);
+//                    RK4.calculateNextState(SolarSystem.bodies);
 //                    EnhancedEuler.calculateNextState(SolarSystem.bodies);
-//                    EulerSolver.calculateNextState(SolarSystem.bodies);
+                    EulerSolver.calculateNextState(SolarSystem.bodies);
 
                     // I still don't like this part, so if someone have any ideas how to make it better
                     // please enlighten me
+
+                    // Pauses when point in time is reached and displays information about probe
+
+                    applyNewState(); // update states of objects
+
                     if (SolarSystem.probe.getDistanceToTitan() < minTitanDistance) {
                         minTitanDistance = SolarSystem.probe.getDistanceToTitan(); // updates best distance to titan so far
                     }
 
-                    // Pauses when point in time is reached and displays information about probe
-                    if (timer.isTimeReached() || (best_Probe != null && best_Probe.isTitanReached())) {
-                        System.out.println("Percentage Error: " + PhysicsUtils.relativeError(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation()));
+                    if (timer.isTimeReached() || (SolarSystem.probe.isTitanReached())) {
+                        SolarSystem.probe.displayData();
+                        System.out.println("Minimal distance to Titan during whole simulation: " + minTitanDistance);
+
+//                        System.out.println("Percentage Error: " + PhysicsUtils.relativeError(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation()));
                         pause();
                     }
 
-                    applyNewState(); // update states of objects
 
                 default:
                     break;
@@ -81,8 +86,6 @@ public class SimulationLogic {
      calculations happen in one state)
      * */
     public void applyNewState() {
-//        SolarSystem.probe.update();
-
         for (Body body : SolarSystem.bodies) {
             body.update();
         }
