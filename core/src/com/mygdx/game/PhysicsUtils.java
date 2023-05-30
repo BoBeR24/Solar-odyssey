@@ -7,7 +7,8 @@ public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
     public final static int STEPSIZE = 30;
-
+    //Nasa Coordinates after 1 year
+    private final static Vector NASA_Earth = new Vector(-146525538.264264, -29597910.637783, 2927.15182555466);
    /**
     * initializes methods for updating velocity and coordinates
     * @param body object that the forces are being exerted on
@@ -59,5 +60,15 @@ public class PhysicsUtils{
         force = force.multiply(scalingFactor / magnitude);
 
         return force;
+    }
+
+    public static Vector relativeError(Vector Location){
+        Vector Error = Location.subtract(NASA_Earth);
+        Error.x = Math.abs(Error.x * (1.0/ NASA_Earth.x));
+        Error.y = Math.abs(Error.y * (1.0/ NASA_Earth.y));
+        Error.z = Math.abs(Error.z * (1.0/NASA_Earth.z));
+
+        Error.multiply(100);
+        return Error;
     }
 }
