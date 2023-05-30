@@ -31,15 +31,11 @@ public class SimulationLogic {
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
 
-        SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
+        // You can specify name for the file to read. By default it is set to be "values.txt"
+        DataReader dataReader = new DataReader();
+        dataReader.read();
 
-//        for (double x = 0.2360; x < 0.2410; x = x + 0.0002) {
-//            for (double y = 0.006862175; y < 0.007162175; y = y + 0.0002) {
-//                for (double z = 0.08; z < 0.086736; z = z + 0.001) {
-//                    ProbeLauncher.launch(new Vector(41.0 + x, -15.0 - y, -3.1 - z));
-//                }
-//            }
-//        }
+        SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
 
         ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // probe that hits titan(it doesn't)
 

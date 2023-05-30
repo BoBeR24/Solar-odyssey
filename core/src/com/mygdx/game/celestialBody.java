@@ -12,7 +12,7 @@ public class celestialBody implements Body{
     private Vector nextLocation; // location to which planet will be moved in the next state of the system
     private Vector velocity;
     private Vector nextVelocity; // velocity of the current object in the next state of the system
-    private int radius;
+    private double radius;
     private double mass;
     private Color color; // color of the body
     private int width; // width of the image of the body
@@ -37,13 +37,13 @@ public class celestialBody implements Body{
 
         // if object id refers to the Sun scaling factor differs, to avoid sun being too big
         if (this.id == 0) {
-            this.width = SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8); // default width and height
-            this.height = SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8);
+            this.width = (int) SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8); // default width and height
+            this.height = (int) SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8);
 
         }
         else {
-            this.width = SystemProperties.radii[id] / SolarSystem.SIZE_FACTOR; // default width and height
-            this.height = SystemProperties.radii[id] / SolarSystem.SIZE_FACTOR;
+            this.width = (int) SystemProperties.radii[id] / SolarSystem.SIZE_FACTOR; // default width and height
+            this.height = (int) SystemProperties.radii[id] / SolarSystem.SIZE_FACTOR;
         }
     }
 
