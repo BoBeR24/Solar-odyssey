@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-
-import java.util.Arrays;
+import com.mygdx.game.solvers.EnhancedEuler;
+import com.mygdx.game.solvers.EulerSolver;
+import com.mygdx.game.solvers.RK4;
 
 /**
  * class which contains all logics for simulation running process
@@ -14,14 +15,11 @@ public class SimulationLogic {
     private Odyssey game;
     private final int distFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
-//    private int timeCounter = 0;
-//    private int timeDesired = 31536000;
+
     //31536000 seconds in 1 year
     private Timer timer;
-    private int range = 0;
     private Probe best_Probe;
     private double minTitanDistance = Double.MAX_VALUE;
-    private int count = 0;
 
 
     public SimulationLogic(final Odyssey game) {
@@ -50,31 +48,20 @@ public class SimulationLogic {
             switch (SolarSystemScreen.state) {
 
                 case RUNNING:
-                    count++;
                     timer.iterate(PhysicsUtils.STEPSIZE);
-                    RK4.calculate();
-//                    for (celestialBody planet : SolarSystem.planets) { // first update positions and velocities for planet and save them to temp arrays
-//                        PhysicsUtils.calculateNextState(planet);
-//                    }
+                    RK4.calculateNextState(SolarSystem.bodies);
+//                    EnhancedEuler.calculateNextState(SolarSystem.bodies);
+//                    EulerSolver.calculateNextState(SolarSystem.bodies);
 
-
-                    for (Probe probe : SolarSystem.probes) { // calculates next positions for probes
-//                        PhysicsUtils.calculateNextState(probe);
-
-                        // I still don't like this part, so if someone have any ideas how to make it better
-                        // please enlighten me
-                        if (probe.getDistanceToTitan() < minTitanDistance) {
-                            minTitanDistance = probe.getDistanceToTitan(); // updates best distance to titan so far
-                            best_Probe = probe; // saves probe which reached best distance to the Titan
-                        }
+                    // I still don't like this part, so if someone have any ideas how to make it better
+                    // please enlighten me
+                    if (SolarSystem.probe.getDistanceToTitan() < minTitanDistance) {
+                        minTitanDistance = SolarSystem.probe.getDistanceToTitan(); // updates best distance to titan so far
                     }
 
-//                    if (count == 2) {
-//                        pause();
-//                    }
                     // Pauses when point in time is reached and displays information about probe
                     if (timer.isTimeReached() || (best_Probe != null && best_Probe.isTitanReached())) {
-                        System.out.println("Percentage Error: " + PhysicsUtils.relativeError(SolarSystem.planets.get(SystemProperties.EARTH).getLocation()));
+                        System.out.println("Percentage Error: " + PhysicsUtils.relativeError(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation()));
                         pause();
                     }
 
@@ -94,12 +81,10 @@ public class SimulationLogic {
      calculations happen in one state)
      * */
     public void applyNewState() {
-        for (Probe probe : SolarSystem.probes) {
-            probe.update();
-        }
+//        SolarSystem.probe.update();
 
-        for (celestialBody planet : SolarSystem.planets) {
-            planet.update();
+        for (Body body : SolarSystem.bodies) {
+            body.update();
         }
     }
 
@@ -107,24 +92,25 @@ public class SimulationLogic {
     /** redraws all sprites and objects
      * */
     public void redrawScene() {
-        for (celestialBody planet : SolarSystem.planets) {
+        // for all bodies except the last one(which is probe)
+        for (int i = 0; i < SolarSystem.bodies.size() - 1; i++) {
+            celestialBody planet = (celestialBody) SolarSystem.bodies.get(i);
             game.shape.setColor(planet.getColor());
             game.shape.ellipse((float) (centerScreenCords.x + (planet.getLocation().x / distFactor) - (planet.getWidth() / 2)), (float) (centerScreenCords.y + (planet.getLocation().y / distFactor) - (planet.getHeight()) / 2), planet.getWidth(), planet.getHeight());
         }
 
-        for (Probe probe : SolarSystem.probes) {
-            game.shape.setColor(Color.VIOLET);
-            game.shape.ellipse((float) (centerScreenCords.x + (probe.getLocation().x / distFactor) - 5),
-                    (float) (centerScreenCords.y + (probe.getLocation().y / distFactor) - 5),
-                    10, 10);
-        }
+        game.shape.setColor(Color.VIOLET);
+        game.shape.ellipse((float) (centerScreenCords.x + (SolarSystem.probe.getLocation().x / distFactor) - 5),
+                (float) (centerScreenCords.y + (SolarSystem.probe.getLocation().y / distFactor) - 5),
+                10, 10);
+
     }
 
     /** method to keep camera centered at the first probe position(so camera follows the first probe)
      * */
     public void moveCameraToProbe(OrthographicCamera camera){
-        if (SolarSystem.probes.size() > 0) {
-            Vector toFollow = SolarSystem.planets.get(SystemProperties.SUN).getLocation(); // our custom vector
+        if (SolarSystem.probe != null) {
+            Vector toFollow = SolarSystem.bodies.get(SystemProperties.SUN).getLocation(); // our custom vector
             Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / distFactor), centerScreenCords.y + (float) (toFollow.y / distFactor), 0);
 
             camera.position.set(toFollow_gdx);

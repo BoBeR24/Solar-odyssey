@@ -42,7 +42,7 @@ public class SolarSystemScreen implements Screen {
      * */
     @Override
     public void render(float delta) {
-        //ScreenUtils.clear(0, 0, 0, 1); // trails on/off
+        ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
         //logic.moveCameraToProbe(camera); // if you want to make camera follow the probe - uncomment this
         game.shape.setProjectionMatrix(camera.combined);

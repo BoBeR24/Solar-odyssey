@@ -1,4 +1,9 @@
-package com.mygdx.game;
+package com.mygdx.game.solvers;
+
+import com.mygdx.game.Body;
+import com.mygdx.game.PhysicsUtils;
+import com.mygdx.game.SolarSystem;
+import com.mygdx.game.Vector;
 
 import java.util.ArrayList;
 
@@ -7,22 +12,18 @@ import java.util.ArrayList;
  * */
 public class EulerSolver {
     /** method to initiate solving process.
-     * @param body body to which we calculate next state
-     * @param STEPSIZE step size for the solver
+     * @param universe states for which set of body we want approximate next state
      * */
-    public static Vector[] solve(Body body, int STEPSIZE){
-        ArrayList<Body> universe = new ArrayList<>();
-        universe.addAll(SolarSystem.planets);
-        universe.addAll(SolarSystem.probes);
+    public static void calculateNextState(ArrayList<Body> universe){
+        for (Body body : universe) {
+            final int STEPSIZE = PhysicsUtils.STEPSIZE;
 
-        Vector force = PhysicsUtils.allForce(body, universe);
+            Vector force = PhysicsUtils.allForce(body, universe);
 
-        Vector[] newValues = new Vector[2];
+            body.setNextLocation(updateCoordinate(body, STEPSIZE));
+            body.setNextVelocity(updateVelocity(body, force, STEPSIZE));
 
-        newValues[0] = updateCoordinate(body, STEPSIZE);
-        newValues[1] = updateVelocity(body, force, STEPSIZE);
-
-        return newValues;
+        }
     }
 
     /** update coordinates of the body

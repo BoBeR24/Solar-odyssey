@@ -1,4 +1,9 @@
-package com.mygdx.game;
+package com.mygdx.game.solvers;
+
+import com.mygdx.game.Body;
+import com.mygdx.game.PhysicsUtils;
+import com.mygdx.game.SolarSystem;
+import com.mygdx.game.Vector;
 
 import java.util.ArrayList;
 
@@ -11,22 +16,20 @@ public class RK4 {
 //    private static ArrayList<Body> clonedBodies = new ArrayList<>();
 //    private static ArrayList<Body> bodies = new ArrayList<>();
 
-    public static void calculate() {
+    public static void calculateNextState(ArrayList<Body> universe) {
         //TODO make code compatible of working with more than one probe(may require changing id in Probe class)
 
         cloned_universe = new ArrayList<>();
         init_universe = new ArrayList<>();
 
         // save initial state of all planets and probes and fill cloned universe
-        for (celestialBody planet : SolarSystem.planets) {
-            init_universe.add(planet);
-            cloned_universe.add(planet.clone());
+        for (Body body : universe) {
+            init_universe.add(body);
+            cloned_universe.add(body.clone());
         }
 
-        for (Probe probe : SolarSystem.probes) {
-            init_universe.add(probe);
-            cloned_universe.add(probe.clone());
-        }
+//        init_universe.add(SolarSystem.probe);
+//        cloned_universe.add(SolarSystem.probe.clone());
 
         k_positions = new Vector[4][init_universe.size()];
         k_velocities = new Vector[4][init_universe.size()];
@@ -36,21 +39,21 @@ public class RK4 {
             k1State(body);
         }
 
-        updateUniverse();
+        updateUniverse(cloned_universe);
 
         // calculate k2
         for (Body body : cloned_universe) {
             k2State(body);
         }
 
-        updateUniverse();
+        updateUniverse(cloned_universe);
 
         // calculate k3
         for (Body body : cloned_universe) {
             k3State(body);
         }
 
-        updateUniverse();
+        updateUniverse(cloned_universe);
 
 
         // calculate k4
@@ -58,7 +61,7 @@ public class RK4 {
             k4State(body);
         }
 
-        updateUniverse();
+        updateUniverse(cloned_universe);
 
         // calculate final new state for planets
         for (Body body: init_universe) {
@@ -170,8 +173,10 @@ public class RK4 {
                 (forcesSum.z * step) / body.getMass());
     }
 
-    private static void updateUniverse(){
-        for (Body body : cloned_universe) {
+    /** Updates whole given universe(each body from it)
+     * */
+    private static void updateUniverse(ArrayList<Body> universeToUpdate){
+        for (Body body : universeToUpdate) {
             body.update();
         }
     }

@@ -10,7 +10,7 @@ public class SystemInitializer {
     /** adds all planets to the system and setting up their names and colors
      * */
     public static void fillSystemWithPlanets() {
-        ArrayList<celestialBody> planets = SolarSystem.planets;
+        ArrayList<Body> planets = SolarSystem.bodies;
 
         celestialBody sun = new celestialBody(SystemProperties.SUN); // add all bodies here
         sun.setColor(Color.YELLOW);

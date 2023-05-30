@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.mygdx.game.solvers.EnhancedEuler;
+
 import java.util.ArrayList;
 
 /**
@@ -17,18 +19,18 @@ public class PhysicsUtils{
     */
    // one of the ways may be to move for loop for all planets to solvers themselves,
    // so each call of solver would calculate next state for all bodies
-    public static void calculateNextState(Body body){
-
-        //Run Eulers Method
-        // Vector[] newValues = EulerSolver.solve(body, STEPSIZE);
-
-        //Run Enhanced Eulers method (Heuns method)
-        Vector[] newValues = EnhancedEuler.solve(body, STEPSIZE);
-
-        body.setNextLocation(newValues[0].x, newValues[0].y, newValues[0].z);
-        body.setNextVelocity(newValues[1].x, newValues[1].y, newValues[1].z);
-
-    }
+//    public static void calculateNextState(Body body){
+//
+//        //Run Eulers Method
+//        // Vector[] newValues = EulerSolver.solve(body, STEPSIZE);
+//
+//        //Run Enhanced Eulers method (Heuns method)
+//        Vector[] newValues = EnhancedEuler.calculateNextState(body, STEPSIZE);
+//
+//        body.setNextLocation(newValues[0].x, newValues[0].y, newValues[0].z);
+//        body.setNextVelocity(newValues[1].x, newValues[1].y, newValues[1].z);
+//
+//    }
 
     /** Calculates sum of the forces
      * */

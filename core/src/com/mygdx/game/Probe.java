@@ -88,7 +88,7 @@ public class Probe implements Body{
      * */
     public double calculateDistanceToTitan(){
         // gets titan object
-        celestialBody titan = SolarSystem.planets.get(SystemProperties.TITAN);
+        celestialBody titan = (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN);
 
         double dist = this.location.subtract(titan.getLocation()).magnitude();
 
