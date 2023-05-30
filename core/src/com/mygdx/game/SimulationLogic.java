@@ -44,6 +44,7 @@ public class SimulationLogic {
      * */
     public void update(){
         boolean hasCompletedItteration = false;
+        int step = 1;
         for (int i = 0; i < 600; i++) { // amount of calculations per frame(to speed up the simulation)
             // Determines what happens when the Solar System is PAUSED or RUNNING
             switch (SolarSystemScreen.state) {
@@ -60,12 +61,17 @@ public class SimulationLogic {
                     }
 
                     // gives the probe a thrust
-                    if (hasCompletedItteration){
+                    if (hasCompletedItteration && step == 1){
                         for (Probe probe : SolarSystem.probes) {
-                        Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.SATURN),0.01, 70);
-                        if (probe.getDistanceToTitan() <= 5000){
-                            pause();
+                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.TITAN),10);
+                            if (Math.abs(probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.TITAN).getLocation()).magnitude()) < 10000){
+                                step++;
+                            }
                         }
+                    }
+                    if (step ==2){
+                        for (Probe probe : SolarSystem.probes) {
+                            Pathfinding.inOrbit(probe, SolarSystem.planets.get(SystemProperties.TITAN));
                         }
                     }
 

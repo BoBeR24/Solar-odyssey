@@ -80,7 +80,7 @@ public class Probe implements Body{
 
         // if distance to titans surface is less or equal to 300 km we consider that titan is reached
         if (dist <= titan.getRadius() + 300) {
-            titanReached = true;
+            //titanReached = true;
         }
 
         return dist;
