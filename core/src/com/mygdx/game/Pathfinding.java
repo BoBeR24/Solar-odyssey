@@ -9,17 +9,12 @@ public class Pathfinding {
     private static final double PI = Math.PI;
     
     //Method that plots a path of a probe to within a given distance of a celestial body, considering a max velocity by wich the probe shousld arrive at the celectial body.
-    public static void toBody(Probe probe, celestialBody body, double desiredDestinationSpeed, double pointToSlowDown){
+    public static void toBody(Probe probe, celestialBody body, double pointToSlowDown){
 
-        Vector velocity = probe.getVelocity();
+        Vector velocity = probe.getNextVelocity();
         Vector directionToBody = body.getLocation().subtract(probe.getLocation());
         double distanceToBody = directionToBody.magnitude();
-        double maxSpeed;
-        if (distanceToBody > pointToSlowDown){
-            	maxSpeed = 30000;
-        } else {
-            maxSpeed = desiredDestinationSpeed;
-        }
+        double maxSpeed = 30000;
         Vector desiredNewVelocity = directionToBody.multiply(maxSpeed/distanceToBody);
 
         double accelerationX = desiredNewVelocity.x - velocity.x;

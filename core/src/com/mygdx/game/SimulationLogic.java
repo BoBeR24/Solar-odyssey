@@ -63,8 +63,8 @@ public class SimulationLogic {
                     // gives the probe a thrust
                     if (hasCompletedItteration && step == 1){
                         for (Probe probe : SolarSystem.probes) {
-                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.TITAN),10000, 400000);
-                            if (Math.abs(probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.TITAN).getLocation()).magnitude()) < 10000){
+                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.TITAN), 400000);
+                            if (Math.abs(probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.TITAN).getLocation()).magnitude()) < 3000){
                                 step++;
                             }
                         }
@@ -79,7 +79,7 @@ public class SimulationLogic {
                     }
                     else if (step == 3){
                         for (Probe probe : SolarSystem.probes){
-                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.EARTH), 10000, 1000);
+                            Pathfinding.toBody(probe, SolarSystem.planets.get(SystemProperties.EARTH), 0);
                             if (probe.getLocation().subtract(SolarSystem.planets.get(SystemProperties.EARTH).getLocation()).magnitude() < 6371){
                                 close();
                                 System.out.println(Rocketry.fuel);
