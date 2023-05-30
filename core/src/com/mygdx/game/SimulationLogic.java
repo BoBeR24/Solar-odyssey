@@ -73,9 +73,6 @@ public class SimulationLogic {
                     // Pauses when point in time is reached and displays information about probe
                     if (timer.isTimeReached() || (best_Probe != null && best_Probe.isTitanReached())) {
                         System.out.println("Percentage Error: " + PhysicsUtils.relativeError(SolarSystem.planets.get(SystemProperties.EARTH).getLocation()));
-                        System.out.println("Time taken(in seconds): " + timer.getTimePassed());
-                        System.out.println("Minimal distance to Titan center " + minTitanDistance);
-                        best_Probe.displayData();
                         pause();
                     }
 

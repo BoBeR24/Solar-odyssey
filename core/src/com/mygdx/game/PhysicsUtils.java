@@ -62,13 +62,15 @@ public class PhysicsUtils{
         return force;
     }
 
-    public static Vector relativeError(Vector Location){
+    public static double relativeError(Vector Location){
         Vector Error = Location.subtract(NASA_Earth);
         Error.x = Math.abs(Error.x * (1.0/ NASA_Earth.x));
         Error.y = Math.abs(Error.y * (1.0/ NASA_Earth.y));
         Error.z = Math.abs(Error.z * (1.0/NASA_Earth.z));
 
         Error.multiply(100);
-        return Error;
+
+        double averageError = (Error.x + Error.y + Error.z)/3;
+        return averageError;
     }
 }
