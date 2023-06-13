@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.SupportiveClasses;
 
 /** class to keep track of time with each iteration
  * */

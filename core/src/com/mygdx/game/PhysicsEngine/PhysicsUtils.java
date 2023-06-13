@@ -1,6 +1,8 @@
-package com.mygdx.game;
+package com.mygdx.game.PhysicsEngine;
 
-import com.mygdx.game.solvers.EnhancedEuler;
+import com.mygdx.game.Objects.Body;
+import com.mygdx.game.Objects.Vector;
+import com.mygdx.game.Properties.SystemProperties;
 
 import java.util.ArrayList;
 
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared
     private final static double gravitationalConstant = 6.6743 * Math.pow(10, -20);
-    public final static int STEPSIZE = 30;
+    public final static int STEPSIZE = 1;
     //Nasa Coordinates after 1 year
     private final static Vector NASA_Earth = new Vector(-146525538.264264, -29597910.637783, 2927.15182555466);
 

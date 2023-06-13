@@ -1,4 +1,7 @@
-package com.mygdx.game;
+package com.mygdx.game.Properties;
+
+import com.mygdx.game.Objects.Body;
+import com.mygdx.game.Objects.Probe;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Objects;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;

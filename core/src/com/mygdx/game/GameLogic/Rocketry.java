@@ -1,4 +1,7 @@
-package com.mygdx.game;
+package com.mygdx.game.GameLogic;
+
+import com.mygdx.game.Objects.Probe;
+import com.mygdx.game.Objects.Vector;
 
 // class that gives a probe object rocket functionallity
 public class Rocketry {

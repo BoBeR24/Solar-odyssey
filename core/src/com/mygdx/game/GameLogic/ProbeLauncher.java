@@ -1,4 +1,8 @@
-package com.mygdx.game;
+package com.mygdx.game.GameLogic;
+
+import com.mygdx.game.Objects.Probe;
+import com.mygdx.game.Properties.SolarSystem;
+import com.mygdx.game.Objects.Vector;
 
 public class ProbeLauncher {
     /**

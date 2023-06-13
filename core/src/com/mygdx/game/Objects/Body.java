@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Objects;
 
 /** interface which is holds common functionality for different space objects(for example both
  *  planet and probe are considered to be a body)

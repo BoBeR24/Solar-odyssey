@@ -1,23 +1,26 @@
-package com.mygdx.game;
+package com.mygdx.game.Objects;
 
-public class Probe implements Body{
-    private int id = SystemProperties.PROBE; // same id is reserved for all probes(so all probes have the same id)
-    private double mass;
+import com.mygdx.game.Properties.SolarSystem;
+import com.mygdx.game.Properties.SystemProperties;
+
+public class Probe implements Body {
+    private final int id = SystemProperties.PROBE; // same id is reserved for all probes(so all probes have the same id)
+    private final double mass;
     private Vector location;
     private Vector nextLocation;
     private Vector velocity;
     private Vector nextVelocity;
-    private Vector pStart; // To track the starting position of the probe
-    private Vector vStart; // To track the starting velocity of the probe
+    private final Vector pStart; // To track the starting position of the probe
+    private final Vector vStart; // To track the starting velocity of the probe
     private double distanceToTitan; // closest the probe has gotten to titan
     private boolean titanReached;
-    private double feul; // feul measured in Delta-v
+    private double fuel; // fuel measured in Delta-v
 
     /** Creating Probe with specified starter velocity and location
      * @param starterVelocity - initial velocity of the probe relative to Earth
      * @param starterLocation - initial location of the probe relative to Earth
      * */
-    Probe(Vector starterVelocity, Vector starterLocation){
+    public Probe(Vector starterVelocity, Vector starterLocation){
         this.mass = 50000;
         // add relative location and velocity to Earths initial condition to get absolute values
         this.location = SystemProperties.initCoordinates[SystemProperties.EARTH].add(starterLocation);
@@ -37,12 +40,8 @@ public class Probe implements Body{
      * and specified starter velocity
      * @param starterVelocity - initial velocity of the probe
      * */
-    Probe(Vector starterVelocity) {
+    public Probe(Vector starterVelocity) {
         this(starterVelocity, new Vector(SystemProperties.radii[SystemProperties.EARTH], 0, 0));
-    }
-
-    Probe() {
-        this.mass = 50000;
     }
 
     /** !!!This clone method doesn't do a full copy, it only transfers essential characteristics,
@@ -191,11 +190,11 @@ public class Probe implements Body{
         return id;
     }
 
-    public double getFeul(){
-        return feul;
+    public double getFuel(){
+        return fuel;
     }
 
-    public void setfeul(double feul){
-        this.feul = feul;
+    public void setFuel(double fuel){
+        this.fuel = fuel;
     }
 }

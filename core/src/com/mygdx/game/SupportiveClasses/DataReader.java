@@ -1,5 +1,8 @@
-package com.mygdx.game;
+package com.mygdx.game.SupportiveClasses;
 
+
+import com.mygdx.game.Objects.Vector;
+import com.mygdx.game.Properties.SystemProperties;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +27,7 @@ public class DataReader {
         this.file = file;
     }
     public DataReader() {
-        this(new File("C:\\JavaWorkspace\\Odyssey\\core\\src\\com\\mygdx\\game\\values.txt"));
+        this(new File("C:\\JavaWorkspace\\Odyssey\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\values.txt"));
     }
 
     public void read() {

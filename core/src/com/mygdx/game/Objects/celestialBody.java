@@ -1,11 +1,13 @@
-package com.mygdx.game;
+package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.graphics.Color;
+import com.mygdx.game.Properties.SolarSystem;
+import com.mygdx.game.Properties.SystemProperties;
 
 /**
  * Class representing all bodies in simulated system
  * */
-public class celestialBody implements Body{
+public class celestialBody implements Body {
 //    private final String name; // name of the body
     private final int id; // id which represents position in the list of bodies
     private Vector location;
@@ -19,7 +21,7 @@ public class celestialBody implements Body{
     private int height; // height of the image of the body
 
 
-    celestialBody(int index){
+    public celestialBody(int index){
         this.id = index;
 
         this.color = Color.WHITE; // default color

@@ -1,10 +1,12 @@
-package com.mygdx.game;
+package com.mygdx.game.GUI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.GameLogic.SimulationLogic;
+import com.mygdx.game.GameLogic.State;
 
 
 /**

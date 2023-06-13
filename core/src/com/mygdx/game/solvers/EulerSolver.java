@@ -1,9 +1,8 @@
 package com.mygdx.game.solvers;
 
-import com.mygdx.game.Body;
-import com.mygdx.game.PhysicsUtils;
-import com.mygdx.game.SolarSystem;
-import com.mygdx.game.Vector;
+import com.mygdx.game.Objects.Body;
+import com.mygdx.game.PhysicsEngine.PhysicsUtils;
+import com.mygdx.game.Objects.Vector;
 
 import java.util.ArrayList;
 

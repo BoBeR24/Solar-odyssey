@@ -1,6 +1,10 @@
-package com.mygdx.game;
+package com.mygdx.game.GameLogic;
 
 import com.badlogic.gdx.graphics.Color;
+import com.mygdx.game.Objects.Body;
+import com.mygdx.game.Properties.SolarSystem;
+import com.mygdx.game.Properties.SystemProperties;
+import com.mygdx.game.Objects.celestialBody;
 
 import java.util.ArrayList;
 

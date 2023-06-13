@@ -1,11 +1,20 @@
-package com.mygdx.game;
+package com.mygdx.game.GameLogic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.solvers.EnhancedEuler;
-import com.mygdx.game.solvers.EulerSolver;
+import com.mygdx.game.GUI.Odyssey;
+import com.mygdx.game.GUI.SolarSystemScreen;
+import com.mygdx.game.Objects.Body;
+import com.mygdx.game.Objects.Probe;
+import com.mygdx.game.Objects.Vector;
+import com.mygdx.game.Objects.celestialBody;
+import com.mygdx.game.PhysicsEngine.PhysicsUtils;
+import com.mygdx.game.Properties.SolarSystem;
+import com.mygdx.game.Properties.SystemProperties;
+import com.mygdx.game.SupportiveClasses.DataReader;
+import com.mygdx.game.SupportiveClasses.Timer;
 import com.mygdx.game.solvers.RK4;
 
 /**
@@ -21,10 +30,13 @@ public class SimulationLogic {
     private double minTitanDistance = Double.MAX_VALUE;
     private Probe probe;
 
+    private int step = 1;
+    private boolean hasCompletedItteration = false;
+
 
     public SimulationLogic(final Odyssey game) {
         this.game = game;
-        this.timer = new Timer(31536000); // set up timer for 1 year by default
+        this.timer = new Timer(31536000 * 2); // set up timer for 1 year by default
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
@@ -39,8 +51,6 @@ public class SimulationLogic {
         probe = SolarSystem.probe;
 
     }
-    int step = 1;
-    boolean hasCompletedItteration = false;
 
     /**
      * updates the current state of the simulation. Draws all objects
@@ -52,9 +62,9 @@ public class SimulationLogic {
 
                 case RUNNING:
                     timer.iterate(PhysicsUtils.STEPSIZE);
-//                    RK4.calculateNextState(SolarSystem.bodies);
-//                    EnhancedEuler.calculateNextState(SolarSystem.bodies);
-                    EulerSolver.calculateNextState(SolarSystem.bodies);
+                   RK4.calculateNextState(SolarSystem.bodies);
+                    // EnhancedEuler.calculateNextState(SolarSystem.bodies);
+                //    EulerSolver.calculateNextState(SolarSystem.bodies);
 
 
                     hillClimb();
@@ -97,18 +107,19 @@ public class SimulationLogic {
     }
 
     private void hillClimb() {
+        // System.out.println(step);
         // gives the probe a thrust
         if (hasCompletedItteration && step == 1) {
             Pathfinding.toBody(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN), 400000);
 
-            if (Math.abs(probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.TITAN).getLocation()).magnitude()) < 3000) {
+            if (Math.abs(probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.TITAN).getLocation()).magnitude()) < 30000) {
                 step++;
             }
 
         } else if (step == 2) {
             Pathfinding.inOrbit(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN));
 
-            if (timer.getTimePassed() >= 5256000) {     //31536000
+            if (timer.getTimePassed() >= 525600) {     //31536000
                 step++;
             }
         } else if (step == 3) {
