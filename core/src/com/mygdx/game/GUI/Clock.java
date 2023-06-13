@@ -9,7 +9,12 @@ public class Clock {
     private int minutes;
     private int seconds;
     private int totalSeconds;
-
+    /**
+     * constructor for Clock class taking date you want to start from satring with time 00:00
+     * @param day 
+     * @param month
+     * @param year
+     */
     public Clock(int day, int month, int year) {
         LocalDateTime startingDay = LocalDateTime.of(year, month, day, 0, 0, 0);
         this.date = startingDay;
@@ -18,7 +23,10 @@ public class Clock {
         this.seconds = 0;
         this.totalSeconds = 0;
     }
-
+    /**
+     * Method updating all of the instances of CLock with time passed in seconds
+     * @param secondsPassed
+     */
     public void updateTime(int secondsPassed) {
         totalSeconds += secondsPassed;
 
