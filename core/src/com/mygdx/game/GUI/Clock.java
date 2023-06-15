@@ -26,12 +26,12 @@ public class Clock {
     }
     /**
      * Method updating all of the instances of CLock with time passed in seconds
-     * @param secondsPassed
+     * @param timeStep
      */
-    public void updateTime(int secondsPassed) {
-        totalSeconds += secondsPassed;
+    public void updateTime(int timeStep) {
+        totalSeconds += timeStep;
 
-        this.date = this.date.plus(secondsPassed, ChronoUnit.SECONDS);
+        this.date = this.date.plus(timeStep, ChronoUnit.SECONDS);
 
         hours = (int) ((totalSeconds / 3600) % 24);
         minutes = (int) ((totalSeconds / 60) % 60);
