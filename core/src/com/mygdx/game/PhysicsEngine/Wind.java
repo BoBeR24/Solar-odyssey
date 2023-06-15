@@ -66,7 +66,7 @@ public class Wind {
         randomWindDirection();
         if (this.windDirection == 2){
             vector.x = vector.x * (-1);
-            vector.x = vector.y * (-1);
+            vector.y = vector.y * (-1);
         }
         return vector;
     }
