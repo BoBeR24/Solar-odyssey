@@ -27,7 +27,7 @@ public class DataReader {
         this.file = file;
     }
     public DataReader() {
-        this(new File("C:\\JavaWorkspace\\Odyssey\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\values.txt"));
+        this(new File("C:\\Users\\Surface\\Desktop\\MU material\\Project 1-2\\code\\Solar-odyssey\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\values.txt"));
     }
 
     public void read() {

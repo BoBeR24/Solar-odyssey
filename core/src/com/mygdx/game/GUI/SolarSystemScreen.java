@@ -1,12 +1,18 @@
 package com.mygdx.game.GUI;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.GameLogic.SimulationLogic;
 import com.mygdx.game.GameLogic.State;
+import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 
 
 /**
@@ -18,6 +24,16 @@ public class SolarSystemScreen implements Screen {
     public static final OrthographicCamera camera = new OrthographicCamera();
     private final SimulationLogic logic;
     public static State state = State.RUNNING;
+    private SpriteBatch batch;
+    private BitmapFont font;
+    private String date;
+    private Clock clock;
+    private DateTimeFormatter timeFormatter;
+    private float labelX;
+    private float labelY;
+    private int timepassed;
+
+
 
 
     public SolarSystemScreen(final Odyssey game) {
@@ -30,7 +46,18 @@ public class SolarSystemScreen implements Screen {
         game.shape.setProjectionMatrix(camera.combined);
 
         this.logic = new SimulationLogic(game); // initialize our simulation
+        timepassed=0;
+        batch = new SpriteBatch();
+        font = new BitmapFont(); 
+        float fontScale = 2f; 
+        labelX = Gdx.graphics.getWidth() - 500; 
+        labelY = Gdx.graphics.getHeight() - 100;
+        font.getData().setScale(fontScale);
+        clock = new Clock(10, 4, 2023); // Initialize the Clock with the desired starting date
+        timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Customize the pattern based on your desired time format
+        date="Date of launch: April 10th";
     }
+
 
     /**
      * Called when screen appears
@@ -44,6 +71,7 @@ public class SolarSystemScreen implements Screen {
      * */
     @Override
     public void render(float delta) {
+    
         ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
         logic.moveCameraToProbe(camera); // if you want to make camera follow the probe - uncomment this
@@ -51,6 +79,22 @@ public class SolarSystemScreen implements Screen {
 
         game.shape.begin(ShapeType.Filled);
 
+
+        batch.begin();
+        font.draw(batch, date, labelX, labelY); 
+
+        timepassed=timepassed+PhysicsUtils.STEPSIZE;
+        clock.updateTime(timepassed); 
+
+        LocalDateTime currentTime = clock.getDate();
+        String formattedTime = currentTime.format(timeFormatter);
+
+        font.draw(batch, formattedTime, labelX, labelY-50); 
+       // font.draw(batch, Integer.toString(clock.get), labelX, labelY-50); 
+       font.draw(batch,"Days passed: " + Integer.toString(clock.getDaysPassed()), labelX, labelY-150);
+        font.draw(batch,Integer.toString(clock.getHours()) + ":" + Integer.toString(clock.getMinutes()) + ":" + Integer.toString(clock.getSeconds()), labelX, labelY-100);
+        
+        batch.end();
         logic.update();
 
         game.shape.end();
@@ -81,6 +125,8 @@ public class SolarSystemScreen implements Screen {
 
     @Override
     public void dispose() {
+        batch.dispose();
+        font.dispose();
         logic.close();
     }
 }

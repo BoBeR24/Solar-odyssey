@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.GUI.Odyssey;
 import com.mygdx.game.GUI.SolarSystemScreen;
 import com.mygdx.game.Objects.Body;
@@ -101,6 +102,7 @@ public class SimulationLogic {
      calculations happen in one state)
      * */
     private void applyNewState() {
+        Label.LabelStyle label1 = new Label.LabelStyle();
         for (Body body : SolarSystem.bodies) {
             body.update();
         }

@@ -9,6 +9,7 @@ public class Clock {
     private int minutes;
     private int seconds;
     private int totalSeconds;
+    private int days;
     /**
      * constructor for Clock class taking date you want to start from satring with time 00:00
      * @param day 
@@ -37,6 +38,7 @@ public class Clock {
         hours = (int) ((totalSeconds / 3600) % 24);
         minutes = (int) ((totalSeconds / 60) % 60);
         seconds = (int) (totalSeconds % 60);
+        days=(int) dayPassed;
     }
 
     public LocalDateTime getDate() {
@@ -57,5 +59,9 @@ public class Clock {
 
     public int totalSeconds() {
         return totalSeconds;
+    }
+
+    public int getDaysPassed(){
+        return days;
     }
 }
