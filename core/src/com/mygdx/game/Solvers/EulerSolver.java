@@ -1,4 +1,4 @@
-package com.mygdx.game.solvers;
+package com.mygdx.game.Solvers;
 
 import com.mygdx.game.Objects.Body;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;

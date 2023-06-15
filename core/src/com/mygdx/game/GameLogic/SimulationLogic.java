@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.GUI.Odyssey;
 import com.mygdx.game.GUI.SolarSystemScreen;
 import com.mygdx.game.Objects.Body;
-import com.mygdx.game.Objects.Probe;
 import com.mygdx.game.Objects.Vector;
 import com.mygdx.game.Objects.celestialBody;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
@@ -15,7 +14,7 @@ import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
 import com.mygdx.game.SupportiveClasses.DataReader;
 import com.mygdx.game.SupportiveClasses.Timer;
-import com.mygdx.game.solvers.RK4;
+import com.mygdx.game.Solvers.RK4;
 
 /**
  * class which contains all logics for simulation running process
@@ -26,12 +25,8 @@ public class SimulationLogic {
     private final Vector3 centerScreenCords;
 
     //31536000 seconds in 1 year
-    private Timer timer;
+    private final Timer timer;
     private double minTitanDistance = Double.MAX_VALUE;
-    private Probe probe;
-
-    private int step = 1;
-    private boolean hasCompletedItteration = false;
 
 
     public SimulationLogic(final Odyssey game) {
@@ -41,14 +36,17 @@ public class SimulationLogic {
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
 
-        // You can specify path to the file to read. By default it is set to be path to "values.txt"
+        // You can specify path to the file to read. By default, it is set to be path to "values.txt"
         DataReader dataReader = new DataReader();
         dataReader.read();
 
         SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
 
-        ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // probe that hits titan(it doesn't)
-        probe = SolarSystem.probe;
+        ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // initialize probe launch
+
+        // set up hill climbing algorithm
+        HillClimbing.timer = this.timer;
+        HillClimbing.probe = SolarSystem.probe;
 
     }
 
@@ -67,7 +65,7 @@ public class SimulationLogic {
                 //    EulerSolver.calculateNextState(SolarSystem.bodies);
 
 
-                    hillClimb();
+                    HillClimbing.hillClimb();
 
 
                     applyNewState(); // update states of objects
@@ -90,7 +88,7 @@ public class SimulationLogic {
                     break;
 
             }
-            hasCompletedItteration = true;
+            HillClimbing.hasCompletedIteration = true;
         }
 
         redrawScene(); // redraw all entities of the system
@@ -105,33 +103,6 @@ public class SimulationLogic {
             body.update();
         }
     }
-
-    private void hillClimb() {
-        // System.out.println(step);
-        // gives the probe a thrust
-        if (hasCompletedItteration && step == 1) {
-            Pathfinding.toBody(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN), 400000);
-
-            if (Math.abs(probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.TITAN).getLocation()).magnitude()) < 30000) {
-                step++;
-            }
-
-        } else if (step == 2) {
-            Pathfinding.inOrbit(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN));
-
-            if (timer.getTimePassed() >= 525600) {     //31536000
-                step++;
-            }
-        } else if (step == 3) {
-            Pathfinding.toBody(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.EARTH), 0);
-
-            if (probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation()).magnitude() < 6371) {
-                close();
-                System.out.println(Rocketry.fuel);
-            }
-        }
-    }
-
 
     /** redraws all sprites and objects
      * */
