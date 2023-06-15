@@ -1,6 +1,7 @@
 package com.mygdx.game.Solvers;
 
 import com.mygdx.game.Objects.Body;
+import com.mygdx.game.PhysicsEngine.Function;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 import com.mygdx.game.Objects.Vector;
 
@@ -9,15 +10,15 @@ import java.util.ArrayList;
 /** One of several different ODE solver methods based on classic 1st order Euler's method.
  *
  * */
-public class EulerSolver {
+public class EulerSolver implements Solver{
     /** method to initiate solving process.
      * @param universe states for which set of body we want approximate next state
      * */
-    public static void calculateNextState(ArrayList<Body> universe){
+    public void calculateNextState(ArrayList<Body> universe, Function function, float initialTime){
         for (Body body : universe) {
             final int STEPSIZE = PhysicsUtils.STEPSIZE;
 
-            Vector force = PhysicsUtils.allForce(body, universe);
+            Vector force = function.evaluate(body, universe, initialTime);
 
             body.setNextLocation(updateCoordinate(body, STEPSIZE));
             body.setNextVelocity(updateVelocity(body, force, STEPSIZE));
@@ -27,7 +28,7 @@ public class EulerSolver {
 
     /** update coordinates of the body
      * */
-    private static Vector updateCoordinate(Body body, int STEPSIZE){
+    private Vector updateCoordinate(Body body, int STEPSIZE){
         return new Vector(
                 (body.getLocation().x + body.getVelocity().x * STEPSIZE),
                 (body.getLocation().y + body.getVelocity().y * STEPSIZE),
@@ -36,7 +37,7 @@ public class EulerSolver {
 
     /** update velocity of the body
      * */
-    private static Vector updateVelocity(Body body, Vector forcesSum, int STEPSIZE){
+    private Vector updateVelocity(Body body, Vector forcesSum, int STEPSIZE){
         return new Vector(
                 body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
                 body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),

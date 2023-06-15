@@ -9,9 +9,12 @@ import com.mygdx.game.GUI.SolarSystemScreen;
 import com.mygdx.game.Objects.Body;
 import com.mygdx.game.Objects.Vector;
 import com.mygdx.game.Objects.celestialBody;
+import com.mygdx.game.PhysicsEngine.Function;
+import com.mygdx.game.PhysicsEngine.NewtonForce;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
+import com.mygdx.game.Solvers.Solver;
 import com.mygdx.game.SupportiveClasses.DataReader;
 import com.mygdx.game.SupportiveClasses.Timer;
 import com.mygdx.game.Solvers.RK4;
@@ -26,12 +29,15 @@ public class SimulationLogic {
 
     //31536000 seconds in 1 year
     private final Timer timer;
+    // Variable which contains function to use in further calculations
+    private Function function;
+    private Solver solver;
     private double minTitanDistance = Double.MAX_VALUE;
 
 
     public SimulationLogic(final Odyssey game) {
         this.game = game;
-        this.timer = new Timer(31536000 * 2); // set up timer for 1 year by default
+        this.timer = new Timer(31536000 * 2, PhysicsUtils.STEPSIZE); // set up timer for 2 years by default
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
@@ -44,7 +50,13 @@ public class SimulationLogic {
 
         ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // initialize probe launch
 
-        // set up hill climbing algorithm
+        // Choose a function we are going to use
+        this.function = new NewtonForce();
+
+        // Choose a solver we want to use
+        this.solver = new RK4();
+
+        // Set up hill climbing algorithm
         HillClimbing.timer = this.timer;
         HillClimbing.probe = SolarSystem.probe;
 
@@ -59,8 +71,13 @@ public class SimulationLogic {
             switch (SolarSystemScreen.state) {
 
                 case RUNNING:
-                    timer.iterate(PhysicsUtils.STEPSIZE);
-                   RK4.calculateNextState(SolarSystem.bodies);
+//                    if (counter >= 6) {
+//                        pause();
+//                    }
+//                    counter++;
+//                    System.out.println(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation());
+
+                    solver.calculateNextState(SolarSystem.bodies, this.function, timer.getTimePassed());
                     // EnhancedEuler.calculateNextState(SolarSystem.bodies);
                 //    EulerSolver.calculateNextState(SolarSystem.bodies);
 
@@ -69,6 +86,8 @@ public class SimulationLogic {
 
 
                     applyNewState(); // update states of objects
+//                    System.out.println(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation());
+
 
                     if (SolarSystem.probe.getDistanceToTitan() < minTitanDistance) {
                         minTitanDistance = SolarSystem.probe.getDistanceToTitan(); // updates best distance to titan so far

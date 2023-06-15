@@ -2,14 +2,18 @@ package com.mygdx.game.Solvers;
 
 import com.mygdx.game.Objects.Body;
 import com.mygdx.game.Objects.Vector;
+import com.mygdx.game.PhysicsEngine.Function;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 import com.mygdx.game.Properties.SolarSystem;
 
 import java.util.ArrayList;
 
 public class EnhancedEuler{
-    public static void calculateNextState(ArrayList<Body> universe){
+    public static void calculateNextState(ArrayList<Body> universe, Function function, float initialTime){
         final int STEPSIZE = PhysicsUtils.STEPSIZE;
+
+        Solver solver = new EulerSolver();
+
 
         ArrayList<Body> cloned_universe = new ArrayList<>();
 
@@ -17,16 +21,17 @@ public class EnhancedEuler{
             cloned_universe.add(body.clone());
         }
 
+
         //Calculate next set of values with default euler solver approach
-        EulerSolver.calculateNextState(cloned_universe);
+        solver.calculateNextState(cloned_universe, function, initialTime);
         updateUniverse(cloned_universe);
 
         for (Body body : universe) {
             //Calculate forces in original universe from current state
-            Vector forceOriginal = PhysicsUtils.allForce(body, SolarSystem.bodies);
+            Vector forceOriginal = function.evaluate(body, SolarSystem.bodies, initialTime);
             //Calculate forces for the same body, but in cloned universe(which is in the next state, approximated by
             // default solver)
-            Vector forceClone = PhysicsUtils.allForce(cloned_universe.get(body.getId()), cloned_universe);
+            Vector forceClone = function.evaluate(cloned_universe.get(body.getId()), cloned_universe, initialTime);
 
             //Average the force vector previously calculated
             Vector forceSum = (forceClone.add(forceOriginal)).multiply(0.5);
