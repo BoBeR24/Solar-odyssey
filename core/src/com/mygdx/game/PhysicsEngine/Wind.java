@@ -8,7 +8,7 @@ import java.lang.Math.*;
 public class Wind {
 
     final double SHIP_DIAMETER = 7; // in meters
-    final double ATMOSPHARE_DENSITY = 1.240512; // in kg/m^2 (98,4%*1,25+1,6%*0,657=1,240512 METHANE & ETHANE)
+    final double ATMOSPHARE_DENSITY = 1.240512; // in kg/m^2 (98,4%*1,25+1,6%*0,657=1,240512 NITROGEN & ETHANE)  but maybe just use 1,5*Earth air density 
     int windDirection; // 1 for from left to right, 2 for from right to left
     int angle; // +- 15 degrees 
     
@@ -24,8 +24,8 @@ public class Wind {
         double windPressure = windPressure(velocity);
         double windForce = windForce(windPressure, shipArea());
         Vector wind = newWind(windForce);
-        wind = vectorAngleRotation(wind);
         wind = vectorDirectionRotation(wind);
+        wind = vectorAngleRotation(wind);
         return wind;
     }
     /**
@@ -66,7 +66,6 @@ public class Wind {
         randomWindDirection();
         if (this.windDirection == 2){
             vector.x = vector.x * (-1);
-            vector.y = vector.y * (-1);
         }
         return vector;
     }
