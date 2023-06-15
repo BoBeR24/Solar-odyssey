@@ -31,14 +31,11 @@ public class Clock {
     public void updateTime(int secondsPassed) {
         totalSeconds += secondsPassed;
 
-        long dayPassed = ((hours * 3600 + minutes * 60 + seconds + secondsPassed)/3600)%24;
-        if (dayPassed > 0){
-            this.date = this.date.plus(dayPassed, ChronoUnit.DAYS);
-        }
+        this.date = this.date.plus(secondsPassed, ChronoUnit.SECONDS);
+
         hours = (int) ((totalSeconds / 3600) % 24);
         minutes = (int) ((totalSeconds / 60) % 60);
         seconds = (int) (totalSeconds % 60);
-        days=(int) dayPassed;
     }
 
     public LocalDateTime getDate() {
@@ -63,5 +60,18 @@ public class Clock {
 
     public int getDaysPassed(){
         return days;
+    }
+
+    public static void main(String[] args) {
+        Clock clock = new Clock(1, 4, 2023);
+        int timePassed = 0;
+        int tp = 7;
+        int endP = 60 * 60;
+        while (timePassed < endP) {
+        clock.updateTime(tp);
+        System.out.println(clock.getDate());
+        timePassed += tp;
+        }
+
     }
 }
