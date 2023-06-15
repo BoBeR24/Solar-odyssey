@@ -20,7 +20,7 @@ public class Clock {
         LocalDateTime startingDay = LocalDateTime.of(year, month, day, 0, 0, 0);
         this.date = startingDay;
         this.hours = 0;
-        this.minutes = 0;
+        this.minutes =0;
         this.seconds = 0;
         this.totalSeconds = 0;
     }

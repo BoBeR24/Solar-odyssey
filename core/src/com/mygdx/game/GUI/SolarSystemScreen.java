@@ -28,10 +28,9 @@ public class SolarSystemScreen implements Screen {
     private BitmapFont font;
     private String date;
     private Clock clock;
-    private DateTimeFormatter timeFormatter;
     private float labelX;
     private float labelY;
-    private int timepassed;
+    DateTimeFormatter FORMATTER;
 
 
 
@@ -46,7 +45,6 @@ public class SolarSystemScreen implements Screen {
         game.shape.setProjectionMatrix(camera.combined);
 
         this.logic = new SimulationLogic(game); // initialize our simulation
-        timepassed=0;
         batch = new SpriteBatch();
         font = new BitmapFont(); 
         float fontScale = 2f; 
@@ -54,7 +52,7 @@ public class SolarSystemScreen implements Screen {
         labelY = Gdx.graphics.getHeight() - 100;
         font.getData().setScale(fontScale);
         clock = new Clock(10, 4, 2023); // Initialize the Clock with the desired starting date
-        timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Customize the pattern based on your desired time format
+        FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         date="Date of launch: April 10th";
     }
 
@@ -83,15 +81,15 @@ public class SolarSystemScreen implements Screen {
         batch.begin();
         font.draw(batch, date, labelX, labelY); 
 
-        timepassed=timepassed+PhysicsUtils.STEPSIZE;
-        clock.updateTime(timepassed); 
+        //timepassed=timepassed+PhysicsUtils.STEPSIZE;
+        clock.updateTime(PhysicsUtils.STEPSIZE); 
 
         LocalDateTime currentTime = clock.getDate();
-        String formattedTime = currentTime.format(timeFormatter);
+        String formattedTime = currentTime.format(FORMATTER);
 
         font.draw(batch, formattedTime, labelX, labelY-50); 
-       // font.draw(batch, Integer.toString(clock.get), labelX, labelY-50); 
-       font.draw(batch,"Days passed: " + Integer.toString(clock.getDaysPassed()), labelX, labelY-150);
+        // font.draw(batch, Integer.toString(clock.get), labelX, labelY-50); 
+        font.draw(batch,"Days passed: " + Integer.toString(clock.getDaysPassed()), labelX, labelY-150);
         font.draw(batch,Integer.toString(clock.getHours()) + ":" + Integer.toString(clock.getMinutes()) + ":" + Integer.toString(clock.getSeconds()), labelX, labelY-100);
         
         batch.end();
