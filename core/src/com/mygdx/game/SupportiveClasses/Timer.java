@@ -3,7 +3,7 @@ package com.mygdx.game.SupportiveClasses;
 /** class to keep track of time with each iteration
  * */
 public class Timer {
-    private final float endTime;
+    private float endTime;
     private float currentTime = 0;
     private boolean timeReached = false;
     private boolean isPaused = false;
@@ -52,5 +52,9 @@ public class Timer {
      * */
     public void unpause() {
         isPaused = false;
+    }
+
+    public void reset(){
+        currentTime = 0;
     }
 }

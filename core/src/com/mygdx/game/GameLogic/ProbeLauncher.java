@@ -11,6 +11,10 @@ public class ProbeLauncher {
     public static void launch(Vector velocity){
         Probe probe = new Probe(velocity);
         SolarSystem.probe = probe;
-        SolarSystem.bodies.add(probe);
+        if (SolarSystem.bodies.size() >= 12){
+            SolarSystem.bodies.set(11, probe);
+        } else {
+            SolarSystem.bodies.add(probe);
+        }
     }
 }

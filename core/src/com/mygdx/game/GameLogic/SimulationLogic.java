@@ -26,8 +26,9 @@ public class SimulationLogic {
     private Odyssey game;
     private final int distFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
+    private final float TIME;
 
-    //31536000 seconds in 1 year
+    private final int SECONDS_IN_YEAR = 31536000;
     private final Timer timer;
     // Variable which contains function to use in further calculations
     private Function function;
@@ -37,7 +38,8 @@ public class SimulationLogic {
 
     public SimulationLogic(final Odyssey game) {
         this.game = game;
-        this.timer = new Timer(31536000 * 2, PhysicsUtils.STEPSIZE); // set up timer for 2 years by default
+        this.TIME = SECONDS_IN_YEAR * 2;
+        this.timer = new Timer(TIME * 2, PhysicsUtils.STEPSIZE); // set up timer for 2 years by default
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
@@ -83,6 +85,8 @@ public class SimulationLogic {
 
 
                     HillClimbing.hillClimb();
+                    System.out.println(timer.getTimePassed());
+                    timer.iterate();
 
 
                     applyNewState(); // update states of objects
@@ -170,5 +174,9 @@ public class SimulationLogic {
      * */
     public void close(){
         System.out.println("Thank you");
+    }
+
+    public void resetTimer(){
+        timer.reset();
     }
 }
