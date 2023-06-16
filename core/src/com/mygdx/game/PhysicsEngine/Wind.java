@@ -51,8 +51,10 @@ public class Wind {
     private Vector vectorAngleRotation(Vector vector){
         randomAngle();
         Vector newVector = new Vector(0.0, 0.0, 0.0);
-        double newX = Math.cos(this.angle)*vector.x - Math.sin(this.angle)*vector.y;
-        double newY = Math.sin(this.angle)*vector.x - Math.cos(this.angle)*vector.y;
+        // double newX = Math.cos(this.angle)*vector.x - Math.sin(this.angle)*vector.y
+        // double newY = Math.sin(this.angle)*vector.x - Math.cos(this.angle)*vector.y;
+        double newX = Math.cos(this.angle)*vector.x;
+        double newY = Math.sin(this.angle)*vector.x;
         newVector.x = newX;
         newVector.y = newY;
         return newVector;
