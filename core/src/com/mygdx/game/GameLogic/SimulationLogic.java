@@ -85,7 +85,6 @@ public class SimulationLogic {
 
 
                     HillClimbing.hillClimb();
-                    System.out.println(timer.getTimePassed());
                     timer.iterate();
 
 
