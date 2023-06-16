@@ -51,6 +51,11 @@ public class Wind {
         return windPressure * shipArea;
     }
 
+    /**
+     * rotation vector of wind based on the angle
+     * @param vector of wind with only x coordinate being =! 0
+     * @return rotated vetor based on the angle
+     */
     private Vector vectorAngleRotation(Vector vector){
         Vector newVector = new Vector(0.0, 0.0, 0.0);
         // double newX = Math.cos(this.angle)*vector.x - Math.sin(this.angle)*vector.y
@@ -66,6 +71,11 @@ public class Wind {
         this.angle = getRandomNumber(-15, 15);
     }
 
+    /**
+     * changing the direction of wind if the wind is blowing from left to right
+     * @param Vector with values =! 0 only on x coordinate
+     * @return vector 
+     */
     private Vector vectorDirectionRotation(Vector vector){
         if (this.windDirection == 2){
             vector.x = vector.x * (-1);
@@ -78,6 +88,11 @@ public class Wind {
         return (int) ((Math.random() * (max - min)) + min);
     }
 
+    /**
+     * velocity depends on the height we are on, the higher we are the stronger the wind can be
+     * @param distanceToTitan
+     * @return velocity of wind in x-axis, from 0 to the upper bound based on the distance
+     */
     private double randomVelocity(double distanceToTitan){
         if (distanceToTitan < 7){
             return getRandomNumber(0, 9);
@@ -88,10 +103,17 @@ public class Wind {
         } else return 0;
     }
 
+    /**
+     * randomise the direction of wind (1 for wind blowind from left to right, 2 for wind blowing from right to left)
+     */
     private void randomWindDirection(){
         this.windDirection = getRandomNumber(1, 2);
     }
-
+    /**
+     * creating new wind vector with defined velocity in x-axis
+     * @param windForce
+     * @return 
+     * */
     private Vector newWind(double windForce){
         Vector vector = new Vector(0.0, 0.0, 0.0);
         vector.x = windForce;
