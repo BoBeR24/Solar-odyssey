@@ -20,6 +20,8 @@ public class Wind {
      * @return vector of force in N (z coordinate is always 0)
      */
     public Vector generateWind(double distanceToTitan){
+        randomAngle();
+        randomWindDirection();
         double velocity = randomVelocity(distanceToTitan);
         double windPressure = windPressure(velocity);
         double windForce = windForce(windPressure, shipArea());
@@ -49,7 +51,6 @@ public class Wind {
     }
 
     private Vector vectorAngleRotation(Vector vector){
-        randomAngle();
         Vector newVector = new Vector(0.0, 0.0, 0.0);
         // double newX = Math.cos(this.angle)*vector.x - Math.sin(this.angle)*vector.y
         // double newY = Math.sin(this.angle)*vector.x - Math.cos(this.angle)*vector.y;
@@ -65,7 +66,6 @@ public class Wind {
     }
 
     private Vector vectorDirectionRotation(Vector vector){
-        randomWindDirection();
         if (this.windDirection == 2){
             vector.x = vector.x * (-1);
         }
