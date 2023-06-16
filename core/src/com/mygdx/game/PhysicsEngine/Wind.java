@@ -10,7 +10,8 @@ public class Wind {
     final double SHIP_DIAMETER = 7; // in meters
     final double ATMOSPHARE_DENSITY = 1.240512; // in kg/m^2 (98,4%*1,25+1,6%*0,657=1,240512 NITROGEN & ETHANE)  but maybe just use 1,5*Earth air density 
     int windDirection; // 1 for from left to right, 2 for from right to left
-    int angle; // +- 15 degrees 
+    int angle; // +- 15 degrees
+    Vector wind; 
     
     public Wind(){
     }
@@ -25,7 +26,7 @@ public class Wind {
         double velocity = randomVelocity(distanceToTitan);
         double windPressure = windPressure(velocity);
         double windForce = windForce(windPressure, shipArea());
-        Vector wind = newWind(windForce);
+        wind = newWind(windForce);
         wind = vectorDirectionRotation(wind);
         wind = vectorAngleRotation(wind);
         return wind;
@@ -95,6 +96,36 @@ public class Wind {
         Vector vector = new Vector(0.0, 0.0, 0.0);
         vector.x = windForce;
         return vector;
+    }
+
+    // Getter for windDirection
+    public int getWindDirection() {
+        return windDirection;
+    }
+
+    // Setter for windDirection
+    public void setWindDirection(int windDirection) {
+        this.windDirection = windDirection;
+    }
+
+    // Getter for angle
+    public int getAngle() {
+        return angle;
+    }
+
+    // Setter for angle
+    public void setAngle(int angle) {
+        this.angle = angle;
+    }
+
+    // Getter for wind
+    public Vector getWind() {
+        return wind;
+    }
+
+    // Setter for wind
+    public void setWind(Vector wind) {
+        this.wind = wind;
     }
 
     
