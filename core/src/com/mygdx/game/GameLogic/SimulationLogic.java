@@ -16,6 +16,8 @@ import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
 import com.mygdx.game.SupportiveClasses.DataReader;
 import com.mygdx.game.SupportiveClasses.Timer;
+import com.mygdx.game.solvers.EnhancedEuler;
+import com.mygdx.game.solvers.EulerSolver;
 import com.mygdx.game.solvers.RK4;
 
 /**
@@ -63,9 +65,9 @@ public class SimulationLogic {
 
                 case RUNNING:
                     timer.iterate(PhysicsUtils.STEPSIZE);
-                   RK4.calculateNextState(SolarSystem.bodies);
-                    // EnhancedEuler.calculateNextState(SolarSystem.bodies);
-                //    EulerSolver.calculateNextState(SolarSystem.bodies);
+                    RK4.calculateNextState(SolarSystem.bodies);
+                    //EnhancedEuler.calculateNextState(SolarSystem.bodies);
+                    //EulerSolver.calculateNextState(SolarSystem.bodies);
 
 
                     hillClimb();
@@ -82,7 +84,7 @@ public class SimulationLogic {
                         SolarSystem.probe.displayData();
                         System.out.println("Minimal distance to Titan during whole simulation: " + minTitanDistance);
 
-//                        System.out.println("Percentage Error: " + PhysicsUtils.relativeError(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation()));
+                     //System.out.println("Percentage Error: " + PhysicsUtils.relativeError(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation()));
                         pause();
                     }
 

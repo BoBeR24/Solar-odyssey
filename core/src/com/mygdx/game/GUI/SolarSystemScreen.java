@@ -51,9 +51,9 @@ public class SolarSystemScreen implements Screen {
         labelX = Gdx.graphics.getWidth() - 500; 
         labelY = Gdx.graphics.getHeight() - 100;
         font.getData().setScale(fontScale);
-        clock = new Clock(10, 4, 2023);
+        clock = new Clock(1, 4, 2023);
         FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        date="Date of launch: April 10th";
+        date="Date of launch: April 1st";
     }
 
 
@@ -81,7 +81,6 @@ public class SolarSystemScreen implements Screen {
         batch.begin();
         font.draw(batch, date, labelX, labelY); 
 
-        //timepassed=timepassed+PhysicsUtils.STEPSIZE;
         clock.updateTime(PhysicsUtils.STEPSIZE*600); 
 
         LocalDateTime currentTime = clock.getDate();
@@ -89,6 +88,7 @@ public class SolarSystemScreen implements Screen {
 
         font.draw(batch, formattedTime, labelX, labelY-50); 
         // font.draw(batch, Integer.toString(clock.get), labelX, labelY-50); 
+
         font.draw(batch,"Days passed: " + Integer.toString(clock.getDaysPassed()), labelX, labelY-150);
         font.draw(batch,Integer.toString(clock.getHours()) + ":" + Integer.toString(clock.getMinutes()) + ":" + Integer.toString(clock.getSeconds()), labelX, labelY-100);
         
