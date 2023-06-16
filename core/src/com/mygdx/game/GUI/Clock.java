@@ -9,7 +9,7 @@ public class Clock {
     private int minutes;
     private int seconds;
     private int totalSeconds;
-    private int days;
+    private int daysPased;
     /**
      * constructor for Clock class taking date you want to start from satring with time 00:00
      * @param day 
@@ -23,6 +23,7 @@ public class Clock {
         this.minutes =0;
         this.seconds = 0;
         this.totalSeconds = 0;
+        this.daysPased = 0;
     }
     /**
      * Method updating all of the instances of CLock with time passed in seconds
@@ -30,7 +31,7 @@ public class Clock {
      */
     public void updateTime(int timeStep) {
         totalSeconds += timeStep;
-
+        daysPased = (int)(totalSeconds/3600)/24;
         this.date = this.date.plus(timeStep, ChronoUnit.SECONDS);
 
         hours = (int) ((totalSeconds / 3600) % 24);
@@ -59,19 +60,7 @@ public class Clock {
     }
 
     public int getDaysPassed(){
-        return days;
+        return daysPased;
     }
 
-    public static void main(String[] args) {
-        Clock clock = new Clock(1, 4, 2023);
-        int timePassed = 0;
-        int tp = 7;
-        int endP = 60 * 60;
-        while (timePassed < endP) {
-        clock.updateTime(tp);
-        System.out.println(clock.getDate());
-        timePassed += tp;
-        }
-
-    }
 }
