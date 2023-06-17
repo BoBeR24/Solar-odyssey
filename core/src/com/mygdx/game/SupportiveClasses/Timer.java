@@ -7,7 +7,7 @@ public class Timer {
     private float currentTime = 0;
     private boolean timeReached = false;
     private boolean isPaused = false;
-    private float stepSize;
+    public float stepSize;
 
     public Timer(float endTime, float stepSize) {
         this.endTime = endTime;

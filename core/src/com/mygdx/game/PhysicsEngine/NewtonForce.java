@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class NewtonForce implements Function{
     /** Calculates sum of the forces
      * */
-    public Vector evaluate(Body body, ArrayList<Body> universe, float time) {
+    public Vector allForces(Body body, ArrayList<Body> universe) {
         Vector forcesSum = new Vector(0.0, 0.0, 0.0); // sum of all forces
 
         // Loops through all celestial bodies except itself and the probe since an object cant affect itself
@@ -38,5 +38,25 @@ public class NewtonForce implements Function{
         force = force.multiply(scalingFactor / magnitude);
 
         return force;
+    }
+
+    @Override
+    public Vector calculateCoordinateChange(Body body, ArrayList<Body> universe, float startTime){
+        return new Vector(
+                (body.getVelocity().x),
+                (body.getVelocity().y),
+                (body.getVelocity().z)
+        );
+    }
+
+    @Override
+    public Vector calculateVelocityChange(Body body, ArrayList<Body> universe, float startTime){
+        Vector funcVal = allForces(body, universe);
+
+        return new Vector(
+                (funcVal.x) / body.getMass(),
+                (funcVal.y) / body.getMass(),
+                (funcVal.z) / body.getMass()
+        );
     }
 }
