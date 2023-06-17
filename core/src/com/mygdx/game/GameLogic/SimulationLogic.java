@@ -14,6 +14,8 @@ import com.mygdx.game.PhysicsEngine.NewtonForce;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
+import com.mygdx.game.Solvers.EnhancedEuler;
+import com.mygdx.game.Solvers.EulerSolver;
 import com.mygdx.game.Solvers.Solver;
 import com.mygdx.game.SupportiveClasses.DataReader;
 import com.mygdx.game.SupportiveClasses.Timer;
@@ -33,6 +35,7 @@ public class SimulationLogic {
     private Function function;
     private Solver solver;
     private double minTitanDistance = Double.MAX_VALUE;
+    int counter = 0;
 
 
     public SimulationLogic(final Odyssey game) {
@@ -55,6 +58,8 @@ public class SimulationLogic {
 
         // Choose a solver we want to use
         this.solver = new RK4();
+//        this.solver = new EnhancedEuler();
+//        this.solver = new EulerSolver();
 
         // Set up hill climbing algorithm
         HillClimbing.timer = this.timer;
@@ -77,10 +82,7 @@ public class SimulationLogic {
 //                    counter++;
 //                    System.out.println(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation());
 
-                    solver.calculateNextState(SolarSystem.bodies, this.function, timer.getTimePassed());
-                    // EnhancedEuler.calculateNextState(SolarSystem.bodies);
-                //    EulerSolver.calculateNextState(SolarSystem.bodies);
-
+                    solver.calculateNextState(SolarSystem.bodies, this.function, timer.getTimePassed(), PhysicsUtils.STEPSIZE);
 
                     HillClimbing.hillClimb();
 

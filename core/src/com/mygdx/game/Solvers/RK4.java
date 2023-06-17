@@ -6,9 +6,10 @@ import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 import com.mygdx.game.Objects.Vector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RK4 implements Solver{
-    private final int STEPSIZE = PhysicsUtils.STEPSIZE;
+    private float STEPSIZE;
     private Function function;
     private Vector[][] k_positions;
     private Vector[][] k_velocities;
@@ -17,8 +18,9 @@ public class RK4 implements Solver{
     private float initialTime;
 
 
-    public void calculateNextState(ArrayList<Body> universe, Function givenFunction, float initialTime) {
+    public void calculateNextState(ArrayList<Body> universe, Function givenFunction, float initialTime, float stepSize) {
         //TODO make code compatible of working with more than one probe(may require changing id in Probe class)
+        this.STEPSIZE = stepSize;
 
         cloned_universe = new ArrayList<>();
         init_universe = new ArrayList<>();
@@ -32,9 +34,6 @@ public class RK4 implements Solver{
             init_universe.add(body);
             cloned_universe.add(body.clone());
         }
-
-//        init_universe.add(SolarSystem.probe);
-//        cloned_universe.add(SolarSystem.probe.clone());
 
         k_positions = new Vector[4][init_universe.size()];
         k_velocities = new Vector[4][init_universe.size()];
@@ -60,7 +59,6 @@ public class RK4 implements Solver{
 
         updateUniverse(cloned_universe);
 
-
         // calculate k4
         for (Body body : cloned_universe) {
             k4State(body);
@@ -77,12 +75,9 @@ public class RK4 implements Solver{
     /** Calculates k1 state of given body
      * */
     private void k1State(Body body) {
-        // calculate k1 for planets
-        Vector funcVal = function.evaluate(body, cloned_universe, initialTime);
-
-        // save k1 for position and velocity
-        k_positions[0][body.getId()] = calculateCoordinate(body, STEPSIZE);
-        k_velocities[0][body.getId()] = calculateVelocity(body, funcVal, STEPSIZE);
+        // evaluate function for coordinate and velocity and write result to relative k arrays
+        k_positions[0][body.getId()] = function.calculateCoordinateChange(body, cloned_universe, initialTime);
+        k_velocities[0][body.getId()] = function.calculateVelocityChange(body, cloned_universe, initialTime);
 
         // update location and velocity of a cloned body to Yn + h * k1 / 2 position to calculate force in next position
         body.setNextLocation(init_universe.get(body.getId()).getLocation().add(
@@ -95,10 +90,8 @@ public class RK4 implements Solver{
     }
 
     private void k2State(Body body) {
-        Vector funcVal = function.evaluate(body, cloned_universe, initialTime + STEPSIZE / 2.0f);
-
-        k_positions[1][body.getId()] = calculateCoordinate(body, STEPSIZE / 2.0f);
-        k_velocities[1][body.getId()] = calculateVelocity(body, funcVal, STEPSIZE / 2.0f);
+        k_positions[1][body.getId()] = function.calculateCoordinateChange(body, cloned_universe, initialTime + STEPSIZE / 2.0f);
+        k_velocities[1][body.getId()] = function.calculateVelocityChange(body, cloned_universe, initialTime + STEPSIZE / 2.0f);
 
         // update location and velocity of a cloned body to Yn + h * k2 / 2 position to calculate force in that position
         body.setNextLocation(init_universe.get(body.getId()).getLocation().add(
@@ -111,10 +104,8 @@ public class RK4 implements Solver{
     }
 
     private void k3State(Body body) {
-        Vector funcVal = function.evaluate(body, cloned_universe, initialTime + STEPSIZE / 2.0f);
-
-        k_positions[2][body.getId()] = calculateCoordinate(body, STEPSIZE / 2.0f);
-        k_velocities[2][body.getId()] = calculateVelocity(body, funcVal, STEPSIZE / 2.0f);
+        k_positions[2][body.getId()] = function.calculateCoordinateChange(body, cloned_universe, initialTime + STEPSIZE / 2.0f);
+        k_velocities[2][body.getId()] = function.calculateVelocityChange(body, cloned_universe, initialTime + STEPSIZE / 2.0f);
 
         // update location and velocity of a cloned body to Yn + h * k3 position to calculate force in that position
         body.setNextLocation(init_universe.get(body.getId()).getLocation().add(
@@ -127,10 +118,8 @@ public class RK4 implements Solver{
     }
 
     private void k4State(Body body) {
-        Vector funcVal = function.evaluate(body, cloned_universe, initialTime + STEPSIZE);
-
-        k_positions[3][body.getId()] = calculateCoordinate(body, STEPSIZE);
-        k_velocities[3][body.getId()] = calculateVelocity(body, funcVal, STEPSIZE);
+        k_positions[3][body.getId()] = function.calculateCoordinateChange(body, cloned_universe, initialTime + STEPSIZE);
+        k_velocities[3][body.getId()] = function.calculateVelocityChange(body, cloned_universe, initialTime + STEPSIZE);
     }
 
     private void final_state(Body body) {
@@ -154,25 +143,6 @@ public class RK4 implements Solver{
         body.setNextVelocity(next_velocity);
     }
 
-    /** calculate new coordinates of the body. In fact if we look at the formula of RK4 method this can be considered as
-     * f(y) for coordinates
-     * */
-    private Vector calculateCoordinate(Body body, float step){
-        return new Vector(
-                (body.getVelocity().x * step),
-                (body.getVelocity().y * step),
-                (body.getVelocity().z * step));
-    }
-
-    /** calculate new velocity of the body. In fact if we look at the formula of RK4 method this can be considered as
-     * f() for velocities
-     * */
-    private Vector calculateVelocity(Body body, Vector funcVal, float step){
-        return new Vector(
-                (funcVal.x * step) / body.getMass(),
-                (funcVal.y * step) / body.getMass(),
-                (funcVal.z * step) / body.getMass());
-    }
 
     /** Updates whole given universe(each body from it)
      * */

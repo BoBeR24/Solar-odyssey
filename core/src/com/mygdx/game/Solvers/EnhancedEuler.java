@@ -8,9 +8,10 @@ import com.mygdx.game.Properties.SolarSystem;
 
 import java.util.ArrayList;
 
-public class EnhancedEuler{
-    public static void calculateNextState(ArrayList<Body> universe, Function function, float initialTime){
-        final int STEPSIZE = PhysicsUtils.STEPSIZE;
+public class EnhancedEuler implements Solver{
+    private float STEPSIZE;
+    public void calculateNextState(ArrayList<Body> universe, Function function, float initialTime, float stepSize){
+        this.STEPSIZE = stepSize;
 
         Solver solver = new EulerSolver();
 
@@ -21,43 +22,49 @@ public class EnhancedEuler{
             cloned_universe.add(body.clone());
         }
 
-
         //Calculate next set of values with default euler solver approach
-        solver.calculateNextState(cloned_universe, function, initialTime);
+        solver.calculateNextState(cloned_universe, function, initialTime, stepSize);
         updateUniverse(cloned_universe);
 
         for (Body body : universe) {
-            //Calculate forces in original universe from current state
-            Vector forceOriginal = function.evaluate(body, SolarSystem.bodies, initialTime);
-            //Calculate forces for the same body, but in cloned universe(which is in the next state, approximated by
-            // default solver)
-            Vector forceClone = function.evaluate(cloned_universe.get(body.getId()), cloned_universe, initialTime);
+            // calculate coordinate and velocity change for initial state(so evaluate Yn)
+            Vector originalCoordinateChange = function.calculateCoordinateChange(body, universe, initialTime);
+            Vector originalVelocityChange = function.calculateVelocityChange(body, universe, initialTime);
 
-            //Average the force vector previously calculated
-            Vector forceSum = (forceClone.add(forceOriginal)).multiply(0.5);
+            // do the same for the cloned universe(as cloned universe is currently in next state(Yn+1))
+            Vector clonedCoordinateChange = function.calculateCoordinateChange(cloned_universe.get(body.getId()),
+                    cloned_universe, initialTime);
+            Vector clonedVelocityChange = function.calculateVelocityChange(cloned_universe.get(body.getId()),
+                    cloned_universe, initialTime);
 
-            //Calculate velocity and position with old body and new average force vector and return it
-            body.setNextLocation(updateCoordinate(body, STEPSIZE));
-            body.setNextVelocity(updateVelocity(body, forceSum, STEPSIZE));
+            // now find average between next step approximation and current state
+            Vector averageCoordinateChange = originalCoordinateChange.add(clonedCoordinateChange).multiply(0.5);
+            Vector averageVelocityChange = originalVelocityChange.add(clonedVelocityChange).multiply(0.5);
+
+            // use this approximation to calculate new, more accurate approximation
+            body.setNextLocation(nextCoordinate(body, averageCoordinateChange));
+            body.setNextVelocity(nextVelocity(body, averageVelocityChange));
         }
-    }   
+    }
 
     /** update coordinates of the body
      * */
-    private static Vector updateCoordinate(Body body, int STEPSIZE){
+    private Vector nextCoordinate(Body body, Vector coordinateChange){
         return new Vector(
-        (body.getLocation().x + body.getVelocity().x * STEPSIZE),
-        (body.getLocation().y + body.getVelocity().y * STEPSIZE),
-        (body.getLocation().z + body.getVelocity().z * STEPSIZE));
+                (body.getLocation().x + coordinateChange.x * STEPSIZE),
+                (body.getLocation().y + coordinateChange.y * STEPSIZE),
+                (body.getLocation().z + coordinateChange.z * STEPSIZE)
+        );
     }
 
     /** update velocity of the body
      * */
-    private static Vector updateVelocity(Body body, Vector forcesSum, int STEPSIZE){
+    private Vector nextVelocity(Body body, Vector velocityChange){
         return new Vector(
-        body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
-        body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-        body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass());
+                body.getVelocity().x + velocityChange.x * STEPSIZE,
+                body.getVelocity().y + velocityChange.y * STEPSIZE,
+                body.getVelocity().z + velocityChange.z * STEPSIZE
+        );
     }
 
     /** Updates whole given universe(each body from it)

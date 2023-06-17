@@ -11,36 +11,43 @@ import java.util.ArrayList;
  *
  * */
 public class EulerSolver implements Solver{
+    private float STEPSIZE;
+
     /** method to initiate solving process.
      * @param universe states for which set of body we want approximate next state
      * */
-    public void calculateNextState(ArrayList<Body> universe, Function function, float initialTime){
+    @Override
+    public void calculateNextState(ArrayList<Body> universe, Function function, float initialTime, float stepSize){
+        this.STEPSIZE = stepSize;
         for (Body body : universe) {
-            final int STEPSIZE = PhysicsUtils.STEPSIZE;
+//            Vector force = function.evaluate(body, universe, initialTime);
 
-            Vector force = function.evaluate(body, universe, initialTime);
+            Vector coordinateChange = function.calculateCoordinateChange(body, universe, initialTime);
+            Vector velocityChange = function.calculateVelocityChange(body, universe, initialTime);
 
-            body.setNextLocation(updateCoordinate(body, STEPSIZE));
-            body.setNextVelocity(updateVelocity(body, force, STEPSIZE));
+            body.setNextLocation(nextCoordinate(body, coordinateChange));
+            body.setNextVelocity(nextVelocity(body, velocityChange));
 
         }
     }
 
     /** update coordinates of the body
      * */
-    private Vector updateCoordinate(Body body, int STEPSIZE){
+    private Vector nextCoordinate(Body body, Vector coordinateChange){
         return new Vector(
-                (body.getLocation().x + body.getVelocity().x * STEPSIZE),
-                (body.getLocation().y + body.getVelocity().y * STEPSIZE),
-                (body.getLocation().z + body.getVelocity().z * STEPSIZE));
+                (body.getLocation().x + coordinateChange.x * STEPSIZE),
+                (body.getLocation().y + coordinateChange.y * STEPSIZE),
+                (body.getLocation().z + coordinateChange.z * STEPSIZE)
+        );
     }
 
     /** update velocity of the body
      * */
-    private Vector updateVelocity(Body body, Vector forcesSum, int STEPSIZE){
+    private Vector nextVelocity(Body body, Vector velocityChange){
         return new Vector(
-                body.getVelocity().x + (forcesSum.x * STEPSIZE) / body.getMass(),
-                body.getVelocity().y + (forcesSum.y * STEPSIZE) / body.getMass(),
-                body.getVelocity().z + (forcesSum.z * STEPSIZE) / body.getMass());
+                body.getVelocity().x + velocityChange.x * STEPSIZE,
+                body.getVelocity().y + velocityChange.y * STEPSIZE,
+                body.getVelocity().z + velocityChange.z * STEPSIZE
+        );
     }
 }
