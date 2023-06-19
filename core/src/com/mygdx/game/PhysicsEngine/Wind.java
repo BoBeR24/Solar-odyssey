@@ -164,7 +164,34 @@ public class Wind {
         this.wind = wind;
     }
 
-    //TODO: getter and setter for forces on particular bounds
+    public void setVectorForceZero(Vector forceBoundZero){
+        this.forceBoundZero=forceBoundZero;
+    }
+    public Vector getVectorForceZero(){
+        return this.forceBoundZero;
+    }
+
+    public void setVectorForceOne(Vector forceBoundOne){
+        this.forceBoundOne=forceBoundOne;
+    }
+    public Vector getVectorForceOne(){
+        return this.forceBoundOne;
+    }
+
+    public void setVectorForceTwo(Vector forceBoundTwo){
+        this.forceBoundTwo=forceBoundTwo;
+    }
+    public Vector getVectorForceTwo(){
+        return this.forceBoundTwo;
+    }
+
+    public void setVectorForceThree(Vector forceBoundThree){
+        this.forceBoundThree=forceBoundThree;
+    }
+    public Vector getVectorForceThree(){
+        return this.forceBoundThree;
+    }
+
 
 
     //TODO: method that takes distance to titan and returns particular force of wind at that distance
