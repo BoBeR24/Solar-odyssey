@@ -27,6 +27,7 @@ public class HillClimbing {
 
         } else if (step == 2) {
             //TODO launch probes at all different positions in every week recorded and find the most fuel efficient. Make sure to save thrust mapping
+            // Mapping will be done with a linked list
 
         } else if (step == 3) {
             //TODO launch probe with thrust mapping found in step 2
