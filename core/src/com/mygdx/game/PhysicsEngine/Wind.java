@@ -23,26 +23,26 @@ public class Wind {
     private static Wind Wind; 
     
     private Wind(){
-        randomAngle();
-        randomWindDirection();
+        this.angle = randomAngle();
+        this.windDirection = randomWindDirection();
         double velocity = randomVelocity(ZERO_BOUND);
         double windPressure = windPressure(velocity);
         double windForce = windForce(windPressure, shipArea());
         forceBoundZero = newWind(windForce);
-        forceBoundZero = vectorDirectionRotation(forceBoundOne);
-        forceBoundZero = vectorAngleRotation(forceBoundOne);
+        forceBoundZero = vectorDirectionRotation(forceBoundZero);
+        forceBoundZero = vectorAngleRotation(forceBoundZero);
 
-        randomAngle();
-        randomWindDirection();
+        this.angle = randomAngle();
+        this.windDirection = randomWindDirection();
         velocity = randomVelocity(FIRST_BOUND);
         windPressure = windPressure(velocity);
         windForce = windForce(windPressure, shipArea());
         forceBoundOne = newWind(windForce);
-        forceBoundOne = vectorDirectionRotation(forceBoundTwo);
-        forceBoundOne = vectorAngleRotation(forceBoundTwo);
+        forceBoundOne = vectorDirectionRotation(forceBoundOne);
+        forceBoundOne = vectorAngleRotation(forceBoundOne);
 
-        randomAngle();
-        randomWindDirection();
+        this.angle = randomAngle();
+        this.windDirection = randomWindDirection();
         velocity = randomVelocity(SECOND_BOUND);
         windPressure = windPressure(velocity);
         windForce = windForce(windPressure, shipArea());
@@ -50,15 +50,14 @@ public class Wind {
         forceBoundTwo = vectorDirectionRotation(forceBoundTwo);
         forceBoundTwo = vectorAngleRotation(forceBoundTwo);
 
-        randomAngle();
-        randomWindDirection();
+        this.angle = randomAngle();
+        this.windDirection = randomWindDirection();
         velocity = randomVelocity(THIRD_BOUND);
         windPressure = windPressure(velocity);
         windForce = windForce(windPressure, shipArea());
         forceBoundThree = newWind(windForce);
         forceBoundThree = vectorDirectionRotation(forceBoundThree);
         forceBoundThree = vectorAngleRotation(forceBoundThree);
-
     }
     /**
      * Singleton way of creating wind
@@ -107,8 +106,8 @@ public class Wind {
         return newVector;
     }
 
-    private void randomAngle(){
-        this.angle = (getRandomNumber(-1*MAX_ANGLE, MAX_ANGLE)/360) * 2 * Math.PI;
+    private double randomAngle(){
+        return (getRandomNumber(-1*MAX_ANGLE, MAX_ANGLE)/360) * 2 * Math.PI;
     }
 
     /**
@@ -147,8 +146,8 @@ public class Wind {
     /**
      * randomise the direction of wind (1 for wind blowind from left to right, 2 for wind blowing from right to left)
      */
-    private void randomWindDirection(){
-        this.windDirection = getRandomNumber(1, 2);
+    private int randomWindDirection(){
+        return getRandomNumber(1, 2);
     }
     /**
      * creating new wind vector with defined velocity in x-axis
