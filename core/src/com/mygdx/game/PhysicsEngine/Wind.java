@@ -13,11 +13,13 @@ public class Wind {
     final double FIRST_BOUND = 7;
     final double SECOND_BOUND = 60;
     final double THIRD_BOUND = 120;
-    Vector forceBoundZero;
-    
-    int windDirection; // 1 for from left to right, 2 for from right to left
-    int angle; // +- 15 degrees
-    Vector wind;
+    private Vector forceBoundZero;
+    private Vector forceBoundOne;
+    private Vector forceBoundTwo;
+    private Vector forceBoundThree;
+    private int windDirection; // 1 for from left to right, 2 for from right to left
+    private int angle; // +- 15 degrees
+    private Vector wind;
     private static Wind Wind; 
     
     //TODO: do the constructor
