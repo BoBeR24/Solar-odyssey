@@ -9,18 +9,19 @@ public class Wind {
 
     final double SHIP_DIAMETER = 7; // in meters
     final double ATMOSPHARE_DENSITY = 1.240512; // in kg/m^2 (98,4%*1,25+1,6%*0,657=1,240512 NITROGEN & ETHANE)  but maybe just use 1,5*Earth air density 
+    final double ZERO_BOUND = 0.1;
+    final double FIRST_BOUND = 7;
+    final double SECOND_BOUND = 60;
+    final double THIRD_BOUND = 120;
+    Vector forceBoundZero;
+    
     int windDirection; // 1 for from left to right, 2 for from right to left
     int angle; // +- 15 degrees
-    Vector wind; 
+    Vector wind;
+    private static Wind Wind; 
     
-    public Wind(){
-    }
-    /**
-     * 
-     * @param distanceToTitan in km
-     * @return vector of force in N (z coordinate is always 0)
-     */
-    public Vector generateWind(double distanceToTitan){
+    //TODO: do the constructor
+    private Wind(){
         randomAngle();
         randomWindDirection();
         double velocity = randomVelocity(distanceToTitan);
@@ -29,8 +30,19 @@ public class Wind {
         wind = newWind(windForce);
         wind = vectorDirectionRotation(wind);
         wind = vectorAngleRotation(wind);
-        return wind;
     }
+    /**
+     * 
+     * @param distanceToTitan in km
+     * @return vector of force in N (z coordinate is always 0)
+     */
+    public static Wind getWind(){
+        if(Wind  == null){
+            Wind Wind = new Wind();
+        }
+        return Wind;
+    }
+
     /**
      * 4*PI*R^2 but we say that wind blows always on the half of the area of the spaceship 
      * @return half of the ship area in m^2
@@ -94,11 +106,13 @@ public class Wind {
      * @return velocity of wind in x-axis, from 0 to the upper bound based on the distance
      */
     private double randomVelocity(double distanceToTitan){
-        if (distanceToTitan < 7){
+        if (distanceToTitan > ZERO_BOUND){
+            return 0;
+        } else if (distanceToTitan < FIRST_BOUND){
             return getRandomNumber(0, 9);
-        } else if(distanceToTitan < 60){
+        } else if(distanceToTitan < SECOND_BOUND){
             return getRandomNumber(0, 17);
-        } else if (distanceToTitan < 120){
+        } else if (distanceToTitan < THIRD_BOUND){
             return getRandomNumber(0, 120);
         } else return 0;
     }
@@ -140,15 +154,16 @@ public class Wind {
         this.angle = angle;
     }
 
-    // Getter for wind
-    public Vector getWind() {
-        return wind;
-    }
 
     // Setter for wind
     public void setWind(Vector wind) {
         this.wind = wind;
     }
+
+    //TODO: getter and setter for forces on particular bounds
+
+
+    //TODO: method that takes distance to titan and returns particular force of wind at that distance
 
     
 }
