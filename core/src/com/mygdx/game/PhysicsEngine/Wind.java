@@ -56,9 +56,8 @@ public class Wind {
 
     }
     /**
-     * 
-     * @param distanceToTitan in km
-     * @return vector of force in N (z coordinate is always 0)
+     * Singleton way of creating wind
+     * @return vector object Wind
      */
     public static Wind getWind(){
         if(Wind  == null){
@@ -204,7 +203,7 @@ public class Wind {
     public void setVectorForceThree(Vector forceBoundThree){
         this.forceBoundThree=forceBoundThree;
     }
-    
+
     public Vector getVectorForceThree(){
         return this.forceBoundThree;
     }
