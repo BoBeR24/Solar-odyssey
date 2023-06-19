@@ -18,7 +18,8 @@ public class Wind {
     private Vector forceBoundTwo;
     private Vector forceBoundThree;
     private int windDirection; // 1 for from left to right, 2 for from right to left
-    private int angle; // +- 15 degrees
+    final int maxAngle = 15; // in degrees
+    private double angle; // in radians
     private static Wind Wind; 
     
     private Wind(){
@@ -103,7 +104,7 @@ public class Wind {
     }
 
     private void randomAngle(){
-        this.angle = getRandomNumber(-15, 15);
+        this.angle = (getRandomNumber(-1*maxAngle, maxAngle)/360) * 2 * Math.PI;
     }
 
     /**
@@ -167,18 +168,19 @@ public class Wind {
     }
 
     // Getter for angle
-    public int getAngle() {
+    public double getAngle() {
         return angle;
     }
 
     // Setter for angle
-    public void setAngle(int angle) {
+    public void setAngle(double angle) {
         this.angle = angle;
     }
 
     public void setVectorForceZero(Vector forceBoundZero){
         this.forceBoundZero=forceBoundZero;
     }
+
     public Vector getVectorForceZero(){
         return this.forceBoundZero;
     }
@@ -186,6 +188,7 @@ public class Wind {
     public void setVectorForceOne(Vector forceBoundOne){
         this.forceBoundOne=forceBoundOne;
     }
+
     public Vector getVectorForceOne(){
         return this.forceBoundOne;
     }
@@ -193,6 +196,7 @@ public class Wind {
     public void setVectorForceTwo(Vector forceBoundTwo){
         this.forceBoundTwo=forceBoundTwo;
     }
+
     public Vector getVectorForceTwo(){
         return this.forceBoundTwo;
     }
@@ -200,6 +204,7 @@ public class Wind {
     public void setVectorForceThree(Vector forceBoundThree){
         this.forceBoundThree=forceBoundThree;
     }
+    
     public Vector getVectorForceThree(){
         return this.forceBoundThree;
     }
