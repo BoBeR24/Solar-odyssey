@@ -25,7 +25,6 @@ public class Wind {
     private Wind(){
         randomAngle();
         randomWindDirection();
-
         double velocity = randomVelocity(ZERO_BOUND);
         double windPressure = windPressure(velocity);
         double windForce = windForce(windPressure, shipArea());
@@ -33,6 +32,8 @@ public class Wind {
         forceBoundZero = vectorDirectionRotation(forceBoundOne);
         forceBoundZero = vectorAngleRotation(forceBoundOne);
 
+        randomAngle();
+        randomWindDirection();
         velocity = randomVelocity(FIRST_BOUND);
         windPressure = windPressure(velocity);
         windForce = windForce(windPressure, shipArea());
@@ -40,6 +41,8 @@ public class Wind {
         forceBoundOne = vectorDirectionRotation(forceBoundTwo);
         forceBoundOne = vectorAngleRotation(forceBoundTwo);
 
+        randomAngle();
+        randomWindDirection();
         velocity = randomVelocity(SECOND_BOUND);
         windPressure = windPressure(velocity);
         windForce = windForce(windPressure, shipArea());
@@ -47,6 +50,8 @@ public class Wind {
         forceBoundTwo = vectorDirectionRotation(forceBoundTwo);
         forceBoundTwo = vectorAngleRotation(forceBoundTwo);
 
+        randomAngle();
+        randomWindDirection();
         velocity = randomVelocity(THIRD_BOUND);
         windPressure = windPressure(velocity);
         windForce = windForce(windPressure, shipArea());
