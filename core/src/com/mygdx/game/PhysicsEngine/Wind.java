@@ -18,7 +18,7 @@ public class Wind {
     private Vector forceBoundTwo;
     private Vector forceBoundThree;
     private int windDirection; // 1 for from left to right, 2 for from right to left
-    final int maxAngle = 15; // in degrees
+    final int MAX_ANGLE = 15; // in degrees
     private double angle; // in radians
     private static Wind Wind; 
     
@@ -103,7 +103,7 @@ public class Wind {
     }
 
     private void randomAngle(){
-        this.angle = (getRandomNumber(-1*maxAngle, maxAngle)/360) * 2 * Math.PI;
+        this.angle = (getRandomNumber(-1*MAX_ANGLE, MAX_ANGLE)/360) * 2 * Math.PI;
     }
 
     /**
