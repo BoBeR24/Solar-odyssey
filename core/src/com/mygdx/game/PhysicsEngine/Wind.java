@@ -24,12 +24,14 @@ public class Wind {
     private Wind(){
         randomAngle();
         randomWindDirection();
-        double velocity = randomVelocity(distanceToTitan);
+
+        double velocity = randomVelocity(ZERO_BOUND);
         double windPressure = windPressure(velocity);
         double windForce = windForce(windPressure, shipArea());
         wind = newWind(windForce);
         wind = vectorDirectionRotation(wind);
         wind = vectorAngleRotation(wind);
+
     }
     /**
      * 
@@ -106,13 +108,13 @@ public class Wind {
      * @return velocity of wind in x-axis, from 0 to the upper bound based on the distance
      */
     private double randomVelocity(double distanceToTitan){
-        if (distanceToTitan > ZERO_BOUND){
+        if (distanceToTitan == ZERO_BOUND){
             return 0;
-        } else if (distanceToTitan < FIRST_BOUND){
+        } else if (distanceToTitan == FIRST_BOUND){
             return getRandomNumber(0, 9);
-        } else if(distanceToTitan < SECOND_BOUND){
+        } else if(distanceToTitan == SECOND_BOUND){
             return getRandomNumber(0, 17);
-        } else if (distanceToTitan < THIRD_BOUND){
+        } else if (distanceToTitan == THIRD_BOUND){
             return getRandomNumber(0, 120);
         } else return 0;
     }
