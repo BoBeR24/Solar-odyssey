@@ -19,10 +19,8 @@ public class Wind {
     private Vector forceBoundThree;
     private int windDirection; // 1 for from left to right, 2 for from right to left
     private int angle; // +- 15 degrees
-    private Vector wind;
     private static Wind Wind; 
     
-    //TODO: do the constructor
     private Wind(){
         randomAngle();
         randomWindDirection();
@@ -30,9 +28,30 @@ public class Wind {
         double velocity = randomVelocity(ZERO_BOUND);
         double windPressure = windPressure(velocity);
         double windForce = windForce(windPressure, shipArea());
-        wind = newWind(windForce);
-        wind = vectorDirectionRotation(wind);
-        wind = vectorAngleRotation(wind);
+        forceBoundZero = newWind(windForce);
+        forceBoundZero = vectorDirectionRotation(forceBoundOne);
+        forceBoundZero = vectorAngleRotation(forceBoundOne);
+
+        velocity = randomVelocity(FIRST_BOUND);
+        windPressure = windPressure(velocity);
+        windForce = windForce(windPressure, shipArea());
+        forceBoundOne = newWind(windForce);
+        forceBoundOne = vectorDirectionRotation(forceBoundTwo);
+        forceBoundOne = vectorAngleRotation(forceBoundTwo);
+
+        velocity = randomVelocity(SECOND_BOUND);
+        windPressure = windPressure(velocity);
+        windForce = windForce(windPressure, shipArea());
+        forceBoundTwo = newWind(windForce);
+        forceBoundTwo = vectorDirectionRotation(forceBoundTwo);
+        forceBoundTwo = vectorAngleRotation(forceBoundTwo);
+
+        velocity = randomVelocity(THIRD_BOUND);
+        windPressure = windPressure(velocity);
+        windForce = windForce(windPressure, shipArea());
+        forceBoundThree = newWind(windForce);
+        forceBoundThree = vectorDirectionRotation(forceBoundThree);
+        forceBoundThree = vectorAngleRotation(forceBoundThree);
 
     }
     /**
@@ -98,7 +117,6 @@ public class Wind {
         }
         return vector;
     }
-    
 
     private int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
@@ -158,12 +176,6 @@ public class Wind {
         this.angle = angle;
     }
 
-
-    // Setter for wind
-    public void setWind(Vector wind) {
-        this.wind = wind;
-    }
-
     public void setVectorForceZero(Vector forceBoundZero){
         this.forceBoundZero=forceBoundZero;
     }
@@ -192,9 +204,16 @@ public class Wind {
         return this.forceBoundThree;
     }
 
-
-
-    //TODO: method that takes distance to titan and returns particular force of wind at that distance
-
+    public Vector getForceBasedOnDistance(double distanceToTitan){
+        if (distanceToTitan < ZERO_BOUND){
+            return forceBoundZero;
+        } else if (distanceToTitan < FIRST_BOUND){
+            return forceBoundOne;
+        } else if(distanceToTitan < SECOND_BOUND){
+            return forceBoundTwo;
+        } else if (distanceToTitan < THIRD_BOUND){
+            return forceBoundThree;
+        } else return new Vector(0,0,0);
+    }
     
 }
