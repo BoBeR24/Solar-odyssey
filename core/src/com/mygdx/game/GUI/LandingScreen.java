@@ -13,7 +13,7 @@ public class LandingScreen implements Screen {
 
     private final Odyssey game;
     public static final OrthographicCamera camera = new OrthographicCamera();
-    private final FlightLogic logic;
+    private final LandingLogic logic;
     public static State state = State.RUNNING;
 
     public LandingScreen(final Odyssey game) {
