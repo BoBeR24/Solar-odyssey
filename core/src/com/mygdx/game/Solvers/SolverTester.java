@@ -39,7 +39,6 @@ public class SolverTester {
         System.out.println(body.getLocation());
 
         while (!timer.isTimeReached()) {
-            System.out.println(timer.getTimePassed());
             solver.calculateNextState(universe, function, timer.getTimePassed(), timer.stepSize);
 
             timer.iterate();
@@ -47,6 +46,7 @@ public class SolverTester {
             for (Body obj : universe) {
                 obj.update();
 
+                System.out.println(timer.getTimePassed());
                 System.out.println(obj.getLocation());
             }
         }
