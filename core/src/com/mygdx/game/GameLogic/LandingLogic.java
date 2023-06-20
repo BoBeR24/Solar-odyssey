@@ -29,7 +29,9 @@ public class LandingLogic {
     private Solver solver;
     private double minTitanDistance = Double.MAX_VALUE;
     int counter = 0;
-    public LandingLogic(Game game){
+    public LandingLogic(Odyssey game){
+        this.game = game;
+
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
 
