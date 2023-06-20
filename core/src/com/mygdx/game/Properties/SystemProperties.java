@@ -16,6 +16,7 @@ public class SystemProperties {
     final public static int NEPTUNE = 9;
     final public static int URANUS = 10;
     final public static int PROBE = 11;
+    final public static int ROCKET = 12;
 
      final public static Vector[] initCoordinates = new Vector[11];
      final public static Vector[] initVelocities= new Vector[11];
