@@ -14,8 +14,6 @@ import com.mygdx.game.PhysicsEngine.NewtonForce;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
-import com.mygdx.game.Solvers.EnhancedEuler;
-import com.mygdx.game.Solvers.EulerSolver;
 import com.mygdx.game.Solvers.Solver;
 import com.mygdx.game.SupportiveClasses.DataReader;
 import com.mygdx.game.SupportiveClasses.Timer;
@@ -24,7 +22,7 @@ import com.mygdx.game.Solvers.RK4;
 /**
  * class which contains all logics for simulation running process
  * */
-public class SimulationLogic {
+public class FlightLogic {
     private Odyssey game;
     private final int distFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
@@ -38,7 +36,7 @@ public class SimulationLogic {
     int counter = 0;
 
 
-    public SimulationLogic(final Odyssey game) {
+    public FlightLogic(final Odyssey game) {
         this.game = game;
         this.timer = new Timer(31536000 * 2, PhysicsUtils.STEPSIZE); // set up timer for 2 years by default
 
