@@ -17,5 +17,6 @@ public class Resetter {
         }
         ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183));
         HillClimbing.timer.reset();
+        Rocketry.fuel = 0;
         }
 }
