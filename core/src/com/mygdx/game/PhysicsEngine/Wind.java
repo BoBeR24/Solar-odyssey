@@ -100,7 +100,7 @@ public class Wind {
         // double newX = Math.cos(this.angle)*vector.x - Math.sin(this.angle)*vector.y
         // double newY = Math.sin(this.angle)*vector.x - Math.cos(this.angle)*vector.y;
         double newX = Math.cos(this.angle)*vector.x;
-        double newY = Math.sin(this.angle)*vector.x;
+        double newY = (-1)*Math.sin(this.angle)*vector.x;
         newVector.x = newX;
         newVector.y = newY;
         return newVector;
