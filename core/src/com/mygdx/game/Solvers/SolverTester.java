@@ -14,8 +14,7 @@ public class SolverTester {
     private final static Timer timer = new Timer(4, 0.5f);
 
     public static void main(String[] args) {
-        //TODO manually calculate rk4 approximation for specified function and compare results
-        // (it is better to recheck correctness of the code again as it behaves weirdly)
+        //manually calculate rk4 approximation for specified function and compare results
         DataReader reader = new DataReader();
         reader.read();
 
