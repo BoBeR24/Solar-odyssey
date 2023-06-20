@@ -13,7 +13,7 @@ public class DataReader {
     public Vector[] coordinates;
     public Vector[] velocities;
     public double[] masses;
-    public double[] radii;
+    public int[] radii;
     public File file;
 
     /** Class that reads input values from a file
@@ -48,7 +48,7 @@ public class DataReader {
                 coordinates[lineCounter] = coordinate;
                 velocities[lineCounter] = velocity;
                 masses[lineCounter] = Double.parseDouble(textLine[7]);
-                radii[lineCounter] = Double.parseDouble(textLine[8]);
+                radii[lineCounter] = Integer.parseInt(textLine[8]);
 
                 lineCounter++;
             }

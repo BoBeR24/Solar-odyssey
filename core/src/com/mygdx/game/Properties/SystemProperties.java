@@ -22,5 +22,5 @@ public class SystemProperties {
      final public static Vector[] initVelocities= new Vector[11];
 
      final public static double[] masses = new double[11];
-     final public static double[] radii = new double[11];
+     final public static int[] radii = new int[11];
 }

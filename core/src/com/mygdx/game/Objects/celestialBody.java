@@ -14,8 +14,8 @@ public class celestialBody implements Body {
     private Vector nextLocation; // location to which planet will be moved in the next state of the system
     private Vector velocity;
     private Vector nextVelocity; // velocity of the current object in the next state of the system
-    private double radius;
-    private double mass;
+    private final int radius;
+    private final double mass;
     private Color color; // color of the body
     private int width; // width of the image of the body
     private int height; // height of the image of the body

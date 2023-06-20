@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.GUI.LandingScreen;
 import com.mygdx.game.GUI.Odyssey;
 import com.mygdx.game.GUI.SolarSystemScreen;
 import com.mygdx.game.Objects.Body;
 import com.mygdx.game.Objects.Vector;
 import com.mygdx.game.Objects.celestialBody;
+import com.mygdx.game.PhysicsEngine.CameraUtils;
 import com.mygdx.game.PhysicsEngine.Function;
 import com.mygdx.game.PhysicsEngine.NewtonForce;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
@@ -40,8 +42,7 @@ public class FlightLogic {
         this.game = game;
         this.timer = new Timer(31536000 * 2, PhysicsUtils.STEPSIZE); // set up timer for 2 years by default
 
-        this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
-                (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
+        this.centerScreenCords = SolarSystemScreen.centerScreenCords;
 
         // You can specify path to the file to read. By default, it is set to be path to "values.txt"
         DataReader dataReader = new DataReader();
@@ -49,7 +50,7 @@ public class FlightLogic {
 
         SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
 
-        ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // initialize probe launch
+        ProbeLauncher.launchProbe(new Vector(41.2384, -15.006862175, -3.183)); // initialize probe launch
 
         // Choose a function we are going to use
         this.function = new NewtonForce();
@@ -84,10 +85,8 @@ public class FlightLogic {
 
                     HillClimbing.hillClimb();
 
-
                     applyNewState(); // update states of objects
 //                    System.out.println(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation());
-
 
                     if (SolarSystem.probe.getDistanceToTitan() < minTitanDistance) {
                         minTitanDistance = SolarSystem.probe.getDistanceToTitan(); // updates best distance to titan so far
@@ -99,15 +98,21 @@ public class FlightLogic {
                         System.out.println("Minimal distance to Titan during whole simulation: " + minTitanDistance);
 
 //                        System.out.println("Percentage Error: " + PhysicsUtils.relativeError(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation()));
-                        pause();
+                        this.game.getScreen().pause();
                     }
 
+                    if (HillClimbing.isOnTitanOrbit) {
+                        System.out.println("Orbit has been reached. Switching to landing scene");
+
+                        this.game.setScreen(new LandingScreen(this.game));
+                    }
+
+                    HillClimbing.hasCompletedIteration = true;
 
                 default:
                     break;
 
             }
-            HillClimbing.hasCompletedIteration = true;
         }
 
         redrawScene(); // redraw all entities of the system
@@ -140,29 +145,8 @@ public class FlightLogic {
 
     }
 
-    /** method to keep camera centered at the first probe position(so camera follows the first probe)
-     * */
-    public void moveCameraToProbe(OrthographicCamera camera){
-        if (SolarSystem.probe != null) {
-            Vector toFollow = SolarSystem.bodies.get(SystemProperties.PROBE).getLocation(); // our custom vector
-            Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / distFactor), centerScreenCords.y + (float) (toFollow.y / distFactor), 0);
+    private void switchScene() {
 
-            camera.position.set(toFollow_gdx);
-            camera.update();
-        }
-
-    }
-
-    /** method to pause the simulation by switching current state of the game to paused
-     * */
-    public void pause() {
-        SolarSystemScreen.state = State.PAUSED;
-    }
-
-    /** method to unpause the simulation by switching current state of the game to running
-     * */
-    public void unpause() {
-        SolarSystemScreen.state = State.RUNNING;
     }
 
     /**

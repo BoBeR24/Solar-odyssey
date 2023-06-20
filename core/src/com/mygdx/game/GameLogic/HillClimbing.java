@@ -9,6 +9,7 @@ import com.mygdx.game.SupportiveClasses.Timer;
 
 public class HillClimbing {
     public static boolean hasCompletedIteration = false;
+    public static boolean isOnTitanOrbit = false;
     public static int step = 1;
     public static Timer timer;
     public static Probe probe;
@@ -18,12 +19,14 @@ public class HillClimbing {
         if (hasCompletedIteration && step == 1) {
             Pathfinding.toBody(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN), 400000);
 
-            if (Math.abs(probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.TITAN).getLocation()).magnitude()) < 30000) {
+            if (Math.abs(probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.TITAN).getLocation()).magnitude()) < 3000000) {
                 step++;
             }
 
         } else if (step == 2) {
             Pathfinding.inOrbit(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN));
+
+            isOnTitanOrbit = true;
 
             if (timer.getTimePassed() >= 525600) {     //31536000
                 step++;

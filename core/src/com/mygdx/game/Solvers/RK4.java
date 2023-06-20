@@ -19,7 +19,6 @@ public class RK4 implements Solver{
 
 
     public void calculateNextState(ArrayList<Body> universe, Function givenFunction, float initialTime, float stepSize) {
-        //TODO make code compatible of working with more than one probe(may require changing id in Probe class)
         this.STEPSIZE = stepSize;
 
         cloned_universe = new ArrayList<>();
@@ -35,6 +34,8 @@ public class RK4 implements Solver{
             cloned_universe.add(body.clone());
         }
 
+        //TODO currently id of a body represents its place in an array, however, if initial universe size is 2(like in landing scene)
+        // Titan id is out of bounds(bad possible solution is to to make k arrays the same size all the time and fill unused indexes with some reserved value(or NULL))
         k_positions = new Vector[4][init_universe.size()];
         k_velocities = new Vector[4][init_universe.size()];
 

@@ -1,28 +1,30 @@
 package com.mygdx.game.Objects;
 
-public class Rocket implements Body{
+public class LandingModule implements Body{
     private Vector velocity;
     private Vector location;
     private Vector nextVelocity;
     private Vector nextLocation;
-    private final int mass;
+    private double rotation; // rotation of the module relative to y-axis
+    private final double mass = 2000;
     private final int id = 12;
 
-    public Rocket(Vector initialLocation, Vector initialVelocity, int mass) {
+    public LandingModule(Vector initialLocation, Vector initialVelocity, double rotation) {
         this.location = initialLocation;
         this.velocity = initialVelocity;
-        this.mass = mass;
 
         this.nextLocation = initialLocation;
         this.nextVelocity = initialVelocity;
+
+        this.rotation = rotation;
     }
 
     /** !!!This clone method doesn't do a full copy, it only transfers essential characteristics,
      *  such as location and velocity
      * */
     @Override
-    public Rocket clone(){
-        Rocket clonedRocket = new Rocket(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), this.mass);
+    public LandingModule clone(){
+        LandingModule clonedRocket = new LandingModule(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), this.rotation);
 
         clonedRocket.setLocation(new Vector(this.location));
         clonedRocket.setVelocity(new Vector(this.velocity));
@@ -83,6 +85,10 @@ public class Rocket implements Body{
         this.setVelocity(vector.x, vector.y, vector.z);
     }
 
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
+
     @Override
     public Vector getLocation(){
         return this.location;
@@ -106,6 +112,10 @@ public class Rocket implements Body{
     @Override
     public double getMass(){
         return this.mass;
+    }
+
+    public double getRotation() {
+        return this.rotation;
     }
 
     @Override

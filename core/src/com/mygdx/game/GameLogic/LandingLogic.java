@@ -11,9 +11,11 @@ import com.mygdx.game.Objects.Body;
 import com.mygdx.game.Objects.Vector;
 import com.mygdx.game.Objects.celestialBody;
 import com.mygdx.game.PhysicsEngine.Function;
+import com.mygdx.game.PhysicsEngine.NewtonForce;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
+import com.mygdx.game.Solvers.RK4;
 import com.mygdx.game.Solvers.Solver;
 import com.mygdx.game.SupportiveClasses.Timer;
 
@@ -27,23 +29,37 @@ public class LandingLogic {
     // Variable which contains function to use in further calculations
     private Function function;
     private Solver solver;
-    private double minTitanDistance = Double.MAX_VALUE;
-    int counter = 0;
+
     public LandingLogic(Odyssey game){
         this.game = game;
+
+        this.timer = new Timer(31536000, PhysicsUtils.STEPSIZE); // set up timer for 1 year by default
 
         this.centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
                 (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
 
-        this.timer = new Timer(31536000, PhysicsUtils.STEPSIZE); // set up timer for 2 years by default
+        SolarSystem.resetSystem();
 
+        // add only a titan to list of bodies(as landing scene only considers rocket and Titan)
+        Body titan = new celestialBody(SystemProperties.TITAN);
+
+        SolarSystem.bodies.add(titan);
+
+        ProbeLauncher.launchLandingModule(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), 2000); // initialize probe launch
+
+         this.function = new NewtonForce();
+
+        // Choose a solver we want to use
+        this.solver = new RK4();
+//        this.solver = new EnhancedEuler();
+//        this.solver = new EulerSolver();
     }
 
     /**
      * updates the current state of the simulation. Draws all objects
      * */
     public void update(){
-
+        //TODO decide how to represent landing pad in our code
 
     }
 
@@ -71,31 +87,6 @@ public class LandingLogic {
                 (float) (centerScreenCords.y + (SolarSystem.probe.getLocation().y / distFactor) - 5),
                 10, 10);
 
-    }
-
-    /** method to keep camera centered at the first probe position(so camera follows the first probe)
-     * */
-    public void moveCameraToProbe(OrthographicCamera camera){
-        if (SolarSystem.probe != null) {
-            Vector toFollow = SolarSystem.bodies.get(SystemProperties.PROBE).getLocation(); // our custom vector
-            Vector3 toFollow_gdx = new Vector3(centerScreenCords.x + (float) (toFollow.x / distFactor), centerScreenCords.y + (float) (toFollow.y / distFactor), 0);
-
-            camera.position.set(toFollow_gdx);
-            camera.update();
-        }
-
-    }
-
-    /** method to pause the simulation by switching current state of the game to paused
-     * */
-    public void pause() {
-        SolarSystemScreen.state = State.PAUSED;
-    }
-
-    /** method to unpause the simulation by switching current state of the game to running
-     * */
-    public void unpause() {
-        SolarSystemScreen.state = State.RUNNING;
     }
 
     /**
