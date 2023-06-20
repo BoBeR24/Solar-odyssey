@@ -11,7 +11,7 @@ import com.mygdx.game.SupportiveClasses.Timer;
 
 
 public class SolverTester {
-    private final static Timer timer = new Timer(4, 0.5f);
+    private final static Timer timer = new Timer(4, 0.1f);
 
     public static void main(String[] args) {
         //manually calculate rk4 approximation for specified function and compare results
