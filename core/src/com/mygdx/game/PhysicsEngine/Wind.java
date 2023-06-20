@@ -65,7 +65,7 @@ public class Wind {
      */
     public static Wind getWind(){
         if(Wind  == null){
-            Wind Wind = new Wind();
+            Wind = new Wind();
         }
         return Wind;
     }
