@@ -14,4 +14,11 @@ public class SolarSystem {
     public final static int DIST_FACTOR = 300_000; // pre-calculated distance scaling factor
     public static int SIZE_FACTOR = 200; // pre-calculated scale scaling factor
 
+    /** Resets the system(deletes all current planets and probes)
+     */
+    public static void resetSystem() {
+        bodies.clear();
+        probe = null;
+    }
+
 }
