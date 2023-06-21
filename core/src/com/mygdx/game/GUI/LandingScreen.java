@@ -23,11 +23,11 @@ public class LandingScreen implements Screen {
         this.game = game;
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // create a camera
-        camera.zoom = 2f;
+        camera.zoom = 3f;
         camera.update(); // update camera
 
-        centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
-                (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
+        centerScreenCords = new Vector3((Gdx.graphics.getWidth()) / 2.0f ,
+                (Gdx.graphics.getHeight()) / 2.0f, 0);
 
         game.shape.setProjectionMatrix(camera.combined);
 
@@ -46,7 +46,7 @@ public class LandingScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
-        CameraUtils.moveCameraToProbe(camera, centerScreenCords); // if you want to make camera follow the probe - uncomment this
+//        CameraUtils.moveCameraToProbe(camera, centerScreenCords); // if you want to make camera follow the probe - uncomment this
         game.shape.setProjectionMatrix(camera.combined);
 
         game.shape.begin(ShapeRenderer.ShapeType.Filled);

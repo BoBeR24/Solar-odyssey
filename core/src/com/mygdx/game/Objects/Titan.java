@@ -7,9 +7,9 @@ import com.mygdx.game.Properties.SystemProperties;
 /**
  * Class representing all bodies in simulated system
  * */
-public class celestialBody implements Body {
-//    private final String name; // name of the body
-    private final int id; // id which represents position in the list of bodies
+public class Titan implements Body {
+    //    private final String name; // name of the body
+    private final int id = 1; // id which represents position in the list of bodies
     private Vector location;
     private Vector nextLocation; // location to which planet will be moved in the next state of the system
     private Vector velocity;
@@ -20,49 +20,37 @@ public class celestialBody implements Body {
     private int width; // width of the image of the body
     private int height; // height of the image of the body
 
-
-    public celestialBody(int index){
-        this.id = index;
-
+/** class for Titan used during the landing(as properties of Titan during the landing differ a bit from flight simulation due
+ * to some simplifications in calculations)
+ * */
+    public Titan(){
         this.color = Color.WHITE; // default color
 
-        this.location = new Vector(SystemProperties.initCoordinates[id]);
-        this.velocity = new Vector(SystemProperties.initVelocities[id]);
+        this.radius = SystemProperties.radii[id];
+
+        this.location = new Vector(new Vector(0.0, -this.radius, 0.0));
+        this.velocity = new Vector(new Vector(0.0, 0.0, 0.0));
 
         // let next states initially be same as current(they will be changed anyway)
         this.nextLocation = new Vector(this.location);
         this.nextVelocity = new Vector(this.velocity);
 
-        this.radius = SystemProperties.radii[id];
 
         this.mass = SystemProperties.masses[id];
 
-        // if object id refers to the Sun scaling factor differs, to avoid sun being too big
-        if (this.id == 0) {
-            this.width = SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8); // default width and height
-            this.height = SystemProperties.radii[0] / (SolarSystem.SIZE_FACTOR * 8);
-
-        }
-        else {
-            this.width = SystemProperties.radii[id] / SolarSystem.SIZE_FACTOR; // default width and height
-            this.height = SystemProperties.radii[id] / SolarSystem.SIZE_FACTOR;
-        }
+        this.width = SystemProperties.radii[id] * 2 / SolarSystem.SIZE_FACTOR; // default width and height
+        this.height = SystemProperties.radii[id] * 2 / SolarSystem.SIZE_FACTOR;
     }
 
 
-    // example of cloning Earth:
-    // Body new_body = SolarSystem.planets.get(SystemProperties.EARTH).clone();
+    /** As Titan doesn't have any dynamic properties in landing scene(so we consider it as a static object)
+     *  clone method here is more like of a placeholder
+     *
+     * */
     @Override
-    public celestialBody clone() {
-        celestialBody cloned_body = new celestialBody(this.id);
+    public Titan clone() {
 
-        cloned_body.setLocation(new Vector(this.location));
-        cloned_body.setVelocity(new Vector(this.velocity));
-
-        cloned_body.setNextLocation(new Vector(this.nextLocation));
-        cloned_body.setNextVelocity(new Vector(this.nextVelocity));
-
-        return cloned_body;
+        return new Titan();
     }
 
     @Override
@@ -84,9 +72,9 @@ public class celestialBody implements Body {
 
     @Override
     public void setVelocity(double x, double y, double z) {
-         this.velocity.x = x;
-         this.velocity.y = y;
-         this.velocity.z = z;
+        this.velocity.x = x;
+        this.velocity.y = y;
+        this.velocity.z = z;
     }
 
     public void setVelocity(Vector vector) {

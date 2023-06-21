@@ -76,7 +76,7 @@ public class FlightLogic {
 
                 case RUNNING:
 //                    if (counter >= 6) {
-//                        pause();
+//                    game.getScreen().pause();
 //                    }
 //                    counter++;
 //                    System.out.println(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation());
@@ -105,6 +105,7 @@ public class FlightLogic {
                         System.out.println("Orbit has been reached. Switching to landing scene");
 
                         this.game.setScreen(new LandingScreen(this.game));
+                        return; // exit from this logic session
                     }
 
                     HillClimbing.hasCompletedIteration = true;
@@ -131,7 +132,7 @@ public class FlightLogic {
     /** redraws all sprites and objects
      * */
     private void redrawScene() {
-        // for all bodies except the last one(which is probe)
+        // for all bodies except the last one(which is a probe)
         for (int i = 0; i < SolarSystem.bodies.size() - 1; i++) {
             celestialBody planet = (celestialBody) SolarSystem.bodies.get(i);
             game.shape.setColor(planet.getColor());

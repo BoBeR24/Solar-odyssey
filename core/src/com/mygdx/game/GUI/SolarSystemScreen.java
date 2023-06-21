@@ -31,8 +31,8 @@ public class SolarSystemScreen implements Screen {
 
         game.shape.setProjectionMatrix(camera.combined);
 
-        centerScreenCords = new Vector3((Gdx.graphics.getWidth() - 200) / 2.0f ,
-                (Gdx.graphics.getHeight() - 200) / 2.0f, 0);
+        centerScreenCords = new Vector3((Gdx.graphics.getWidth()) / 2.0f ,
+                (Gdx.graphics.getHeight()) / 2.0f, 0);
 
         this.logic = new FlightLogic(game); // initialize our simulation
     }
@@ -51,7 +51,7 @@ public class SolarSystemScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
-        CameraUtils.moveCameraToProbe(camera, centerScreenCords); // if you want to make camera follow the probe - uncomment this
+//        CameraUtils.moveCameraToProbe(camera, centerScreenCords); // if you want to make camera follow the probe - uncomment this
         game.shape.setProjectionMatrix(camera.combined);
 
         game.shape.begin(ShapeType.Filled);

@@ -1,43 +1,30 @@
 package com.mygdx.game.Objects;
 
-public class LandingModule implements Body{
+public class LandingPad implements Body{
     private Vector velocity;
     private Vector location;
     private Vector nextVelocity;
     private Vector nextLocation;
-    private double rotation; // rotation of the module relative to y-axis
     private final double mass = 2000;
-    private final int id = 2;
+    private final int id = 0;
     private int width;
     private int height;
 
-    public LandingModule(Vector initialLocation, Vector initialVelocity, double rotation) {
-        this.location = initialLocation;
-        this.velocity = initialVelocity;
-
-        this.nextLocation = initialLocation;
-        this.nextVelocity = initialVelocity;
-
-        this.rotation = rotation;
+    public LandingPad() {
+        this.location = new Vector(0.0, 0.0, 0.0);
+        this.velocity = new Vector(0.0, 0.0, 0.0);
 
         setHeight(40);
-        setWidth(40);
+        setWidth(100);
     }
 
-    /** !!!This clone method doesn't do a full copy, it only transfers essential characteristics,
-     *  such as location and velocity
+    /** As landing pad doesn't have any dynamic properties clone method here is more like of a placeholder
+     *
      * */
     @Override
-    public LandingModule clone(){
-        LandingModule clonedRocket = new LandingModule(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), this.rotation);
+    public LandingPad clone(){
 
-        clonedRocket.setLocation(new Vector(this.location));
-        clonedRocket.setVelocity(new Vector(this.velocity));
-
-        clonedRocket.setNextLocation(new Vector(this.nextLocation));
-        clonedRocket.setNextVelocity(new Vector(this.nextVelocity));
-
-        return clonedRocket;
+        return new LandingPad();
     }
 
     @Override
@@ -90,10 +77,6 @@ public class LandingModule implements Body{
         this.setVelocity(vector.x, vector.y, vector.z);
     }
 
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-    }
-
     public void setWidth(int width) {
         this.width = width;
     }
@@ -125,10 +108,6 @@ public class LandingModule implements Body{
     @Override
     public double getMass(){
         return this.mass;
-    }
-
-    public double getRotation() {
-        return this.rotation;
     }
 
     public int getWidth() {
