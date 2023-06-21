@@ -107,7 +107,7 @@ public class Wind {
     }
 
     private double randomAngle(){
-        return (getRandomNumber(-1*MAX_ANGLE, MAX_ANGLE)/360) * 2 * Math.PI;
+        return Math.toRadians(getRandomNumber(-1*MAX_ANGLE, MAX_ANGLE));
     }
 
     /**
