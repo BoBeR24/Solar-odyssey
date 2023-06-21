@@ -35,14 +35,41 @@ public class Controller {
     public static void updateVelocity(){
         velocity.set(velocity.x + (thruster.x/mass),velocity.y+(thruster.y/mass),0);    
     }
-    private void updateCoordinates(){
+    private static void updateCoordinates(){
         coordinates.set(coordinates.x + velocity.x,coordinates.y+velocity.y,0);
     }
+     
     public static void stabalize(){
+        double acceleration;//have to decide this, it is the max acceleration we want to produce with our thrustter on 1 dimension
         thrusterTarget.set(xCounterForce,yCounterForce,new Vector(xCounterForce,yCounterForce,0).getAngle(new Vector(0,1,0)));
-    
         changeAngle(thrusterTarget.z - coordinates.z);
         thruster.set(thrusterTarget);
+        updateVelocity();
+        updateCoordinates();
+
+        if(velocity.x !=0 || velocity.y !=0){
+        thrusterTarget.set(thrusterTarget.add(new Vector(acceleration/mass,acceleration/mass,0)))
+        thrusterTarget.z= thrusterTarget.getAngle(getAngle(new Vector(0,1,0)));
+        changeAngle(thrusterTarget.z - coordinates.z);
+        double timex=velocity.x/acceleration;
+        double timey=velocity.y/acceleration
+        while(timex!=0 && timey!=0){
+            if (timex>1){
+                velocity.x -= acceleration;
+            }else{
+                velocity.x=0;
+            }
+            if (timey>1){
+                velocity.y -= acceleration;
+
+            }else{
+                velocity.y=0;
+            }
+            updateVelocity();
+            updateCoordinates();
+        }
+        }
+
     
     }
     public static void changeAngle(double angleDifference){
