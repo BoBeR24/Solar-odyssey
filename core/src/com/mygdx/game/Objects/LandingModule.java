@@ -6,7 +6,7 @@ public class LandingModule implements Body{
     private Vector nextVelocity;
     private Vector nextLocation;
     private double rotation; // rotation of the module relative to y-axis
-    private final double mass = 2000;
+    private final double mass = 50000;
     private final int id = 2;
     private int width;
     private int height;

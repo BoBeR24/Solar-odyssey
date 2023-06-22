@@ -5,35 +5,34 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.mygdx.game.Objects.Body;
+import com.mygdx.game.Objects.LandingModule;
 import com.mygdx.game.Objects.Probe;
 import com.mygdx.game.Objects.Vector;
+import com.mygdx.game.Properties.SolarSystem;
 
 public class Controller {
 
     //Gravity on Titan, maybe value is wrong
-    public final static double titanGravity = 1.352 * Math.pow(10, -3);
-    public final double gravity = titanGravity / mass;
-    //Mass of landing module
-    public final static double mass = 50000;
-    public static Vector thrusterTarget;
-    public static Vector thruster;
-    public static Vector velocity;
-    public static Wind wind = Wind.getwind();
-    public static double yCounterForce = wind.get().y + gravity;
-    public static double xCounterForce = wind.get().x;
-    public static Vector coordinates;
-    private static FileWriter fileWriter;
-    private static BufferedWriter writer;
+    private final static double titanGravity = 1.352 * Math.pow(10, -3);
+    private final static double gravity = titanGravity / SolarSystem.landingModule.getMass();
+    private static Vector thrusterTarget;
+    private static Vector thruster;
+    private static Wind wind;
+    private static Vector forceWind;
+    private static double yCounterForce;
 
     public static void main() throws IOException {
-        fileWriter = new FileWriter("core\\src\\com\\mygdx\\game\\SupportiveClasses");
-        writer = new BufferedWriter(fileWriter);
+        wind = Wind.getWind();
         //do methods
-        writer.close();
+    }
+
+    public static void setWind(double distance){
+        forceWind = wind.getForceBasedOnDistance(distance);
+        yCounterForce = forceWind.y + gravity;
     }
 
     public static double calculateAcceleration(double force) {
-        double acceleration = force / mass;
+        double acceleration = force / SolarSystem.landingModule.getMass();
 
         return acceleration;
     }
@@ -46,32 +45,25 @@ public class Controller {
         return 0;
     }
 
-
-    //TODO try to use already built-in Euler method to calculate it. If you don't want to then add multiplication by step size
-    // (e.g. thruster.x * stepSize)
     public static void updateVelocity() {
-        velocity.set(velocity.x + (thruster.x / mass), velocity.y + (thruster.y / mass), 0);
+        SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getVelocity().x + (thruster.x / SolarSystem.landingModule.getMass()) * PhysicsUtils.STEPSIZE, SolarSystem.landingModule.getVelocity().y + (thruster.y / SolarSystem.landingModule.getMass()) * PhysicsUtils.STEPSIZE, 0);
     }
 
-    // (e.g. velocity.x * stepSize)
     private void updateCoordinates() {
-        coordinates.set(coordinates.x + velocity.x, coordinates.y + velocity.y, 0);
-        writer.write(String.valueOf(coordinates));
-        writer.newLine();
+        SolarSystem.landingModule.setNextLocation(SolarSystem.landingModule.getLocation().x + SolarSystem.landingModule.getVelocity().x * PhysicsUtils.STEPSIZE, SolarSystem.landingModule.getLocation().y + SolarSystem.landingModule.getVelocity().y * PhysicsUtils.STEPSIZE, 0);
     }
 
     public static void stabilize() {
-        thrusterTarget.set(xCounterForce, yCounterForce, new Vector(xCounterForce, yCounterForce, 0).getAngle(new Vector(0, 1, 0)));
+        thrusterTarget.set(forceWind.x, yCounterForce, new Vector(forceWind.x, yCounterForce, 0).getAngle(new Vector(0, 1, 0)));
 
-        changeAngle(thrusterTarget.z - coordinates.z);
+        changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
         thruster.set(thrusterTarget);
-
     }
 
     public static void changeAngle(double angleDifference) {
         angleDifference = Math.abs(angleDifference);
         if (angleDifference <= 1) {
-            coordinates.z = thrusterTarget.z;
+            SolarSystem.landingModule.setRotation(thrusterTarget.z);
         }
         if (angleDifference <= 2) {
             //           coordinates.z =thrusterTarget.z 
@@ -81,18 +73,16 @@ public class Controller {
             // coordinates.z =thrusterTarget.z 
 
         }
-        //  coordinates.z =thrusterTarget.z
 
+        //  coordinates.z =thrusterTarget.z
 
     }
 
     public static void alignX(Probe probe) {
-        double yCounterForce = wind.get().y + gravity
-        double xCounterForce = wind.get().x;
 
         Vector thrustToX = new Vector(thruster.x, yCounterForce, 0)
 
-        thrusterTarget.set(thruster.x, yCounterForce.y, thrustToX.getAngle(new Vector(0, 1, 0)))
+        thrusterTarget.set(thruster.x, yCounterForce, thrustToX.getAngle(new Vector(0, 1, 0)));
 
 
     }
