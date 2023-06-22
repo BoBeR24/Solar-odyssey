@@ -20,8 +20,8 @@ public class LandingModule implements Body{
 
         this.rotation = rotation;
 
-        setHeight(40);
-        setWidth(40);
+        setHeight(20);
+        setWidth(20);
     }
 
     /** !!!This clone method doesn't do a full copy, it only transfers essential characteristics,
