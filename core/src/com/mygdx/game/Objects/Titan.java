@@ -38,8 +38,8 @@ public class Titan implements Body {
 
         this.mass = SystemProperties.masses[id];
 
-        this.width = SystemProperties.radii[id] * 2 / SolarSystem.SIZE_FACTOR; // default width and height
-        this.height = SystemProperties.radii[id] * 2 / SolarSystem.SIZE_FACTOR;
+        this.width = SystemProperties.radii[id] * 2; // default width and height
+        this.height = SystemProperties.radii[id] * 2;
     }
 
 
