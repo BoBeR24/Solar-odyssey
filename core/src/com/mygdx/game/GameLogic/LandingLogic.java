@@ -20,7 +20,8 @@ import com.mygdx.game.SupportiveClasses.Timer;
 
 public class LandingLogic {
     private Odyssey game;
-    private final int distFactor; // pre-calculated distance factor
+    private final int distFactor;
+    private final int sizeFactor;
     private final Vector3 centerScreenCords;
 
     //31536000 seconds in 1 year
@@ -40,6 +41,7 @@ public class LandingLogic {
         distFactor = SolarSystem.DIST_FACTOR;
 
         SolarSystem.SIZE_FACTOR = 2;
+        sizeFactor = SolarSystem.SIZE_FACTOR;
 
         SolarSystem.resetSystem();
 
@@ -86,14 +88,14 @@ public class LandingLogic {
                         ((LandingPad) SolarSystem.bodies.get(0)).getWidth() / 2.0f),
                 (float) (centerScreenCords.y + (SolarSystem.bodies.get(0).getLocation().y / distFactor) -
                         ((LandingPad) SolarSystem.bodies.get(0)).getHeight() / 2.0f),
-                ((LandingPad) SolarSystem.bodies.get(0)).getWidth(), ((LandingPad) SolarSystem.bodies.get(0)).getHeight());
+                ((LandingPad) SolarSystem.bodies.get(0)).getWidth() * sizeFactor, ((LandingPad) SolarSystem.bodies.get(0)).getHeight() * sizeFactor);
 
         // draw Titan
         game.shape.setColor(Color.valueOf("#f2a900"));
         game.shape.ellipse((float) (centerScreenCords.x + (SolarSystem.bodies.get(1).getLocation().x / distFactor) -
                         ((Titan) SolarSystem.bodies.get(1)).getWidth() / 2.0f),
                 (float) (centerScreenCords.y + (SolarSystem.bodies.get(1).getLocation().y / distFactor) - ((Titan) SolarSystem.bodies.get(1)).getHeight() / 2.0f),
-                ((Titan) SolarSystem.bodies.get(1)).getWidth(), ((Titan) SolarSystem.bodies.get(1)).getHeight());
+                ((Titan) SolarSystem.bodies.get(1)).getWidth() * sizeFactor, ((Titan) SolarSystem.bodies.get(1)).getHeight() * sizeFactor);
 
         // draw landing module
         game.shape.setColor(Color.PINK);
@@ -101,7 +103,7 @@ public class LandingLogic {
                         SolarSystem.landingModule.getWidth() / 2.0f),
                 (float) (centerScreenCords.y + (SolarSystem.landingModule.getLocation().y / distFactor) -
                         SolarSystem.landingModule.getHeight() / 2.0f),
-                SolarSystem.landingModule.getWidth(), SolarSystem.landingModule.getHeight());
+                SolarSystem.landingModule.getWidth() * sizeFactor, SolarSystem.landingModule.getHeight() * sizeFactor);
 
     }
 
