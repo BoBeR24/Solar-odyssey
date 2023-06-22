@@ -13,7 +13,7 @@ public class Controller {
     public final static double titanGravity = 1.352 * Math.pow(10, -3);
     public final double gravity = titanGravity/mass;
     //Mass of landing module
-    public final static double mass = 5000;
+    public final static double mass = 50000;
     public static Vector thrusterTarget;
     public static Vector thruster;
     public static Vector velocity;
