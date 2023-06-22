@@ -79,6 +79,7 @@ public class LandingLogic {
     /** redraws all sprites and objects
      * */
     private void redrawScene() {
+        //TODO deal with sizes of landing module and landing pad(they are way too huge now)
         // draw landing pad
         game.shape.setColor(Color.RED);
         game.shape.rect((float) (centerScreenCords.x + (SolarSystem.bodies.get(0).getLocation().x / distFactor) -
