@@ -24,4 +24,8 @@ public class Positions {
         }
         return instance;
     } 
+
+    public static Vector getPosition(int week){
+        return instance.positions.get("Titan" + week);
+    }
 }

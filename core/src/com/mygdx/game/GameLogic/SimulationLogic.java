@@ -50,7 +50,7 @@ public class SimulationLogic {
 
         SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
 
-        ProbeLauncher.launch(new Vector(41.2384, -15.006862175, -3.183)); // initialize probe launch
+        ProbeLauncher.launch(new Vector(0, 0, 0)); // initialize probe launch
 
         // Choose a function we are going to use
         this.function = new NewtonForce();
@@ -110,7 +110,6 @@ public class SimulationLogic {
                     break;
 
             }
-            HillClimbing.hasCompletedIteration = true;
         }
 
         redrawScene(); // redraw all entities of the system

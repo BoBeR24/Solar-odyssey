@@ -1,5 +1,7 @@
 package com.mygdx.game.GameLogic;
 
+import java.util.LinkedList;
+
 import com.mygdx.game.Objects.Probe;
 import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
@@ -12,8 +14,10 @@ public class HillClimbing {
     public static Resetter resetter;
     public static Timer timer;
     
-    private static final int SECONDS_IN_WEEK = 604800;
-    private static final int SECONDS_IN_YEAR = 31536000;
+    public static final int SECONDS_IN_WEEK = 604800;
+    public static final int SECONDS_IN_YEAR = 31536000;
+
+    private LinkedList bestPath;
 
     public static void hillClimb() {
         // gives the probe a thrust

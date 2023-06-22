@@ -1,8 +1,14 @@
 package com.mygdx.game.GameLogic;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.mygdx.game.Objects.Probe;
 import com.mygdx.game.Objects.Vector;
 import com.mygdx.game.Objects.celestialBody;
+import com.mygdx.game.PhysicsEngine.Function;
+import com.mygdx.game.Properties.SolarSystem;
+import com.mygdx.game.Properties.SystemProperties;
 
 //a class that can plot a path from any point to any celestial object, or a path to get in orbit of a celestial body.
 public class Pathfinding {
@@ -55,5 +61,23 @@ public class Pathfinding {
             acceleration.multiply(MAXACCELERATIONPOSSIBLE / acceleration.magnitude());
         }
         Rocketry.thrust(probe, acceleration);
+    }
+        public static void planPathInTime(int week, Probe probe){
+        Vector positionTitan = Positions.getPosition(week);
+        Vector directionToTitan = positionTitan.subtract(probe.getLocation());
+        double distance = directionToTitan.magnitude();
+        int time = week * HillClimbing.SECONDS_IN_WEEK;
+        double averageSpeed = distance / time;
+        
+        // determine where to stop accelerating and where to start deaccelerating
+        Vector thrust = new Vector(directionToTitan.x,directionToTitan.y,directionToTitan.z);
+        if (HillClimbing.timer.getTimePassed() < averageSpeed/MAXACCELERATIONPOSSIBLE){
+            thrust.multiply(thrust.magnitude()/MAXACCELERATIONPOSSIBLE);
+        } else if (HillClimbing.timer.getTimePassed() < time - (averageSpeed/MAXACCELERATIONPOSSIBLE)){
+            thrust.multiply(0);
+        } else if (HillClimbing.timer.getTimePassed() < time){
+            thrust.multiply(thrust.magnitude()/MAXACCELERATIONPOSSIBLE*-1);
+        }
+        Rocketry.thrust(probe, thrust);
     }
 }
