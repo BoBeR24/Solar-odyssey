@@ -14,8 +14,8 @@ public class LandingPad implements Body{
         this.location = new Vector(0.0, 0.0, 0.0);
         this.velocity = new Vector(0.0, 0.0, 0.0);
 
-        setHeight(40);
-        setWidth(100);
+        setHeight(20);
+        setWidth(50);
     }
 
     /** As landing pad doesn't have any dynamic properties clone method here is more like of a placeholder
