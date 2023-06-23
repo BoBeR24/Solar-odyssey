@@ -1,5 +1,8 @@
 package com.mygdx.game.PhysicsEngine;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -17,10 +20,14 @@ public class Controller {
     private static Vector forceWind;
     private static double yCounterForce;
     private static Queue<Double> rotating = new LinkedList<>();
+    private static FileWriter fileWriter;
+    private static BufferedWriter writer;
 
-    public static void main() {
+    public static void main() throws IOException {
         forceWind = LandingForces.calculateWind(500);
         yCounterForce = forceWind.y + LandingForces.calculateGravity();
+        fileWriter = new FileWriter("core\\src\\com\\mygdx\\game\\SupportiveClasses");
+        writer = new BufferedWriter(fileWriter);
         //do methods
     }
 
