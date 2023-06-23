@@ -25,7 +25,7 @@ public class HillClimbing {
             if (timer.getTimePassed() % SECONDS_IN_WEEK == 0);
             Positions.addPosition("Titan" + timer.getTimePassed() / SECONDS_IN_WEEK, SolarSystem.bodies.get(SystemProperties.TITAN).getLocation());
             if (timer.getTimePassed() >= SECONDS_IN_YEAR){
-                Resetter.resetSimulation();
+                resetter.resetSimulation();
                 step++;
             }
 
