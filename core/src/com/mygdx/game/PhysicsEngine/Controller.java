@@ -9,22 +9,15 @@ import com.mygdx.game.Properties.SystemProperties;
 public class Controller {
 
     //Gravity on Titan, maybe value is wrong
-    private final static double titanGravity = 1.352 * Math.pow(10, -3);
-    private final static double gravity = titanGravity / SolarSystem.landingModule.getMass();
     private static Vector thrusterTarget;
     private static Vector thruster;
-    private static Wind wind;
     private static Vector forceWind;
     private static double yCounterForce;
 
     public static void main() {
-        wind = Wind.getWind();
+        forceWind = LandingForces.calculateWind(500);
+        yCounterForce = forceWind.y + LandingForces.calculateGravity();
         //do methods
-    }
-
-    private static void setWind(double distance){
-        forceWind = wind.getForceBasedOnDistance(distance);
-        yCounterForce = forceWind.y + gravity;
     }
 
     private static double calculateAcceleration(double force) {
