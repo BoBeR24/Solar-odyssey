@@ -29,6 +29,7 @@ public class Controller {
         fileWriter = new FileWriter("core\\src\\com\\mygdx\\game\\SupportiveClasses");
         writer = new BufferedWriter(fileWriter);
         //do methods
+        writer.close();
     }
 
     private static double calculateAcceleration(double force) {
@@ -49,14 +50,16 @@ public class Controller {
         SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getVelocity().x + (thruster.x / SolarSystem.landingModule.getMass()) * PhysicsUtils.STEPSIZE, SolarSystem.landingModule.getVelocity().y + (thruster.y / SolarSystem.landingModule.getMass()) * PhysicsUtils.STEPSIZE, 0);
     }
 
-    private static void updateCoordinates() {
+    private static void updateCoordinates() throws IOException {
         SolarSystem.landingModule.setNextLocation(SolarSystem.landingModule.getLocation().x + SolarSystem.landingModule.getNextVelocity().x * PhysicsUtils.STEPSIZE, SolarSystem.landingModule.getLocation().y + SolarSystem.landingModule.getNextVelocity().y * PhysicsUtils.STEPSIZE, 0);
         SolarSystem.landingModule.update();
         double rotation = rotating.remove();
         SolarSystem.landingModule.setRotation(SolarSystem.landingModule.getRotation()+rotation);
+        writer.write(String.valueOf(SolarSystem.landingModule.getLocation().x) + "" + String.valueOf(SolarSystem.landingModule.getLocation().y) + "" + String.valueOf(SolarSystem.landingModule.getLocation().z) + "" + String.valueOf(SolarSystem.landingModule.getRotation()));
+        writer.newLine();
     }
 
-    private static void stabilize() {
+    private static void stabilize() throws IOException {
         double acceleration=0.0095;//have to decide this, it is the max acceleration we want to produce with our thrustter on 1 dimension
         thrusterTarget.set(forceWind.x,yCounterForce,new Vector(forceWind.x,yCounterForce,0).getAngle(new Vector(0,1,0)));
         changeAngle(thrusterTarget.z -SolarSystem.landingModule.getRotation());
