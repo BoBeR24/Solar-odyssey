@@ -1,5 +1,8 @@
 package com.mygdx.game.PhysicsEngine;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import com.mygdx.game.Objects.LandingModule;
 import com.mygdx.game.Objects.Probe;
 import com.mygdx.game.Objects.Vector;
@@ -13,6 +16,7 @@ public class Controller {
     private static Vector thruster;
     private static Vector forceWind;
     private static double yCounterForce;
+    private static Queue<Double> rotating = new LinkedList<>();
 
     public static void main() {
         forceWind = LandingForces.calculateWind(500);
@@ -41,6 +45,8 @@ public class Controller {
     private static void updateCoordinates() {
         SolarSystem.landingModule.setNextLocation(SolarSystem.landingModule.getLocation().x + SolarSystem.landingModule.getNextVelocity().x * PhysicsUtils.STEPSIZE, SolarSystem.landingModule.getLocation().y + SolarSystem.landingModule.getNextVelocity().y * PhysicsUtils.STEPSIZE, 0);
         SolarSystem.landingModule.update();
+        double rotation = rotating.remove();
+        SolarSystem.landingModule.setRotation(SolarSystem.landingModule.getRotation()+rotation);
     }
 
     private static void stabilize() {
@@ -77,21 +83,19 @@ public class Controller {
     }
 
     private static void changeAngle(double angleDifference) {
-        angleDifference = Math.abs(angleDifference);
-        if (angleDifference <= 0.5) {
-            SolarSystem.landingModule.setRotation(thrusterTarget.z);
+        double time = equationsOfMotion(Math.abs(angleDifference));
+        //Only half of angle is calculated
+        time = time*2.0;
+        int stepsNeeded = (int) Math.floor(time);
+        time = angleDifference/stepsNeeded;
+
+        for(int i = 0; i < stepsNeeded; i++){
+            rotating.add(time);
         }
-        if (angleDifference <= 2) {
-            //           coordinates.z =thrusterTarget.z 
+    }
 
-        }
-        if (angleDifference <= 3) {
-            // coordinates.z =thrusterTarget.z 
-
-        }
-
-        //  coordinates.z =thrusterTarget.z
-
+    private static double equationsOfMotion(double displacement){
+        return Math.sqrt(displacement);
     }
 
     private static void alignX(Probe probe) {
