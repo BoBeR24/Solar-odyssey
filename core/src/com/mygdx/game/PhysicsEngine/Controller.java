@@ -40,7 +40,7 @@ public class Controller {
 
     private static void updateCoordinates() {
         SolarSystem.landingModule.setNextLocation(SolarSystem.landingModule.getLocation().x + SolarSystem.landingModule.getNextVelocity().x * PhysicsUtils.STEPSIZE, SolarSystem.landingModule.getLocation().y + SolarSystem.landingModule.getNextVelocity().y * PhysicsUtils.STEPSIZE, 0);
-    
+        SolarSystem.landingModule.update();
     }
 
     private static void stabilize() {
