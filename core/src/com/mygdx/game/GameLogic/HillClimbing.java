@@ -1,43 +1,46 @@
 package com.mygdx.game.GameLogic;
 
-import com.mygdx.game.GUI.SolarSystemScreen;
+import java.util.LinkedList;
+
 import com.mygdx.game.Objects.Probe;
-import com.mygdx.game.Objects.celestialBody;
 import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
+import com.mygdx.game.SupportiveClasses.Resetter;
 import com.mygdx.game.SupportiveClasses.Timer;
 
 public class HillClimbing {
-    public static boolean hasCompletedIteration = false;
-    public static boolean isOnTitanOrbit = false;
     public static int step = 1;
-    public static Timer timer;
     public static Probe probe;
+    public static Resetter resetter;
+    public static Timer timer;
+    public static boolean isOnTitanOrbit;
+    
+    public static final int SECONDS_IN_WEEK = 604800;
+    public static final int SECONDS_IN_YEAR = 31536000;
+
+    private LinkedList bestPath;
 
     public static void hillClimb() {
         // gives the probe a thrust
-        if (hasCompletedIteration && step == 1) {
-            Pathfinding.toBody(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN), 400000);
-
-            if (Math.abs(probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.TITAN).getLocation()).magnitude()) < 3000000) {
+        if (step == 1) { 
+            if (timer.getTimePassed() % SECONDS_IN_WEEK == 0);
+            Positions.addPosition("Titan" + timer.getTimePassed() / SECONDS_IN_WEEK, SolarSystem.bodies.get(SystemProperties.TITAN).getLocation());
+            if (timer.getTimePassed() >= SECONDS_IN_YEAR){
+                resetter.resetSimulation();
                 step++;
             }
 
         } else if (step == 2) {
-            Pathfinding.inOrbit(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN));
+            //TODO launch probes at all different positions in every week recorded and find the most fuel efficient. Make sure to save thrust mapping
+            // Mapping will be done with a linked list
 
-            isOnTitanOrbit = true;
-
-            if (timer.getTimePassed() >= 525600) {     //31536000
-                step++;
-            }
         } else if (step == 3) {
-            Pathfinding.toBody(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.EARTH), 0);
+            //TODO launch probe with thrust mapping found in step 2
 
-            if (probe.getLocation().subtract(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation()).magnitude() < 6371) {
-                SolarSystemScreen.state = State.PAUSED;
-                System.out.println(Rocketry.fuel);
-            }
+        } else if (step == 4) {
+            //TODO get in orbit
+        } else if (step == 5) {
+            //TODO get to surface
         }
     }
 }
