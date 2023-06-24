@@ -120,7 +120,22 @@ public class Controller {
         return Math.sqrt(displacement);
     }
 
-    private static void alignX(){
+    private static void alignX() throws IOException{
+        Controller.stabilize(); 
+        double distance =SolarSystem.landingModule.getLocation().x;
+        double timex=2*(Math.sqrt(2*acceleration*(distance/2))/acceleration); 
+        thrusterTarget.set(thrusterTarget.x+acceleration*SolarSystem.landingModule.getMass(),thrusterTarget.y,new Vector(thrusterTarget.x+acceleration*SolarSystem.landingModule.getMass(),thrusterTarget.y,0).getAngle(new Vector(0,1,0)));
+        thruster.set(thrusterTarget);
+        for(int i=0; i<(timex/2)-1;i++){
+        SolarSystem.landingModule.setNextVelocity(new Vector(SolarSystem.landingModule.getVelocity().x+acceleration,SolarSystem.landingModule.getVelocity().y,0));
+        //UPDATE
+        } 
+        for(int i=0; i<(timex/2)-1;i++){
+        SolarSystem.landingModule.setNextVelocity(new Vector(SolarSystem.landingModule.getVelocity().x-acceleration,SolarSystem.landingModule.getVelocity().y,0));4        //UPDATE
+        } 
+        if((2*(Math.sqrt(2*acceleration*(distance/2))/acceleration))<1){
+            SolarSystem.landingModule.setLocation(0,SolarSystem.landingModule.getLocation().y,SolarSystem.landingModule.getLocation().z);
+        }else{Controller.alignX();}
 
     }
 
