@@ -16,6 +16,8 @@ public class Controller {
 
     //Gravity on Titan, maybe value is wrong
     private static Vector thrusterTarget;
+    private static double acceleration=0.0095;//have to decide this, it is the max acceleration we want to produce with our thrustter on 1 dimension
+
     private static Vector thruster;
     private static Vector forceWind;
     private static double yCounterForce;
@@ -62,9 +64,10 @@ public class Controller {
     private static void stabilize() throws IOException {
         double acceleration=0.0095;//have to decide this, it is the max acceleration we want to produce with our thrustter on 1 dimension
         thrusterTarget.set(forceWind.x,yCounterForce,new Vector(forceWind.x,yCounterForce,0).getAngle(new Vector(0,1,0)));
-        changeAngle(thrusterTarget.z -SolarSystem.landingModule.getRotation());
         thruster.set(thrusterTarget);
-       //seperate and if f=ma thing is correct 2 lines lower combine  change angle lines, add first two above as else below the big if
+        updateVelocity();
+        updateCoordinates();
+       //if f=ma thing is correct 2 lines lower combine  change angle lines.
 
         if(SolarSystem.landingModule.getVelocity().x !=0 || SolarSystem.landingModule.getVelocity().y !=0){
         thrusterTarget.set(thrusterTarget.add(new Vector(acceleration*SolarSystem.landingModule.getMass(),acceleration*SolarSystem.landingModule.getMass(),0)));
@@ -79,16 +82,25 @@ public class Controller {
                 SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getVelocity().x -acceleration,SolarSystem.landingModule.getVelocity().y,0);
             }else{
                 SolarSystem.landingModule.setNextVelocity(0,SolarSystem.landingModule.getVelocity().y,0);
+                thrusterTarget.set(forceWind.x,thrusterTarget.y,thrusterTarget.z);
+                thrusterTarget.z= thrusterTarget.getAngle(new Vector(0,1,0));
+                changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
+
             }
             if (timey>1){
               SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getVelocity().x ,SolarSystem.landingModule.getVelocity().y-acceleration,0);
 
             }else{
               SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getVelocity().x ,0,0);
+              thrusterTarget.set(thrusterTarget.x,yCounterForce,thrusterTarget.z);
+              thrusterTarget.z= thrusterTarget.getAngle(new Vector(0,1,0));
+              changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
             }
             updateCoordinates();
         }
-        }
+        }else{changeAngle(thrusterTarget.z -SolarSystem.landingModule.getRotation());
+        thruster.set(thrusterTarget);}
+     
 
     }
 
@@ -108,13 +120,12 @@ public class Controller {
         return Math.sqrt(displacement);
     }
 
-    private static void alignX(Probe probe) {
+    private static void alignX(){
 
-        Vector thrustToX = new Vector(thruster.x, yCounterForce, 0);
+    }
 
-        thrusterTarget.set(thruster.x, yCounterForce, thrustToX.getAngle(new Vector(0, 1, 0)));
+        
 
 
     }
 
-}
