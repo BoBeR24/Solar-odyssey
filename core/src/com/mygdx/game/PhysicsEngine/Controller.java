@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.mygdx.game.GameLogic.ProbeLauncher;
 import com.mygdx.game.Objects.LandingModule;
 import com.mygdx.game.Objects.Probe;
 import com.mygdx.game.Objects.Vector;
@@ -26,11 +27,14 @@ public class Controller {
     private static BufferedWriter writer;
 
     public static void main() throws IOException {
-        forceWind = LandingForces.calculateWind(500);
-        yCounterForce = forceWind.y + LandingForces.calculateGravity();
-        fileWriter = new FileWriter("core\\src\\com\\mygdx\\game\\SupportiveClasses");
+
+        //Example
+        ProbeLauncher.launchLandingModule(new Vector(500, 500, 0), new Vector(500, 500, 0), 1.0);
+        
+        fileWriter = new FileWriter("core\\src\\com\\mygdx\\game\\SupportiveClasses\\coordinates.txt");
         writer = new BufferedWriter(fileWriter);
         //do methods
+        updateCoordinates();
         writer.close();
     }
 
@@ -55,9 +59,11 @@ public class Controller {
     private static void updateCoordinates() throws IOException {
         SolarSystem.landingModule.setNextLocation(SolarSystem.landingModule.getLocation().x + SolarSystem.landingModule.getNextVelocity().x * PhysicsUtils.STEPSIZE, SolarSystem.landingModule.getLocation().y + SolarSystem.landingModule.getNextVelocity().y * PhysicsUtils.STEPSIZE, 0);
         SolarSystem.landingModule.update();
+        if(!rotating.isEmpty()){
         double rotation = rotating.remove();
         SolarSystem.landingModule.setRotation(SolarSystem.landingModule.getRotation()+rotation);
-        writer.write(String.valueOf(SolarSystem.landingModule.getLocation().x) + "" + String.valueOf(SolarSystem.landingModule.getLocation().y) + "" + String.valueOf(SolarSystem.landingModule.getLocation().z) + "" + String.valueOf(SolarSystem.landingModule.getRotation()));
+        }
+        writer.write(String.valueOf(SolarSystem.landingModule.getLocation().x) + " " + String.valueOf(SolarSystem.landingModule.getLocation().y) + " " + String.valueOf(SolarSystem.landingModule.getRotation()));
         writer.newLine();
     }
 

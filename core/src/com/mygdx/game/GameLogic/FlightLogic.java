@@ -1,5 +1,7 @@
 package com.mygdx.game.GameLogic;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +13,7 @@ import com.mygdx.game.Objects.Body;
 import com.mygdx.game.Objects.Vector;
 import com.mygdx.game.Objects.celestialBody;
 import com.mygdx.game.PhysicsEngine.CameraUtils;
+import com.mygdx.game.PhysicsEngine.Controller;
 import com.mygdx.game.PhysicsEngine.Function;
 import com.mygdx.game.PhysicsEngine.NewtonForce;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
@@ -103,7 +106,12 @@ public class FlightLogic {
 
                     if (HillClimbing.isOnTitanOrbit) {
                         System.out.println("Orbit has been reached. Switching to landing scene");
-
+                        try {
+                            Controller.main();
+                        } catch (IOException e) {
+                            
+                            e.printStackTrace();
+                        }
                         this.game.setScreen(new LandingScreen(this.game));
                         return; // exit from this logic session
                     }
