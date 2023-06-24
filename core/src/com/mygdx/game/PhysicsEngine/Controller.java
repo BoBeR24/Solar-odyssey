@@ -131,7 +131,8 @@ public class Controller {
         //UPDATE
         } 
         for(int i=0; i<(timex/2)-1;i++){
-        SolarSystem.landingModule.setNextVelocity(new Vector(SolarSystem.landingModule.getVelocity().x-acceleration,SolarSystem.landingModule.getVelocity().y,0));4        //UPDATE
+        SolarSystem.landingModule.setNextVelocity(new Vector(SolarSystem.landingModule.getVelocity().x-acceleration,SolarSystem.landingModule.getVelocity().y,0)); 
+        //UPDATE
         } 
         if((2*(Math.sqrt(2*acceleration*(distance/2))/acceleration))<1){
             SolarSystem.landingModule.setLocation(0,SolarSystem.landingModule.getLocation().y,SolarSystem.landingModule.getLocation().z);
