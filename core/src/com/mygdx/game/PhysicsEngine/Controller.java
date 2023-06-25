@@ -276,6 +276,7 @@ public class Controller {
             System.out.println("failed at reaching minimal vertical speed");
             return false;//again, same reason, descend and landing correcter are responsible for this 
         }
+        return true;
         
     }
 }
