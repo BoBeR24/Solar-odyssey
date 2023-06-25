@@ -16,8 +16,8 @@ public class ProbeLauncher {
         SolarSystem.bodies.add(probe);
     }
 
-    public static void launchLandingModule(Vector location, Vector velocity, int mass) {
-        LandingModule landingModule = new LandingModule(location, velocity, mass);
+    public static void launchLandingModule(Vector location, Vector velocity, double rotation) {
+        LandingModule landingModule = new LandingModule(location, velocity, rotation);
         SolarSystem.landingModule = landingModule;
         SolarSystem.bodies.add(landingModule);
     }
