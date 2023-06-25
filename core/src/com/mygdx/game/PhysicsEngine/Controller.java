@@ -43,11 +43,11 @@ public class Controller {
        
         
         noseDive();
-        stabilize();
-        alignX();
-        stabilize();
-        descend();
-        landCorrrecter();
+      //  stabilize();
+       // alignX();
+        //stabilize();
+       // descend();
+       // landCorrrecter();
         
 
         writer.close();
@@ -89,10 +89,11 @@ public class Controller {
                         + SolarSystem.landingModule.getNextVelocity().y * PhysicsUtils.STEPSIZE,
                 0);
         SolarSystem.landingModule.update();
-        if (!rotating.isEmpty()) {
+        /*if (!rotating.isEmpty()) {
             double rotation = rotating.remove();
             SolarSystem.landingModule.setRotation(SolarSystem.landingModule.getRotation() + rotation);
-        }
+        }*/
+        SolarSystem.landingModule.setRotation(thruster.x);
         writer.write(String.valueOf(SolarSystem.landingModule.getLocation().x) + " "
                 + String.valueOf(SolarSystem.landingModule.getLocation().y) + " "
                 + String.valueOf(SolarSystem.landingModule.getRotation()));
@@ -148,15 +149,21 @@ public class Controller {
 
     }
 
-    private static void changeAngle(double angleDifference) {
+    private static void changeAngle(double angleDifference) throws IOException {
+        Vector temp = thruster;
+        
+        thruster.set(0,0,thruster.z);
         double time = equationsOfMotion(Math.abs(angleDifference));
         // Only half of angle is calculated
         time = time * 2.0;
         int stepsNeeded = (int) Math.floor(time);
         time = angleDifference / stepsNeeded;
 
-        for (int i = 0; i < stepsNeeded; i++) {
-            rotating.add(time);
+        for (int i = 1; i < stepsNeeded+1; i++) {
+            thruster.add(new Vector(0,0,time));
+            thruster.set(thruster.x,thruster.y,(2*Math.PI)%thruster.z);
+            updateVelocity();
+            updateCoordinates();
         }
     }
 
@@ -299,7 +306,7 @@ public class Controller {
     }
     private static void noseDive() throws IOException{
         double targetHeight=SolarSystem.landingModule.getLocation().y;
-       while(SolarSystem.landingModule.getLocation().y>targetHeight*(2/3)){
+       while(SolarSystem.landingModule.getLocation().y>targetHeight*(2.0/3.0)){
         double xComponenet = -1*SolarSystem.landingModule.getLocation().x;
        double yComponent = -1*SolarSystem.landingModule.getLocation().y;
        
