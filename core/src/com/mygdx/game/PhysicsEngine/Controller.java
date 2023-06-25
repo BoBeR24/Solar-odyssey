@@ -25,7 +25,6 @@ public class Controller {
     //private static Vector forceWind;
     //private static double yCounterForce;
     private final static double gravity = 1.352 * Math.pow(10, -3);
-    private static Queue<Double> rotating = new LinkedList<>();
     private static FileWriter fileWriter;
     private static BufferedWriter writer;
     public static void main(String[] args) throws IOException {
@@ -89,10 +88,7 @@ public class Controller {
                         + SolarSystem.landingModule.getNextVelocity().y * PhysicsUtils.STEPSIZE,
                 0);
         SolarSystem.landingModule.update();
-        /*if (!rotating.isEmpty()) {
-            double rotation = rotating.remove();
-            SolarSystem.landingModule.setRotation(SolarSystem.landingModule.getRotation() + rotation);
-        }*/
+        
         SolarSystem.landingModule.setRotation(thruster.x);
         writer.write(String.valueOf(SolarSystem.landingModule.getLocation().x) + " "
                 + String.valueOf(SolarSystem.landingModule.getLocation().y) + " "
