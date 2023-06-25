@@ -21,14 +21,14 @@ public class HillClimbing {
         // gives the probe a thrust
         if (step == 1) {
             Pathfinding.toBody(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN), 10000);
-            if (probe.getDistanceToTitan() < 5000){
+            if (probe.getDistanceToTitan() < 900000){
                 step++;
+                isOnTitanOrbit = true;
             }
         } else if (step == 2) {
             Pathfinding.inOrbit(probe, (celestialBody) SolarSystem.bodies.get(SystemProperties.TITAN));
-            if (timer.getTimePassed() > SECONDS_IN_YEAR/2){
+            if (timer.getTimePassed() > SECONDS_IN_YEAR / 2.0f){
                 step++;
-                isOnTitanOrbit = true;
             }
         }
     }

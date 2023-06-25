@@ -16,7 +16,10 @@ import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
 import com.mygdx.game.Solvers.RK4;
 import com.mygdx.game.Solvers.Solver;
+import com.mygdx.game.SupportiveClasses.DataReader;
 import com.mygdx.game.SupportiveClasses.Timer;
+
+import java.io.IOException;
 
 public class LandingLogic {
     private Odyssey game;
@@ -27,6 +30,8 @@ public class LandingLogic {
     //31536000 seconds in 1 year
     private final Timer timer;
     // Variable which contains function to use in further calculations
+    private final DataReader dataReader;
+    private double counter;
     private Function function;
     private Solver solver;
 
@@ -53,7 +58,7 @@ public class LandingLogic {
 
         ProbeLauncher.launchLandingModule(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), 2000); // initialize probe launch
 
-
+        dataReader = new DataReader();
 //        this.function = new NewtonForce();
 //
 //        Choose a solver we want to use
@@ -66,6 +71,28 @@ public class LandingLogic {
      * updates the current state of the simulation. Draws all objects
      * */
     public void update(){
+        for (int i = 0; i < 50; i++) {
+
+            switch (LandingScreen.state) {
+                case RUNNING:
+                    try {
+                        Vector nextMove = dataReader.readLandingMovement();
+                        // in landing scene everything is considered to be in 2D, so we always set z = 0
+                        SolarSystem.landingModule.setLocation(nextMove.x, nextMove.y, 0.0);
+
+                        // z axis of a nextMove vector is used to store rotation
+                        SolarSystem.landingModule.setRotation(nextMove.z);
+
+                    } catch (IOException e) {
+                        this.game.getScreen().pause();
+                        System.out.println("Simulation has ended");
+                    }
+
+                default:
+                    break;
+            }
+        }
+
         redrawScene();
     }
 
@@ -81,7 +108,6 @@ public class LandingLogic {
     /** redraws all sprites and objects
      * */
     private void redrawScene() {
-        //TODO deal with sizes of landing module and landing pad(they are way too huge now)
         // draw landing pad
         game.shape.setColor(Color.RED);
         game.shape.rect((float) (centerScreenCords.x + (SolarSystem.bodies.get(0).getLocation().x / distFactor) -
@@ -105,6 +131,23 @@ public class LandingLogic {
                         SolarSystem.landingModule.getHeight() / sizeFactor / 2.0f),
                 (float) SolarSystem.landingModule.getWidth() / sizeFactor, (float) SolarSystem.landingModule.getHeight() / sizeFactor);
 
+        // identify location of antenna(to visualize direction of the rocket)
+        Vector antenna = new Vector(0.0, 40.0, 0.0);
+//        antenna.y = antenna.y + 40;
+//        System.out.println(antenna + " a");
+
+        antenna.rotate(SolarSystem.landingModule.getRotation(), 'z');
+//        System.out.println(antenna + " b");
+        antenna = antenna.add(SolarSystem.landingModule.getLocation());
+
+//        System.out.println(SolarSystem.landingModule.getRotation());
+
+        game.shape.setColor(Color.YELLOW);
+        game.shape.ellipse((float) (centerScreenCords.x + (antenna.x / distFactor) -
+                        40 / sizeFactor / 2.0f),
+                (float) (centerScreenCords.y + (antenna.y / distFactor) -
+                        40 / sizeFactor / 2.0f),
+                (float) 40 / sizeFactor, (float) 40 / sizeFactor);
     }
 
     /**

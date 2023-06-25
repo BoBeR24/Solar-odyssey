@@ -78,14 +78,19 @@ public class Vector {
     public double magnitude(){
         return sqrt((x * x) + (y * y) + (z * z));
     }
-    public double getAngle(Vector vector){
-        double dotProduct = this.x * vector.x + this.y * vector.y +this.z *vector.z;
-        double magnitudeProduct = Math.sqrt(this.x * this.x + this.y * this.y + this.z*this.z) * Math.sqrt(vector.x * vector.x + vector.y * vector.y +vector.z*vector.z);
+
+    public double getAngle(Vector vector) {
+        double dotProduct = this.x * vector.x + this.y * vector.y + this.z * vector.z;
+        double magnitudeProduct = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z) * Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
         double angleRadians = Math.acos(dotProduct / magnitudeProduct);
-        double angleDegrees = Math.toDegrees(angleRadians);
-        return angleDegrees;
+
+        return Math.toDegrees(angleRadians);
     }
 
+    /** rotate vector around given axis
+     * @param angle - angle in radians to which we want to rotate our vector
+     * @param axis - axis around which we execute rotation
+     * */
     public void rotate(double angle, char axis) {
         if (axis == 'z') {
             double new_X = x * cos(angle) - y * sin(angle);
