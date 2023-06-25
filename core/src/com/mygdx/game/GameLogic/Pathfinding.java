@@ -62,22 +62,4 @@ public class Pathfinding {
         }
         Rocketry.thrust(probe, acceleration);
     }
-        public static void planPathInTime(int week, Probe probe){
-        Vector positionTitan = Positions.getPosition(week);
-        Vector directionToTitan = positionTitan.subtract(probe.getLocation());
-        double distance = directionToTitan.magnitude();
-        int time = week * HillClimbing.SECONDS_IN_WEEK;
-        double averageSpeed = distance / time;
-        
-        // determine where to stop accelerating and where to start deaccelerating
-        Vector thrust = new Vector(directionToTitan.x,directionToTitan.y,directionToTitan.z);
-        if (HillClimbing.timer.getTimePassed() < averageSpeed/MAXACCELERATIONPOSSIBLE){
-            thrust.multiply(thrust.magnitude()/MAXACCELERATIONPOSSIBLE);
-        } else if (HillClimbing.timer.getTimePassed() < time - (averageSpeed/MAXACCELERATIONPOSSIBLE)){
-            thrust.multiply(0);
-        } else if (HillClimbing.timer.getTimePassed() < time){
-            thrust.multiply(thrust.magnitude()/MAXACCELERATIONPOSSIBLE*-1);
-        }
-        Rocketry.thrust(probe, thrust);
-    }
 }
