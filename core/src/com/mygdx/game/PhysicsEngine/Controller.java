@@ -95,6 +95,7 @@ public class Controller {
                     acceleration * SolarSystem.landingModule.getMass(), 0)));
             thrusterTarget.z = thrusterTarget.getAngle(new Vector(0, 1, 0));
             changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
+            thruster.set(thrusterTarget);
             double timex = SolarSystem.landingModule.getVelocity().x / acceleration;
             double timey = SolarSystem.landingModule.getVelocity().y / acceleration;
             while (timex != 0 && timey != 0) {
