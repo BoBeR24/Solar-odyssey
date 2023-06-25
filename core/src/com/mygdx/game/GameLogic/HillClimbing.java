@@ -17,8 +17,6 @@ public class HillClimbing {
     public static final int SECONDS_IN_WEEK = 604800;
     public static final int SECONDS_IN_YEAR = 31536000;
 
-    private LinkedList bestPath;
-
     public static void hillClimb() {
         // gives the probe a thrust
         if (step == 1) {
@@ -28,10 +26,9 @@ public class HillClimbing {
             }
         } else if (step == 2) {
             Pathfinding.inOrbit(probe, SolarSystem.bodies.get(SystemProperties.TITAN));
-            if (Probe.)
-        } else if (step == 3) {
-        } else if (step == 4) {
-        } else if (step == 5) {
+            if (timer.getTimePassed() > SECONDS_IN_YEAR/2){
+                step++;
+            }
         }
     }
 }
