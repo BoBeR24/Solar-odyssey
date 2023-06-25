@@ -85,25 +85,25 @@ public class LandingLogic {
         // draw landing pad
         game.shape.setColor(Color.RED);
         game.shape.rect((float) (centerScreenCords.x + (SolarSystem.bodies.get(0).getLocation().x / distFactor) -
-                        ((LandingPad) SolarSystem.bodies.get(0)).getWidth() / 2.0f),
+                        ((LandingPad) SolarSystem.bodies.get(0)).getWidth() / sizeFactor / 2.0f),
                 (float) (centerScreenCords.y + (SolarSystem.bodies.get(0).getLocation().y / distFactor) -
-                        ((LandingPad) SolarSystem.bodies.get(0)).getHeight() / 2.0f),
-                ((LandingPad) SolarSystem.bodies.get(0)).getWidth() / sizeFactor, ((LandingPad) SolarSystem.bodies.get(0)).getHeight() / sizeFactor);
+                        ((LandingPad) SolarSystem.bodies.get(0)).getHeight() / sizeFactor / 2.0f),
+                (float) ((LandingPad) SolarSystem.bodies.get(0)).getWidth() / sizeFactor, (float) ((LandingPad) SolarSystem.bodies.get(0)).getHeight() / sizeFactor);
 
         // draw Titan
         game.shape.setColor(Color.valueOf("#f2a900"));
         game.shape.ellipse((float) (centerScreenCords.x + (SolarSystem.bodies.get(1).getLocation().x / distFactor) -
-                        ((Titan) SolarSystem.bodies.get(1)).getWidth() / 2.0f),
-                (float) (centerScreenCords.y + (SolarSystem.bodies.get(1).getLocation().y / distFactor) - ((Titan) SolarSystem.bodies.get(1)).getHeight() / 2.0f),
-                ((Titan) SolarSystem.bodies.get(1)).getWidth() / sizeFactor, ((Titan) SolarSystem.bodies.get(1)).getHeight() / sizeFactor);
+                        ((Titan) SolarSystem.bodies.get(1)).getWidth() / sizeFactor / 2.0f),
+                (float) (centerScreenCords.y + (SolarSystem.bodies.get(1).getLocation().y / distFactor) - ((Titan) SolarSystem.bodies.get(1)).getHeight() / sizeFactor / 2.0f),
+                (float) ((Titan) SolarSystem.bodies.get(1)).getWidth() / sizeFactor, (float) ((Titan) SolarSystem.bodies.get(1)).getHeight() / sizeFactor);
 
         // draw landing module
         game.shape.setColor(Color.PINK);
         game.shape.ellipse((float) (centerScreenCords.x + (SolarSystem.landingModule.getLocation().x / distFactor) -
-                        SolarSystem.landingModule.getWidth() / 2.0f),
+                        SolarSystem.landingModule.getWidth() / sizeFactor / 2.0f),
                 (float) (centerScreenCords.y + (SolarSystem.landingModule.getLocation().y / distFactor) -
-                        SolarSystem.landingModule.getHeight() / 2.0f),
-                SolarSystem.landingModule.getWidth() / sizeFactor, SolarSystem.landingModule.getHeight() / sizeFactor);
+                        SolarSystem.landingModule.getHeight() / sizeFactor / 2.0f),
+                (float) SolarSystem.landingModule.getWidth() / sizeFactor, (float) SolarSystem.landingModule.getHeight() / sizeFactor);
 
     }
 
