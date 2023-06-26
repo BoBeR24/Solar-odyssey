@@ -32,7 +32,7 @@ public class Controller {
           // Example
          
         
-        ProbeLauncher.launchLandingModule(new Vector(-9400, 500, 0), new Vector(0, 0, 0), 0);
+        ProbeLauncher.launchLandingModule(new Vector(-400, 500, 0), new Vector(0, 0, 0), 0);
          intialheight=SolarSystem.landingModule.getLocation().y;
          thrusterTarget = new Vector(0,0,0);
          thruster = new Vector(0,0,0);
@@ -45,7 +45,7 @@ public class Controller {
         noseDive();
     stabilize();
       alignX(1);
-       // stabilize();
+       stabilize();
         descend();
        // landCorrrecter();
         
@@ -77,7 +77,7 @@ public class Controller {
                 SolarSystem.landingModule.getVelocity().x
                         + (thruster.x / SolarSystem.landingModule.getMass()) * PhysicsUtils.STEPSIZE,
                 SolarSystem.landingModule.getVelocity().y
-                        + (thruster.y / SolarSystem.landingModule.getMass())- gravity * PhysicsUtils.STEPSIZE,
+                        + (thruster.y / SolarSystem.landingModule.getMass()) - gravity * PhysicsUtils.STEPSIZE,
                 0);
     }
 
@@ -99,9 +99,10 @@ public class Controller {
 
     private static void stabilize() throws IOException {
    
-        thrusterTarget.set(wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x, wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y+gravity,
-                new Vector(wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x, wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y+gravity, 0).getAngle(new Vector(0, 1, 0)));
-        thruster.set(thrusterTarget);
+        thrusterTarget.set(wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x, +gravity * SolarSystem.landingModule.getMass(),
+                new Vector(wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x, gravity * SolarSystem.landingModule.getMass(), 0).getAngle(new Vector(0, 1, 0)));
+                thruster.set(thrusterTarget);
+                //change angle
         updateVelocity();
         updateCoordinates();
         // if f=ma thing is correct 2 lines lower combine change angle lines.
@@ -133,11 +134,16 @@ public class Controller {
 
                 } else {
                     SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getVelocity().x, 0, 0);
-                    thrusterTarget.set(thrusterTarget.x,wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y+gravity, thrusterTarget.z);
+                    thrusterTarget.set(thrusterTarget.x,wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y+gravity*SolarSystem.landingModule.getMass(), thrusterTarget.z);
                     thrusterTarget.z = thrusterTarget.getAngle(new Vector(0, 1, 0));
                     changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
+                    thruster.set(thrusterTarget);
+                    SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getVelocity().x, 0, 0);
+
                 }
                 updateCoordinates();
+            timex = SolarSystem.landingModule.getVelocity().x / acceleration;
+            timey = SolarSystem.landingModule.getVelocity().y / acceleration;
             }
         } else {
             changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
@@ -147,9 +153,9 @@ public class Controller {
     }
 
     private static void changeAngle(double angleDifference) throws IOException {
-        Vector temp = thruster;
+     //   Vector temp = thruster;
         
-        thruster.set(0,0,thruster.z);
+      // thruster.set(0,0,thruster.z);
         double time = equationsOfMotion(Math.abs(angleDifference));
         // Only half of angle is calculated
         time = time * 2.0;
@@ -157,6 +163,7 @@ public class Controller {
         time = angleDifference / stepsNeeded;
         if(stepsNeeded<1){
             thruster.set(thruster.x,thruster.y,thruster.z+angleDifference);
+            
         }else{
            for (int i = 1; i < stepsNeeded+1; i++) {
             thruster = thruster.add(new Vector(0,0,time));
@@ -164,9 +171,9 @@ public class Controller {
 
            }
             thruster.set(thruster.x,thruster.y,thruster.z%(2*Math.PI));
-            updateVelocity();
+         //   updateVelocity();
             updateCoordinates();
-            thruster.set(temp);
+          //  thruster.set(temp);
         }
     }
 
@@ -278,18 +285,20 @@ public class Controller {
         }
         
         if ((2 * (Math.sqrt(2 * acceleration*modifier * (distance / 2)) / acceleration*modifier)) < 0.00001) {
-            SolarSystem.landingModule.setLocation(0, SolarSystem.landingModule.getLocation().y,
+            SolarSystem.landingModule.setNextLocation(0, SolarSystem.landingModule.getLocation().y,
                     SolarSystem.landingModule.getLocation().z);
-                    thrusterTarget.set(wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x , wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y+gravity,
-                new Vector(wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x, wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y+gravity, 0)
-                        .getAngle(new Vector(0, 1, 0)));
+            //SolarSystem.landingModule.setNextVelocity(0,SolarSystem.landingModule.getVelocity().y,0);
+                    thrusterTarget.set(0 , wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y+gravity,
+                new Vector(0, wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y+gravity, 0)
+                      .getAngle(new Vector(0, 1, 0)));
                 changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
+                thruster.set(thrusterTarget);
                 updateVelocity();
                 updateCoordinates();
-                    
+                   
         } else {
-            
-            Controller.alignX(modifier/3);
+  
+            Controller.alignX(modifier/10);
         }
     }
    /*  private static void descend() throws IOException {
@@ -320,29 +329,77 @@ public class Controller {
         // either we include landing and checks here, or we make another methodS
 
     }*/
+    public static double findTargetForce(double speed,double time){
+      double height=  SolarSystem.landingModule.getNextLocation().y;
+     return ((speed-SolarSystem.landingModule.getVelocity().y)/time) * SolarSystem.landingModule.getMass();
+    }
 
 private static void descend() throws IOException {
+        
+        double time =20;
+        double targetForce = findTargetForce(0.01,time);
+
         double scalar = acceleration*(1/intialheight);// have to find value such that the thruster doesnt emit more than it is allowed
         double distance = SolarSystem.landingModule.getLocation().y;
-        double originaly= thrusterTarget.y;
-        thrusterTarget.set(thrusterTarget.x, wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y, 0.0);
-        thrusterTarget.set(thrusterTarget.x, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0.0)));
-        thruster.set(thrusterTarget);
-        changeAngle(thruster.z - SolarSystem.landingModule.getRotation());
-         for(int i =0; i<3;i++){
-        updateVelocity();
-        updateCoordinates();}
-        while (SolarSystem.landingModule.getLocation().y > distance/2) {
-            
-           thrusterTarget.set(thrusterTarget.x, wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y, 0.0);
-        thrusterTarget.set(thrusterTarget.x, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0.0)));
+      //  double originaly= thrusterTarget.y;
+        thrusterTarget.set(thrusterTarget.x, gravity*SolarSystem.landingModule.getMass() - targetForce, 0.0);
+       thrusterTarget.set(thrusterTarget.x, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0)));
+       thruster.set(thrusterTarget);
+       changeAngle(thruster.z - SolarSystem.landingModule.getRotation());
+        for(int i=0;i<time;i++){
+            updateVelocity();
+            updateCoordinates();
+        }
+
+        thrusterTarget.set(thrusterTarget.x, gravity*SolarSystem.landingModule.getMass() , 0.0);
+       thrusterTarget.set(thrusterTarget.x, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0)));
+       thruster.set(thrusterTarget);
+       changeAngle(thruster.z - SolarSystem.landingModule.getRotation());
+        while (SolarSystem.landingModule.getLocation().y > 0.15) {
+            updateVelocity();
+            updateCoordinates();
+        }
+        thrusterTarget.set(thrusterTarget.x, gravity*SolarSystem.landingModule.getMass() +targetForce , 0.0);
+       thrusterTarget.set(thrusterTarget.x, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0)));
+       thruster.set(thrusterTarget);
+       changeAngle(thruster.z - SolarSystem.landingModule.getRotation());
+        for(int i=0;i<time;i++){
+            updateVelocity();
+            updateCoordinates();
+              
+        }
+         time =3;
+        targetForce=findTargetForce(-0.0001,time);
+        thrusterTarget.set(thrusterTarget.x, gravity*SolarSystem.landingModule.getMass() +targetForce , 0.0);
+       thrusterTarget.set(thrusterTarget.x, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0)));
+       thruster.set(thrusterTarget);
+       changeAngle(thruster.z - SolarSystem.landingModule.getRotation());
+
+       for(int i=0;i<time;i++){
+            updateVelocity();
+            updateCoordinates();
+              
+        }
+
+          thrusterTarget.set(thrusterTarget.x, gravity*SolarSystem.landingModule.getMass() , 0.0);
+       thrusterTarget.set(thrusterTarget.x, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0)));
+       thruster.set(thrusterTarget);
+       changeAngle(thruster.z - SolarSystem.landingModule.getRotation());
+        while(SolarSystem.landingModule.getLocation().y>0.0001){
+           updateVelocity();
+            updateCoordinates();
+              System.out.println(SolarSystem.landingModule.getLocation().y); 
+        }
+        System.out.println(SolarSystem.landingModule.getLocation().y);
+           /*  stabilize();
+           thrusterTarget.set(thrusterTarget.x, wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y +gravity*SolarSystem.landingModule.getMass(), thrusterTarget.z);
+        thrusterTarget.set(thrusterTarget.x, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0)));
         thruster.set(thrusterTarget);
         changeAngle(thruster.z - SolarSystem.landingModule.getRotation());
             updateVelocity();
             updateCoordinates();
             
-        }
-        stabilize();
+                stabilize();
         double time =500;
         double neededAcceleration= 2*(SolarSystem.landingModule.getLocation().y/2)/Math.pow(time, 2);
         //double neededAcceleration = 2 * ((SolarSystem.landingModule.getLocation().y / 2) - SolarSystem.landingModule.getLocation().y * time) / Math.pow(time, 2); 
@@ -370,7 +427,7 @@ private static void descend() throws IOException {
                // break;
             }
         // either we include landing and checks here, or we make another methodS
-
+*/
     }
     private static void landCorrrecter() throws IOException {
         double distance = SolarSystem.landingModule.getLocation().y;
