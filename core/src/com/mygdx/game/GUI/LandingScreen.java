@@ -64,14 +64,18 @@ public class LandingScreen implements Screen {
 
     }
 
+    /** method to pause the simulation by switching current state of the game to paused
+     * */
     @Override
     public void pause() {
-
+        LandingScreen.state = State.PAUSED;
     }
 
+    /** method to unpause the simulation by switching current state of the game to running
+     * */
     @Override
     public void resume() {
-
+        LandingScreen.state = State.RUNNING;
     }
 
     @Override

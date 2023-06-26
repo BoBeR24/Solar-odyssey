@@ -23,5 +23,9 @@ public class Positions {
             instance = new Positions();
         }
         return instance;
-    } 
+    }
+
+    public Vector getPosition(String week) {
+        return positions.get(week);
+    }
 }

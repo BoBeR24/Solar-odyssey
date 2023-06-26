@@ -20,6 +20,7 @@ import com.mygdx.game.Solvers.Solver;
 import com.mygdx.game.SupportiveClasses.DataReader;
 import com.mygdx.game.SupportiveClasses.Timer;
 import com.mygdx.game.Solvers.RK4;
+import org.w3c.dom.ls.LSOutput;
 
 /**
  * class which contains all logics for simulation running process
@@ -46,7 +47,7 @@ public class FlightLogic {
 
         // You can specify path to the file to read. By default, it is set to be path to "values.txt"
         DataReader dataReader = new DataReader();
-        dataReader.read();
+        dataReader.readFlightScene();
 
         SystemInitializer.fillSystemWithPlanets(); // adds planets and the Sun to the system
 
@@ -73,8 +74,8 @@ public class FlightLogic {
         for (int i = 0; i < 600; i++) { // amount of calculations per frame(to speed up the simulation)
             // Determines what happens when the Solar System is PAUSED or RUNNING
             switch (SolarSystemScreen.state) {
-
                 case RUNNING:
+                    timer.iterate();
 //                    if (counter >= 6) {
 //                    game.getScreen().pause();
 //                    }

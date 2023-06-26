@@ -16,7 +16,7 @@ public class SolverTester {
     public static void main(String[] args) {
         //manually calculate rk4 approximation for specified function and compare results
         DataReader reader = new DataReader();
-        reader.read();
+        reader.readFlightScene();
 
         ArrayList<Body> universe = new ArrayList<>();
 
