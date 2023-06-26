@@ -3,6 +3,7 @@ package com.mygdx.game.GameLogic;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.mygdx.game.Objects.Body;
 import com.mygdx.game.Objects.Probe;
 import com.mygdx.game.Objects.Vector;
 import com.mygdx.game.Objects.celestialBody;
@@ -19,12 +20,12 @@ public class Pathfinding {
     private static final double PI = Math.PI;
 
     //Method that plots a path of a probe to within a given distance of a celestial body, considering a max velocity by wich the probe shousld arrive at the celectial body.
-    public static void toBody(Probe probe, celestialBody body, double pointToSlowDown) {
+    public static void toBody(Probe probe, Body body, double pointToSlowDown) {
 
         Vector velocity = probe.getNextVelocity();
         Vector directionToBody = body.getLocation().subtract(probe.getLocation());
         double distanceToBody = directionToBody.magnitude();
-        double maxSpeed = 30000;
+        double maxSpeed = 100;
         Vector desiredNewVelocity = directionToBody.multiply(maxSpeed / distanceToBody);
 
         double accelerationX = desiredNewVelocity.x - velocity.x;
@@ -40,7 +41,7 @@ public class Pathfinding {
     }
 
     //Method that plots a path of a probe, so that it gets in orbit of the celestial body
-    public static void inOrbit(Probe probe, celestialBody body) {
+    public static void inOrbit(Probe probe, Body body) {
         Vector velocity = probe.getVelocity();
         Vector directionToBody = body.getLocation().subtract((probe.getLocation()));
         double distanceToBody = directionToBody.magnitude();
