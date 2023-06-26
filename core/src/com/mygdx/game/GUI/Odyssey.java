@@ -17,7 +17,7 @@ public class Odyssey extends Game {
 		font = new BitmapFont();
 		font.getData().setScale(2.0f);
 
-		this.setScreen(new SolarSystemScreen(this));
+		this.setScreen(new LandingScreen(this));
 	}
 
 	@Override
