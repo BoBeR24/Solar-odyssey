@@ -2,6 +2,7 @@ package com.mygdx.game.GameLogic;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.GUI.InfoLabel;
 import com.mygdx.game.GUI.LandingScreen;
 import com.mygdx.game.GUI.Odyssey;
 import com.mygdx.game.GUI.SolarSystemScreen;
@@ -24,6 +25,7 @@ import java.util.Objects;
 public class FlightLogic {
     private final float distFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
+    private final InfoLabel label;
     private final Timer timer;
     private final Odyssey game;
     // Variable which contains function to use in further calculations
@@ -34,7 +36,7 @@ public class FlightLogic {
 
     public FlightLogic(final Odyssey game) {
         this.game = game;
-        this.timer = new Timer(31536000 * 2, PhysicsUtils.STEPSIZE); // set up timer for 2 years by default
+        this.timer = new Timer(31536000 * 2, 30, 2023, 4, 1); // set up timer for 2 years by default
 
         this.centerScreenCords = SolarSystemScreen.centerScreenCords;
 
@@ -58,6 +60,8 @@ public class FlightLogic {
         HillClimbing.timer = this.timer;
         HillClimbing.probe = SolarSystem.probe;
 
+        label = new InfoLabel(game, timer);
+
     }
 
     /**
@@ -69,12 +73,11 @@ public class FlightLogic {
             if (Objects.requireNonNull(SolarSystemScreen.state) == State.RUNNING) {
                 timer.iterate();
 
-                solver.calculateNextState(SolarSystem.bodies, this.function, timer.getTimePassed(), PhysicsUtils.STEPSIZE);
+                solver.calculateNextState(SolarSystem.bodies, this.function, timer.getTimePassed(), timer.stepSize);
 
                 HillClimbing.hillClimb();
 
                 applyNewState(); // update states of objects
-//                    System.out.println(SolarSystem.bodies.get(SystemProperties.EARTH).getLocation());
 
                 if (SolarSystem.probe.getDistanceToTitan() < minTitanDistance) {
                     minTitanDistance = SolarSystem.probe.getDistanceToTitan(); // updates best distance to titan so far
@@ -90,7 +93,6 @@ public class FlightLogic {
 
                 if (HillClimbing.isOnTitanOrbit) {
                     System.out.println("Orbit has been reached. Switching to landing scene");
-
                     this.game.setScreen(new LandingScreen(this.game));
                     return; // exit from this logic session
                 }
@@ -129,6 +131,8 @@ public class FlightLogic {
                 (float) (centerScreenCords.y + (SolarSystem.probe.getLocation().y / distFactor) - 5),
                 10, 10);
 
+        // draw time label
+        label.draw();
     }
 
     private void switchScene() {

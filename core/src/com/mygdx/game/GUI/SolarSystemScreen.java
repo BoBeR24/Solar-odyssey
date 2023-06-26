@@ -1,18 +1,14 @@
 package com.mygdx.game.GUI;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.GameLogic.SimulationLogic;
+import com.mygdx.game.GameLogic.FlightLogic;
 import com.mygdx.game.GameLogic.State;
-import com.mygdx.game.PhysicsEngine.PhysicsUtils;
+import com.mygdx.game.PhysicsEngine.CameraUtils;
 
 
 /**
@@ -22,18 +18,9 @@ public class SolarSystemScreen implements Screen {
 
     private final Odyssey game;
     public static final OrthographicCamera camera = new OrthographicCamera();
-    private final SimulationLogic logic;
+    private final FlightLogic logic;
     public static State state = State.RUNNING;
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private String date;
-    private Clock clock;
-    private float labelX;
-    private float labelY;
-    DateTimeFormatter FORMATTER;
-
-
-
+    public static Vector3 centerScreenCords;
 
     public SolarSystemScreen(final Odyssey game) {
         this.game = game;
@@ -44,18 +31,11 @@ public class SolarSystemScreen implements Screen {
 
         game.shape.setProjectionMatrix(camera.combined);
 
-        this.logic = new SimulationLogic(game); // initialize our simulation
-        batch = new SpriteBatch();
-        font = new BitmapFont(); 
-        float fontScale = 2f; 
-        labelX = Gdx.graphics.getWidth() - 500; 
-        labelY = Gdx.graphics.getHeight() - 100;
-        font.getData().setScale(fontScale);
-        clock = new Clock(1, 4, 2023);
-        FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        date="Date of launch: April 1st";
-    }
+        centerScreenCords = new Vector3((Gdx.graphics.getWidth()) / 2.0f ,
+                (Gdx.graphics.getHeight()) / 2.0f, 0);
 
+        this.logic = new FlightLogic(game); // initialize our simulation
+    }
 
     /**
      * Called when screen appears
@@ -69,32 +49,17 @@ public class SolarSystemScreen implements Screen {
      * */
     @Override
     public void render(float delta) {
-    
         ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
-        logic.moveCameraToProbe(camera); // if you want to make camera follow the probe - uncomment this
+        CameraUtils.moveCameraToProbe(camera, centerScreenCords); // if you want to make camera follow the probe - uncomment this
         game.shape.setProjectionMatrix(camera.combined);
 
         game.shape.begin(ShapeType.Filled);
+        game.batch.begin();
 
-
-        batch.begin();
-        font.draw(batch, date, labelX, labelY); 
-
-        clock.updateTime(PhysicsUtils.STEPSIZE*600); 
-
-        LocalDateTime currentTime = clock.getDate();
-        String formattedTime = currentTime.format(FORMATTER);
-
-        font.draw(batch, formattedTime, labelX, labelY-50); 
-        // font.draw(batch, Integer.toString(clock.get), labelX, labelY-50); 
-
-        font.draw(batch,"Days passed: " + Integer.toString(clock.getDaysPassed()), labelX, labelY-150);
-        font.draw(batch,Integer.toString(clock.getHours()) + ":" + Integer.toString(clock.getMinutes()) + ":" + Integer.toString(clock.getSeconds()), labelX, labelY-100);
-        
-        batch.end();
         logic.update();
 
+        game.batch.end();
         game.shape.end();
 
     }
@@ -107,13 +72,18 @@ public class SolarSystemScreen implements Screen {
 
     }
 
+    /** method to pause the simulation by switching current state of the game to paused
+     * */
     @Override
     public void pause() {
+        SolarSystemScreen.state = State.PAUSED;
     }
 
+    /** method to unpause the simulation by switching current state of the game to running
+     * */
     @Override
     public void resume() {
-
+        SolarSystemScreen.state = State.RUNNING;
     }
 
     @Override
@@ -123,8 +93,6 @@ public class SolarSystemScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        font.dispose();
         logic.close();
     }
 }

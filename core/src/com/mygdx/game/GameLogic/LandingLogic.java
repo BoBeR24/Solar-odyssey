@@ -2,6 +2,7 @@ package com.mygdx.game.GameLogic;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.GUI.InfoLabel;
 import com.mygdx.game.GUI.LandingScreen;
 import com.mygdx.game.GUI.Odyssey;
 import com.mygdx.game.Objects.*;
@@ -18,13 +19,12 @@ public class LandingLogic {
     private final float distFactor;
     private final float sizeFactor;
     private final Vector3 centerScreenCords;
+    private final InfoLabel label;
     private final Timer timer;
     // Variable which contains function to use in further calculations
     private final DataReader dataReader;
     private Odyssey game;
-    private double counter;
-    private Function function;
-    private Solver solver;
+
 
     public LandingLogic(Odyssey game) {
         this.game = game;
@@ -33,7 +33,7 @@ public class LandingLogic {
         // we still need to execute readFlightScene to get radii and masses of objects(e.g. for Titan)
         dataReader.readFlightScene();
 
-        this.timer = new Timer(31536000, PhysicsUtils.STEPSIZE); // set up timer for 1 year by default
+        this.timer = new Timer(31536000, 1, 2023, 10, 2); // set up timer for 1 year by default
 
         this.centerScreenCords = LandingScreen.centerScreenCords;
 
@@ -48,6 +48,8 @@ public class LandingLogic {
         // add only titan to list of bodies(as landing scene only considers landing module, landing pad and Titan)
         SolarSystem.bodies.add(new Titan());
 
+        label = new InfoLabel(game, timer);
+
         ProbeLauncher.launchLandingModule(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), 2000); // initialize landing module launch
     }
 
@@ -55,7 +57,7 @@ public class LandingLogic {
      * updates the current state of the simulation. Draws all objects
      */
     public void update() {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
 
             switch (LandingScreen.state) {
                 case RUNNING:
@@ -66,6 +68,7 @@ public class LandingLogic {
 
                         // z axis of a nextMove vector is used to store rotation
                         SolarSystem.landingModule.setRotation(nextMove.z);
+                        timer.iterate();
 
                     } catch (IOException e) {
                         // if dataReader returns an error means file is corrupted or there is no more lines to read in it.
@@ -121,6 +124,9 @@ public class LandingLogic {
                 (float) (centerScreenCords.y + (antenna.y / distFactor) -
                         SolarSystem.landingModule.getHeight() / 2.0 / sizeFactor / 2.0f - 600),
                 (float) (SolarSystem.landingModule.getHeight() / 2.0 / sizeFactor), (float) (SolarSystem.landingModule.getHeight() / 2.0 / sizeFactor));
+
+        // draw time label
+        label.draw();
     }
 
     /**

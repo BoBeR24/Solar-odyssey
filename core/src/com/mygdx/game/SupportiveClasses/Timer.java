@@ -1,5 +1,8 @@
 package com.mygdx.game.SupportiveClasses;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 /**
  * class to keep track of time with each iteration
  */
@@ -9,10 +12,22 @@ public class Timer {
     private float currentTime = 0;
     private boolean timeReached = false;
     private boolean isPaused = false;
+    private LocalDateTime date;
 
-    public Timer(float endTime, float stepSize) {
+    /**
+     * Set up timer and specify the moment it was created
+     * @param endTime when timer should end
+     * @param stepSize step with which we should iterate our timer
+     * @param year year when timer was created
+     * @param month month when timer was created
+     * @param day day of month when timer was created
+     * */
+    public Timer(float endTime, float stepSize, int year, int month, int day) {
         this.endTime = endTime;
         this.stepSize = stepSize;
+
+
+        date = LocalDateTime.of(year, month, day, 0, 0, 0);
     }
 
     /**
@@ -30,13 +45,23 @@ public class Timer {
         }
 
         currentTime += this.stepSize;
+
+        this.date = date.plus((long) this.stepSize, ChronoUnit.SECONDS);
     }
 
     /**
      * get amount of time passed since start of the timer
+     * @return time passed in seconds
      */
     public float getTimePassed() {
         return currentTime;
+    }
+
+    /**
+     * Get current date in human-readable format
+     * */
+    public LocalDateTime getDate() {
+        return this.date;
     }
 
     /**
