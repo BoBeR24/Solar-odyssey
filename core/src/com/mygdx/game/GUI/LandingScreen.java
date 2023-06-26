@@ -46,7 +46,6 @@ public class LandingScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1); // trails on/off
 
-//        CameraUtils.moveCameraToProbe(camera, centerScreenCords); // if you want to make camera follow the probe - uncomment this
         game.shape.setProjectionMatrix(camera.combined);
 
         game.shape.begin(ShapeRenderer.ShapeType.Filled);
