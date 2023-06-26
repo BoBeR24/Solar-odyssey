@@ -174,6 +174,7 @@ public class Controller {
          //   updateVelocity();
             updateCoordinates();
           //  thruster.set(temp);
+
         }
     }
 
@@ -391,6 +392,11 @@ private static void descend() throws IOException {
               System.out.println(SolarSystem.landingModule.getLocation().y); 
         }
         System.out.println(SolarSystem.landingModule.getLocation().y);
+        if(confirmland()){
+            System.out.println("gj");
+        }
+    }
+
            /*  stabilize();
            thrusterTarget.set(thrusterTarget.x, wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y +gravity*SolarSystem.landingModule.getMass(), thrusterTarget.z);
         thrusterTarget.set(thrusterTarget.x, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0)));
@@ -428,8 +434,8 @@ private static void descend() throws IOException {
             }
         // either we include landing and checks here, or we make another methodS
 */
-    }
-    private static void landCorrrecter() throws IOException {
+    
+   /*  private static void landCorrrecter() throws IOException {
         double distance = SolarSystem.landingModule.getLocation().y;
         double timey = 2 * (Math.sqrt(distance * acceleration) / acceleration);
         if (timey > 1) {
@@ -452,7 +458,7 @@ private static void descend() throws IOException {
         } else {
             System.out.println("landing failed");
         }
-    }
+    }*/
 
     private static boolean confirmland() throws IOException {
         if (Math.abs(SolarSystem.landingModule.getLocation().x) > 0.0001) {
@@ -463,6 +469,7 @@ private static void descend() throws IOException {
             } else {
                 sign = -1;
             }
+
             if ((2 * ((Math.sqrt(Math.abs(SolarSystem.landingModule.getLocation().x))) * acceleration)
                     / acceleration) > 1) {
                 while ((2 * ((Math.sqrt(Math.abs(SolarSystem.landingModule.getLocation().x))) * acceleration)
