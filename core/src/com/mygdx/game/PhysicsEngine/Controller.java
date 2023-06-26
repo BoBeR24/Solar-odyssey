@@ -152,7 +152,7 @@ public class Controller {
 
         } else {
             for (int i = 1; i < stepsNeeded + 1; i++) {
-                thruster = thruster.add(new Vector(0, 0, time));
+                thruster = thruster.add(new Vector(0, 0, time/2));
             }
             thruster.set(thruster.x, thruster.y, thruster.z % (2 * Math.PI));
             updateCoordinates();
