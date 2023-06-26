@@ -261,10 +261,10 @@ public class Controller {
                     .setNextVelocity(new Vector(SolarSystem.landingModule.getVelocity().x + sign* acceleration*modifier,
                             SolarSystem.landingModule.getVelocity().y
                         + ((thruster.y / SolarSystem.landingModule.getMass())- gravity )* PhysicsUtils.STEPSIZE, 0));
-         updateCoordinates();//A
+         updateCoordinates();
         tracker++;
         }
-        //stabilize();
+        
     
         thrusterTarget.set(-thrusterTarget.x , thrusterTarget.y,
                 new Vector(-thrusterTarget.x , thrusterTarget.y, 0)
