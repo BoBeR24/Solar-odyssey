@@ -1,17 +1,12 @@
 package com.mygdx.game.GameLogic;
 
-import java.util.ArrayList;
-
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.mygdx.game.Objects.Body;
 import com.mygdx.game.Objects.Probe;
 import com.mygdx.game.Objects.Vector;
-import com.mygdx.game.Objects.celestialBody;
-import com.mygdx.game.PhysicsEngine.Function;
-import com.mygdx.game.Properties.SolarSystem;
-import com.mygdx.game.Properties.SystemProperties;
 
-//a class that can plot a path from any point to any celestial object, or a path to get in orbit of a celestial body.
+/**
+ * A class that can plot a path from any point to any celestial object, or a path to get in orbit of a celestial body.
+ */
 public class Pathfinding {
 
     private static final int MAXFORCE = 3 * (10 ^ 7);    //The maximum amount of force in Newton the spacecraft is capable of producing.
@@ -19,7 +14,13 @@ public class Pathfinding {
     private static final double GRAVITYCONSTANT = 6.67 * (Math.pow(10, -11)) * 100;
     private static final double PI = Math.PI;
 
-    //Method that plots a path of a probe to within a given distance of a celestial body, considering a max velocity by wich the probe shousld arrive at the celectial body.
+    /**
+     * Method that plots a path of a probe to within a given distance of a celestial body, considering a max velocity by wich the probe shousld arrive at the celectial body.
+     *
+     * @param probe           probe that we move
+     * @param body            body towards which probe is going
+     * @param pointToSlowDown
+     */
     public static void toBody(Probe probe, Body body, double pointToSlowDown) {
 
         Vector velocity = probe.getNextVelocity();
@@ -40,7 +41,12 @@ public class Pathfinding {
         Rocketry.thrust(probe, acceleration);
     }
 
-    //Method that plots a path of a probe, so that it gets in orbit of the celestial body
+    /**
+     * Method that plots a path of a probe, so that it gets in orbit of the celestial body
+     *
+     * @param probe probe that we control
+     * @param body  body we want to orbit
+     */
     public static void inOrbit(Probe probe, Body body) {
         Vector velocity = probe.getVelocity();
         Vector directionToBody = body.getLocation().subtract((probe.getLocation()));

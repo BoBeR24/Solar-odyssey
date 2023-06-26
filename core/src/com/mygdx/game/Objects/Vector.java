@@ -88,8 +88,8 @@ public class Vector {
     }
 
     /** rotate vector around given axis
-     * @param angle - angle in radians to which we want to rotate our vector
-     * @param axis - axis around which we execute rotation
+     * @param angle angle in radians to which we want to rotate our vector
+     * @param axis axis around which we execute rotation
      * */
     public void rotate(double angle, char axis) {
         if (axis == 'z') {

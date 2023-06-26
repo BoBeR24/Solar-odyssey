@@ -7,7 +7,7 @@ import com.mygdx.game.Properties.SystemProperties;
 import java.util.ArrayList;
 
 /**
- * class with methods for calculating and updating physical processes of bodies presented in the system
+ * Class with helping physical related methods and constants used in calculations
  * */
 public class PhysicsUtils{
     //Gravitational constant expressed in cubic kilometers per kilogram per second squared

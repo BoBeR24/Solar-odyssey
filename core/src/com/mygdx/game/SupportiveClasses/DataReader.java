@@ -8,14 +8,14 @@ import javax.annotation.processing.Filer;
 import java.io.*;
 
 public class DataReader {
+    private static BufferedReader flightReader;
+    private static BufferedReader landingReader;
     private final Vector[] coordinates;
     private final Vector[] velocities;
     private final double[] masses;
     private final int[] radii;
     private final File fileForFlightScene;
     private final File fileForLandingScene;
-    private static BufferedReader flightReader;
-    private static BufferedReader landingReader;
 
     /**
      * Class that reads input values from a file

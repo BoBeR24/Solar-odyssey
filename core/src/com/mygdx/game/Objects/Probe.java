@@ -3,6 +3,9 @@ package com.mygdx.game.Objects;
 import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
 
+/**
+ * Probe is an object that is launched towards the Titan
+ * */
 public class Probe implements Body {
     private final int id = SystemProperties.PROBE; // same id is reserved for all probes(so all probes have the same id)
     private final double mass;
@@ -17,8 +20,8 @@ public class Probe implements Body {
     private double fuel; // fuel measured in Delta-v
 
     /** Creating Probe with specified starter velocity and location
-     * @param starterVelocity - initial velocity of the probe relative to Earth
-     * @param starterLocation - initial location of the probe relative to Earth
+     * @param starterVelocity initial velocity of the probe relative to Earth
+     * @param starterLocation initial location of the probe relative to Earth
      * */
     public Probe(Vector starterVelocity, Vector starterLocation){
         this.mass = 50000;
@@ -38,7 +41,7 @@ public class Probe implements Body {
 
     /** Creating probe with default starting location (which is on the right side of earth)
      * and specified starter velocity
-     * @param starterVelocity - initial velocity of the probe
+     * @param starterVelocity initial velocity of the probe
      * */
     public Probe(Vector starterVelocity) {
         this(starterVelocity, new Vector(SystemProperties.radii[SystemProperties.EARTH], 0, 0));

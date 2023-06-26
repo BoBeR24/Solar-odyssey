@@ -9,7 +9,7 @@ public class Odyssey extends Game {
 	@Override
 	public void create () {
 		shape = new ShapeRenderer();
-		this.setScreen(new SolarSystemScreen(this));
+		this.setScreen(new LandingScreen(this));
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package com.mygdx.game.Properties;
 
 import com.mygdx.game.Objects.Vector;
 
+/** Class for storing all initial and constant properties of planets
+ * */
 public class SystemProperties {
     // BELOW GO CONSTANTS WHICH CONTAIN CORRESPONDING TO EACH PLANET INDEX
     final public static int SUN = 0;

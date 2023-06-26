@@ -1,5 +1,7 @@
 package com.mygdx.game.Objects;
 
+/** Module which is used to land on Titan
+ * */
 public class LandingModule implements Body{
     private Vector velocity;
     private Vector location;

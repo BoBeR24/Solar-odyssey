@@ -8,11 +8,13 @@ import com.mygdx.game.Objects.celestialBody;
 
 import java.util.ArrayList;
 
-/** Class which is responsible for setting up initial solar system(e.g. adding planets to it)
- * */
+/**
+ * Class which is responsible for setting up initial solar system(e.g. adding planets to it)
+ */
 public class SystemInitializer {
-    /** adds all planets to the system and setting up their names and colors
-     * */
+    /**
+     * adds all planets to the system and setting up their names and colors
+     */
     public static void fillSystemWithPlanets() {
         ArrayList<Body> planets = SolarSystem.bodies;
 
@@ -37,7 +39,7 @@ public class SystemInitializer {
         planets.add(moon);
 
         celestialBody mars = new celestialBody(SystemProperties.MARS);
-        mars. setColor(Color.valueOf("#D6723B"));
+        mars.setColor(Color.valueOf("#D6723B"));
         planets.add(mars);
 
         celestialBody jupiter = new celestialBody(SystemProperties.JUPITER);

@@ -2,6 +2,9 @@ package com.mygdx.game.PhysicsEngine;
 
 import com.mygdx.game.Objects.Vector;
 
+/**
+ * Class which considers all atmospheric related stuff during landing on Titan(mainly wind and atmosphere)
+ */
 public class Wind {
 
     private static Wind Wind;
@@ -20,6 +23,7 @@ public class Wind {
     private double angle; // in radians
 
     private Wind() {
+        // calculates wind in zero stage of landing
         this.angle = randomAngle();
         this.windDirection = randomWindDirection();
         double velocity = randomVelocity(ZERO_BOUND);
@@ -29,6 +33,7 @@ public class Wind {
         forceBoundZero = vectorDirectionRotation(forceBoundZero);
         forceBoundZero = vectorAngleRotation(forceBoundZero);
 
+        // calculates wind in first stage of landing
         this.angle = randomAngle();
         this.windDirection = randomWindDirection();
         velocity = randomVelocity(FIRST_BOUND);
@@ -38,6 +43,7 @@ public class Wind {
         forceBoundOne = vectorDirectionRotation(forceBoundOne);
         forceBoundOne = vectorAngleRotation(forceBoundOne);
 
+        // calculates wind in second stage of landing
         this.angle = randomAngle();
         this.windDirection = randomWindDirection();
         velocity = randomVelocity(SECOND_BOUND);
@@ -47,6 +53,7 @@ public class Wind {
         forceBoundTwo = vectorDirectionRotation(forceBoundTwo);
         forceBoundTwo = vectorAngleRotation(forceBoundTwo);
 
+        // calculates wind in third stage of landing
         this.angle = randomAngle();
         this.windDirection = randomWindDirection();
         velocity = randomVelocity(THIRD_BOUND);

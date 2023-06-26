@@ -2,7 +2,6 @@ package com.mygdx.game.PhysicsEngine;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.GameLogic.FlightLogic;
 import com.mygdx.game.Objects.Vector;
 import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;

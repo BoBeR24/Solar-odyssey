@@ -6,6 +6,9 @@ import com.mygdx.game.Properties.SystemProperties;
 
 import java.util.ArrayList;
 
+/**
+ * Function for calculating Newtons Law of Gravity
+ * */
 public class NewtonForce implements Function{
     /** Calculates sum of the forces
      * */
@@ -24,7 +27,11 @@ public class NewtonForce implements Function{
         return forcesSum;
     }
 
-    //Calculates the force exerted from the planet on the body
+    /**Calculates the force exerted from the planet on the body
+     * @param body body to which force is applied
+     * @param planet body from which gravitational effect is considered
+     * @return force vector
+     */
     public Vector singleForce(Body body, Body planet){
         Vector force = new Vector(0.0, 0.0, 0.0);
 
@@ -40,6 +47,9 @@ public class NewtonForce implements Function{
         return force;
     }
 
+    /** Calculates change in coordinates at the given time
+     * @see Function#calculateCoordinateChange(Body, ArrayList, float)
+     * */
     @Override
     public Vector calculateCoordinateChange(Body body, ArrayList<Body> universe, float startTime){
         return new Vector(
@@ -49,6 +59,9 @@ public class NewtonForce implements Function{
         );
     }
 
+    /** Calculates change in velocity at the given time
+     * @see Function#calculateVelocityChange(Body, ArrayList, float)
+     * */
     @Override
     public Vector calculateVelocityChange(Body body, ArrayList<Body> universe, float startTime){
         Vector funcVal = allForces(body, universe);

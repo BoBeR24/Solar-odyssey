@@ -6,6 +6,9 @@ import com.mygdx.game.Objects.LandingModule;
 import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Objects.Vector;
 
+/**
+ * Manages probe and landing module launching
+ * */
 public class ProbeLauncher {
     /** launches probe and adds it to the system
      * @param velocity to add to earth velocity

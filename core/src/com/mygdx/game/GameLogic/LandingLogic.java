@@ -1,20 +1,13 @@
 package com.mygdx.game.GameLogic;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.GUI.LandingScreen;
 import com.mygdx.game.GUI.Odyssey;
-import com.mygdx.game.GUI.SolarSystemScreen;
 import com.mygdx.game.Objects.*;
 import com.mygdx.game.PhysicsEngine.Function;
-import com.mygdx.game.PhysicsEngine.NewtonForce;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 import com.mygdx.game.Properties.SolarSystem;
-import com.mygdx.game.Properties.SystemProperties;
-import com.mygdx.game.Solvers.RK4;
 import com.mygdx.game.Solvers.Solver;
 import com.mygdx.game.SupportiveClasses.DataReader;
 import com.mygdx.game.SupportiveClasses.Timer;
@@ -22,21 +15,23 @@ import com.mygdx.game.SupportiveClasses.Timer;
 import java.io.IOException;
 
 public class LandingLogic {
-    private Odyssey game;
     private final float distFactor;
     private final float sizeFactor;
     private final Vector3 centerScreenCords;
-
-    //31536000 seconds in 1 year
     private final Timer timer;
     // Variable which contains function to use in further calculations
     private final DataReader dataReader;
+    private Odyssey game;
     private double counter;
     private Function function;
     private Solver solver;
 
-    public LandingLogic(Odyssey game){
+    public LandingLogic(Odyssey game) {
         this.game = game;
+
+        dataReader = new DataReader();
+        // we still need to execute readFlightScene to get radii and masses of objects(e.g. for Titan)
+        dataReader.readFlightScene();
 
         this.timer = new Timer(31536000, PhysicsUtils.STEPSIZE); // set up timer for 1 year by default
 
@@ -54,15 +49,13 @@ public class LandingLogic {
         SolarSystem.bodies.add(new Titan());
 
         ProbeLauncher.launchLandingModule(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), 2000); // initialize landing module launch
-
-        dataReader = new DataReader();
     }
 
     /**
      * updates the current state of the simulation. Draws all objects
-     * */
-    public void update(){
-        for (int i = 0; i < 50; i++) {
+     */
+    public void update() {
+        for (int i = 0; i < 4; i++) {
 
             switch (LandingScreen.state) {
                 case RUNNING:
@@ -89,8 +82,9 @@ public class LandingLogic {
         redrawScene();
     }
 
-    /** redraws all sprites and objects
-     * */
+    /**
+     * redraws all sprites and objects
+     */
     private void redrawScene() {
         // draw landing pad
         game.shape.setColor(Color.RED);
@@ -105,13 +99,14 @@ public class LandingLogic {
                 (float) (centerScreenCords.y + (SolarSystem.bodies.get(0).getLocation().y / distFactor) - ((Titan) SolarSystem.bodies.get(0)).getHeight() / sizeFactor / 2.0f - 600),
                 (float) ((Titan) SolarSystem.bodies.get(0)).getWidth() / sizeFactor, (float) ((Titan) SolarSystem.bodies.get(0)).getHeight() / sizeFactor);
 
+
         // draw landing module
         game.shape.setColor(Color.PINK);
         game.shape.ellipse((float) (centerScreenCords.x + (SolarSystem.landingModule.getLocation().x / distFactor) -
                         SolarSystem.landingModule.getWidth() / sizeFactor / 2.0f),
                 (float) (centerScreenCords.y + (SolarSystem.landingModule.getLocation().y / distFactor) -
                         SolarSystem.landingModule.getHeight() / sizeFactor / 2.0f - 600),
-                SolarSystem.landingModule.getWidth() / sizeFactor,SolarSystem.landingModule.getHeight() / sizeFactor);
+                SolarSystem.landingModule.getWidth() / sizeFactor, SolarSystem.landingModule.getHeight() / sizeFactor);
 
         // identify location of antenna(to visualize direction of the rocket)
         Vector antenna = new Vector(0.0, SolarSystem.landingModule.getHeight() / 2.0, 0.0);
@@ -130,8 +125,8 @@ public class LandingLogic {
 
     /**
      * method for disposing all visual elements(don't have use for now)
-     * */
-    public void close(){
+     */
+    public void close() {
         System.out.println("Thank you");
     }
 }
