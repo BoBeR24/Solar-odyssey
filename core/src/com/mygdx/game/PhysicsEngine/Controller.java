@@ -36,7 +36,7 @@ public class Controller {
          thrusterTarget = new Vector(0,0,0);
          thruster = new Vector(0,0,0);
 
-        fileWriter = new FileWriter("C:\\Users\\keesd\\Documents\\Uni\\Project 2 year 1\\Project 2 git\\Solar-odyssey\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\coordinates.txt");
+        fileWriter = new FileWriter("core\\src\\com\\mygdx\\game\\SupportiveClasses\\coordinates.txt");
         writer = new BufferedWriter(fileWriter);
         // do methods
        
@@ -89,7 +89,7 @@ public class Controller {
                 0);
         SolarSystem.landingModule.update();
         
-        SolarSystem.landingModule.setRotation(thruster.x);
+        SolarSystem.landingModule.setRotation(thruster.z);
         writer.write(String.valueOf(SolarSystem.landingModule.getLocation().x) + " "
                 + String.valueOf(SolarSystem.landingModule.getLocation().y) + " "
                 + String.valueOf(SolarSystem.landingModule.getRotation()));
@@ -160,9 +160,10 @@ public class Controller {
            for (int i = 1; i < stepsNeeded+1; i++) {
             thruster.add(new Vector(0,0,time));
             thruster.set(thruster.x,thruster.y,thruster.z%(2*Math.PI));
+
+           }
             updateVelocity();
             updateCoordinates();
-           }
         }
 
     }
