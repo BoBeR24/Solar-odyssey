@@ -22,7 +22,7 @@ public interface Body {
     double getMass();
     int getId();
 
-    /** returns identical independent clone of the object in its current state
+    /** returns independent clone of the object in its current state
      * @return cloned object
      * */
     Body clone();

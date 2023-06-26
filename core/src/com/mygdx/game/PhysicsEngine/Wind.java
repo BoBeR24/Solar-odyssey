@@ -4,20 +4,20 @@ import com.mygdx.game.Objects.Vector;
 
 public class Wind {
 
+    private static Wind Wind;
     final double SHIP_RADIUS = 7; // in meters
     final double ATMOSPHERE_DENSITY = 1.240512; // in kg/m^2 (98,4%*1,25+1,6%*0,657=1,240512 NITROGEN & ETHANE)  but maybe just use 1,5*Earth air density
     final double ZERO_BOUND = 0.1;
     final double FIRST_BOUND = 7;
     final double SECOND_BOUND = 60;
     final double THIRD_BOUND = 120;
+    final int MAX_ANGLE = 15; // in degrees
     private Vector forceBoundZero;
     private Vector forceBoundOne;
     private Vector forceBoundTwo;
     private Vector forceBoundThree;
     private int windDirection; // 1 for from left to right, 2 for from right to left
-    final int MAX_ANGLE = 15; // in degrees
     private double angle; // in radians
-    private static Wind Wind;
 
     private Wind() {
         this.angle = randomAngle();
@@ -99,12 +99,12 @@ public class Wind {
      */
     private Vector vectorAngleRotation(Vector vector) {
         Vector newVector = new Vector(0.0, 0.0, 0.0);
-        // double newX = Math.cos(this.angle)*vector.x - Math.sin(this.angle)*vector.y
-        // double newY = Math.sin(this.angle)*vector.x - Math.cos(this.angle)*vector.y;
         double newX = Math.cos(this.angle) * vector.x;
         double newY = (-1) * Math.sin(this.angle) * vector.x;
+
         newVector.x = newX;
         newVector.y = newY;
+
         return newVector;
     }
 
@@ -186,36 +186,36 @@ public class Wind {
         this.angle = angle;
     }
 
-    public void setVectorForceZero(Vector forceBoundZero) {
-        this.forceBoundZero = forceBoundZero;
-    }
-
     public Vector getVectorForceZero() {
         return this.forceBoundZero;
     }
 
-    public void setVectorForceOne(Vector forceBoundOne) {
-        this.forceBoundOne = forceBoundOne;
+    public void setVectorForceZero(Vector forceBoundZero) {
+        this.forceBoundZero = forceBoundZero;
     }
 
     public Vector getVectorForceOne() {
         return this.forceBoundOne;
     }
 
-    public void setVectorForceTwo(Vector forceBoundTwo) {
-        this.forceBoundTwo = forceBoundTwo;
+    public void setVectorForceOne(Vector forceBoundOne) {
+        this.forceBoundOne = forceBoundOne;
     }
 
     public Vector getVectorForceTwo() {
         return this.forceBoundTwo;
     }
 
-    public void setVectorForceThree(Vector forceBoundThree) {
-        this.forceBoundThree = forceBoundThree;
+    public void setVectorForceTwo(Vector forceBoundTwo) {
+        this.forceBoundTwo = forceBoundTwo;
     }
 
     public Vector getVectorForceThree() {
         return this.forceBoundThree;
+    }
+
+    public void setVectorForceThree(Vector forceBoundThree) {
+        this.forceBoundThree = forceBoundThree;
     }
 
     public Vector getForceBasedOnDistance(double distanceToTitan) {

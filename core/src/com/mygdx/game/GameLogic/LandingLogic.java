@@ -50,21 +50,12 @@ public class LandingLogic {
 
         SolarSystem.resetSystem();
 
-        // add landing pad
-//        SolarSystem.bodies.add(new LandingPad());
-
         // add only titan to list of bodies(as landing scene only considers landing module, landing pad and Titan)
         SolarSystem.bodies.add(new Titan());
 
-        ProbeLauncher.launchLandingModule(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), 2000); // initialize probe launch
+        ProbeLauncher.launchLandingModule(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), 2000); // initialize landing module launch
 
         dataReader = new DataReader();
-//        this.function = new NewtonForce();
-//
-//        Choose a solver we want to use
-//        this.solver = new RK4();
-//        this.solver = new EnhancedEuler();
-//        this.solver = new EulerSolver();
     }
 
     /**
@@ -84,26 +75,18 @@ public class LandingLogic {
                         SolarSystem.landingModule.setRotation(nextMove.z);
 
                     } catch (IOException e) {
+                        // if dataReader returns an error means file is corrupted or there is no more lines to read in it.
+                        // Either way we end our simulation after that
                         this.game.getScreen().pause();
                         System.out.println("Simulation has ended");
                     }
 
                 default:
-                    Math.random();
                     break;
             }
         }
 
         redrawScene();
-    }
-
-    /** apply previously calculated states to all objects at the same time(to be sure that all
-     calculations happen in one state)
-     * */
-    private void applyNewState() {
-        for (Body body : SolarSystem.bodies) {
-            body.update();
-        }
     }
 
     /** redraws all sprites and objects

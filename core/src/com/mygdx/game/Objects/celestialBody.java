@@ -50,8 +50,9 @@ public class celestialBody implements Body {
     }
 
 
-    // example of cloning Earth:
-    // Body new_body = SolarSystem.planets.get(SystemProperties.EARTH).clone();
+/** Returns a clone of this body(clone is not full, though,)
+ * example of cloning Earth:
+ * Body new_body = SolarSystem.planets.get(SystemProperties.EARTH).clone();*/
     @Override
     public celestialBody clone() {
         celestialBody cloned_body = new celestialBody(this.id);
