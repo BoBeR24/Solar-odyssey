@@ -7,9 +7,9 @@ public class LandingModule implements Body{
     private Vector nextLocation;
     private double rotation; // rotation of the module relative to y-axis
     private final double mass = 2000;
-    private final int id = 2;
-    private int width;
-    private int height;
+    private final int id = 1;
+    private float width;
+    private float height;
 
     public LandingModule(Vector initialLocation, Vector initialVelocity, double rotation) {
         this.location = initialLocation;
@@ -20,8 +20,9 @@ public class LandingModule implements Body{
 
         this.rotation = rotation;
 
-        setHeight(80);
-        setWidth(80);
+        // these scales do not represent real size of object, they are only used for gui representation
+        setHeight(8f);
+        setWidth(8f);
     }
 
     /** !!!This clone method doesn't do a full copy, it only transfers essential characteristics,
@@ -94,11 +95,11 @@ public class LandingModule implements Body{
         this.rotation = rotation;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(float width) {
         this.width = width;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 
@@ -131,11 +132,11 @@ public class LandingModule implements Body{
         return this.rotation;
     }
 
-    public int getWidth() {
+    public float getWidth() {
         return width;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 

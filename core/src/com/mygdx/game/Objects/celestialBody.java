@@ -17,8 +17,8 @@ public class celestialBody implements Body {
     private final int radius;
     private final double mass;
     private Color color; // color of the body
-    private int width; // width of the image of the body
-    private int height; // height of the image of the body
+    private float width; // width of the image of the body
+    private float height; // height of the image of the body
 
 
     public celestialBody(int index){
@@ -119,11 +119,11 @@ public class celestialBody implements Body {
         this.color = color;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(float width) {
         this.width = width;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 
@@ -165,11 +165,11 @@ public class celestialBody implements Body {
         return color;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 
-    public int getWidth() {
+    public float getWidth() {
         return width;
     }
 

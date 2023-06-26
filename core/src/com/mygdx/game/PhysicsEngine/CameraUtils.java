@@ -8,7 +8,7 @@ import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
 
 public class CameraUtils {
-    static int distFactor = SolarSystem.DIST_FACTOR;
+    static float distFactor = SolarSystem.DIST_FACTOR;
     /** method to keep camera centered at the first probe position(so camera follows the first probe)
      * */
     public static void moveCameraToProbe(OrthographicCamera camera, Vector3 screenCenter){

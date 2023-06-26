@@ -23,7 +23,7 @@ public class LandingScreen implements Screen {
         this.game = game;
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // create a camera
-        camera.zoom = 3f;
+        camera.zoom = 1f;
         camera.update(); // update camera
 
         centerScreenCords = new Vector3((Gdx.graphics.getWidth()) / 2.0f ,

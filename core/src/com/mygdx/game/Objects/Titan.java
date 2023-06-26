@@ -9,7 +9,7 @@ import com.mygdx.game.Properties.SystemProperties;
  * */
 public class Titan implements Body {
     //    private final String name; // name of the body
-    private final int id = 1; // id which represents position in the list of bodies
+    private final int id = 0; // id which represents position in the list of bodies
     private Vector location;
     private Vector nextLocation; // location to which planet will be moved in the next state of the system
     private Vector velocity;
@@ -17,8 +17,8 @@ public class Titan implements Body {
     private final int radius;
     private final double mass;
     private Color color; // color of the body
-    private int width; // width of the image of the body
-    private int height; // height of the image of the body
+    private float width; // width of the image of the body
+    private float height; // height of the image of the body
 
 /** class for Titan used during the landing(as properties of Titan during the landing differ a bit from flight simulation due
  * to some simplifications in calculations)
@@ -35,10 +35,11 @@ public class Titan implements Body {
         this.nextLocation = new Vector(this.location);
         this.nextVelocity = new Vector(this.velocity);
 
-
         this.mass = SystemProperties.masses[id];
 
-        this.width = SystemProperties.radii[id] * 2; // default width and height
+        // these scales do not represent real size of object, they are only used for gui representation
+        // (in this case they are the same as in real life though)
+        this.width = SystemProperties.radii[id] * 2;
         this.height = SystemProperties.radii[id] * 2;
     }
 
@@ -107,11 +108,11 @@ public class Titan implements Body {
         this.color = color;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(float width) {
         this.width = width;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 
@@ -153,11 +154,11 @@ public class Titan implements Body {
         return color;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 
-    public int getWidth() {
+    public float getWidth() {
         return width;
     }
 

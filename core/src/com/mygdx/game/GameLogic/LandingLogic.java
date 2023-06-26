@@ -23,8 +23,8 @@ import java.io.IOException;
 
 public class LandingLogic {
     private Odyssey game;
-    private final int distFactor;
-    private final int sizeFactor;
+    private final float distFactor;
+    private final float sizeFactor;
     private final Vector3 centerScreenCords;
 
     //31536000 seconds in 1 year
@@ -42,16 +42,16 @@ public class LandingLogic {
 
         this.centerScreenCords = LandingScreen.centerScreenCords;
 
-        SolarSystem.DIST_FACTOR = 2;
+        SolarSystem.DIST_FACTOR = 0.35f;
         distFactor = SolarSystem.DIST_FACTOR;
 
-        SolarSystem.SIZE_FACTOR = 2;
+        SolarSystem.SIZE_FACTOR = 0.35f;
         sizeFactor = SolarSystem.SIZE_FACTOR;
 
         SolarSystem.resetSystem();
 
         // add landing pad
-        SolarSystem.bodies.add(new LandingPad());
+//        SolarSystem.bodies.add(new LandingPad());
 
         // add only titan to list of bodies(as landing scene only considers landing module, landing pad and Titan)
         SolarSystem.bodies.add(new Titan());
@@ -89,6 +89,7 @@ public class LandingLogic {
                     }
 
                 default:
+                    Math.random();
                     break;
             }
         }
@@ -110,44 +111,38 @@ public class LandingLogic {
     private void redrawScene() {
         // draw landing pad
         game.shape.setColor(Color.RED);
-        game.shape.rect((float) (centerScreenCords.x + (SolarSystem.bodies.get(0).getLocation().x / distFactor) -
-                        ((LandingPad) SolarSystem.bodies.get(0)).getWidth() / sizeFactor / 2.0f),
-                (float) (centerScreenCords.y + (SolarSystem.bodies.get(0).getLocation().y / distFactor) -
-                        ((LandingPad) SolarSystem.bodies.get(0)).getHeight() / sizeFactor / 2.0f),
-                (float) ((LandingPad) SolarSystem.bodies.get(0)).getWidth() / sizeFactor, (float) ((LandingPad) SolarSystem.bodies.get(0)).getHeight() / sizeFactor);
+        game.shape.rect(centerScreenCords.x - 20 / sizeFactor / 2.0f,
+                centerScreenCords.y - 4 / sizeFactor / 2.0f - 600,
+                20 / sizeFactor, 4 / sizeFactor);
 
         // draw Titan
         game.shape.setColor(Color.valueOf("#f2a900"));
-        game.shape.ellipse((float) (centerScreenCords.x + (SolarSystem.bodies.get(1).getLocation().x / distFactor) -
-                        ((Titan) SolarSystem.bodies.get(1)).getWidth() / sizeFactor / 2.0f),
-                (float) (centerScreenCords.y + (SolarSystem.bodies.get(1).getLocation().y / distFactor) - ((Titan) SolarSystem.bodies.get(1)).getHeight() / sizeFactor / 2.0f),
-                (float) ((Titan) SolarSystem.bodies.get(1)).getWidth() / sizeFactor, (float) ((Titan) SolarSystem.bodies.get(1)).getHeight() / sizeFactor);
+        game.shape.ellipse((float) (centerScreenCords.x + (SolarSystem.bodies.get(0).getLocation().x / distFactor) -
+                        ((Titan) SolarSystem.bodies.get(0)).getWidth() / sizeFactor / 2.0f),
+                (float) (centerScreenCords.y + (SolarSystem.bodies.get(0).getLocation().y / distFactor) - ((Titan) SolarSystem.bodies.get(0)).getHeight() / sizeFactor / 2.0f - 600),
+                (float) ((Titan) SolarSystem.bodies.get(0)).getWidth() / sizeFactor, (float) ((Titan) SolarSystem.bodies.get(0)).getHeight() / sizeFactor);
 
         // draw landing module
         game.shape.setColor(Color.PINK);
         game.shape.ellipse((float) (centerScreenCords.x + (SolarSystem.landingModule.getLocation().x / distFactor) -
                         SolarSystem.landingModule.getWidth() / sizeFactor / 2.0f),
                 (float) (centerScreenCords.y + (SolarSystem.landingModule.getLocation().y / distFactor) -
-                        SolarSystem.landingModule.getHeight() / sizeFactor / 2.0f),
-                (float) SolarSystem.landingModule.getWidth() / sizeFactor, (float) SolarSystem.landingModule.getHeight() / sizeFactor);
+                        SolarSystem.landingModule.getHeight() / sizeFactor / 2.0f - 600),
+                SolarSystem.landingModule.getWidth() / sizeFactor,SolarSystem.landingModule.getHeight() / sizeFactor);
 
         // identify location of antenna(to visualize direction of the rocket)
-        Vector antenna = new Vector(0.0, 40.0, 0.0);
-//        antenna.y = antenna.y + 40;
-//        System.out.println(antenna + " a");
+        Vector antenna = new Vector(0.0, SolarSystem.landingModule.getHeight() / 2.0, 0.0);
 
         antenna.rotate(SolarSystem.landingModule.getRotation(), 'z');
-//        System.out.println(antenna + " b");
         antenna = antenna.add(SolarSystem.landingModule.getLocation());
 
-//        System.out.println(SolarSystem.landingModule.getRotation());
-
+        // draw antenna
         game.shape.setColor(Color.YELLOW);
         game.shape.ellipse((float) (centerScreenCords.x + (antenna.x / distFactor) -
-                        40 / sizeFactor / 2.0f),
+                        SolarSystem.landingModule.getHeight() / 2.0 / sizeFactor / 2.0f),
                 (float) (centerScreenCords.y + (antenna.y / distFactor) -
-                        40 / sizeFactor / 2.0f),
-                (float) 40 / sizeFactor, (float) 40 / sizeFactor);
+                        SolarSystem.landingModule.getHeight() / 2.0 / sizeFactor / 2.0f - 600),
+                (float) (SolarSystem.landingModule.getHeight() / 2.0 / sizeFactor), (float) (SolarSystem.landingModule.getHeight() / 2.0 / sizeFactor));
     }
 
     /**

@@ -27,7 +27,7 @@ import org.w3c.dom.ls.LSOutput;
  * */
 public class FlightLogic {
     private Odyssey game;
-    private final int distFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
+    private final float distFactor = SolarSystem.DIST_FACTOR; // pre-calculated scaling factor
     private final Vector3 centerScreenCords;
 
     //31536000 seconds in 1 year
