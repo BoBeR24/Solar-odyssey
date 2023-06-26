@@ -14,6 +14,8 @@ import com.mygdx.game.Properties.SolarSystem;
 import com.mygdx.game.Properties.SystemProperties;
 
 public class Controller {
+    private final static double gravity = 1.352 * Math.pow(10, -3);
+    private static float stepSize;
     private static double intialheight;
     private static Wind wind = Wind.getWind();
     // Gravity on Titan, maybe value is wrong
@@ -21,11 +23,11 @@ public class Controller {
     private static double acceleration = 0.0095;
     // Rotation-Stepsize
     private static Vector thruster;
-    private final static double gravity = 1.352 * Math.pow(10, -3);
     private static FileWriter fileWriter;
     private static BufferedWriter writer;
 
-    public static void main(String[] args) throws IOException {
+    public static void run(float step) throws IOException {
+        stepSize = step;
         // Example
 
         ProbeLauncher.launchLandingModule(new Vector(-700, 600, 0), new Vector(0, 0, 0), 0);
@@ -33,9 +35,9 @@ public class Controller {
         thrusterTarget = new Vector(0, 0, 0);
         thruster = new Vector(0, 0, 0);
 
-        fileWriter = new FileWriter("core\\src\\com\\mygdx\\game\\SupportiveClasses\\coordinates.txt");
+        fileWriter = new FileWriter("C:\\JavaWorkspace\\Odyssey\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\coordinates.txt");
         writer = new BufferedWriter(fileWriter);
-       //narrative / stages of landing
+        //narrative / stages of landing
         noseDive();
         stabilize();
         alignX(1);
@@ -44,23 +46,20 @@ public class Controller {
         writer.close();
     }
 
-    public static void main() throws IOException {
-
-    }
     //updates the velocity based on forces acting on body, is always followed by update coordinates
     private static void updateVelocity() {
         // checkThrust();
         SolarSystem.landingModule.setNextVelocity(
                 SolarSystem.landingModule.getVelocity().x
                         + ((thruster.x / SolarSystem.landingModule.getMass())
-                                + (wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x)
-                                        / SolarSystem.landingModule.getMass())
-                                * PhysicsUtils.STEPSIZE,
+                        + (wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x)
+                        / SolarSystem.landingModule.getMass())
+                        * stepSize,
                 SolarSystem.landingModule.getVelocity().y
                         + ((thruster.y / SolarSystem.landingModule.getMass()) - gravity
-                                + (wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y)
-                                        / SolarSystem.landingModule.getMass())
-                                * PhysicsUtils.STEPSIZE,
+                        + (wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y)
+                        / SolarSystem.landingModule.getMass())
+                        * stepSize,
                 0);
     }
     //updates the coordinates based on veloctiy.
@@ -68,9 +67,9 @@ public class Controller {
     private static void updateCoordinates() throws IOException {
         SolarSystem.landingModule.setNextLocation(
                 SolarSystem.landingModule.getLocation().x
-                        + SolarSystem.landingModule.getNextVelocity().x * PhysicsUtils.STEPSIZE,
+                        + SolarSystem.landingModule.getNextVelocity().x * stepSize,
                 SolarSystem.landingModule.getLocation().y
-                        + SolarSystem.landingModule.getNextVelocity().y * PhysicsUtils.STEPSIZE,
+                        + SolarSystem.landingModule.getNextVelocity().y * stepSize,
                 0);
         SolarSystem.landingModule.update();
 
@@ -80,7 +79,8 @@ public class Controller {
                 + String.valueOf(SolarSystem.landingModule.getRotation()));
         writer.newLine();
     }
-//stabilised the landing module to reaach a stable position.
+
+    //stabilised the landing module to reaach a stable position.
     private static void stabilize() throws IOException {
 
         thrusterTarget
@@ -162,9 +162,10 @@ public class Controller {
     private static double equationsOfMotion(double displacement) {
         return Math.sqrt(displacement);
     }
-// we are able to align our  module to be right above the landing pad,whilst countering wind and gravity forces.
+
+    // we are able to align our  module to be right above the landing pad,whilst countering wind and gravity forces.
     private static void alignX(double modifier) throws IOException {
-      
+
         double distance = SolarSystem.landingModule.getLocation().x;
         int sign;
         if (distance > 0) {
@@ -174,7 +175,7 @@ public class Controller {
         }
         distance = Math.abs(SolarSystem.landingModule.getLocation().x);
         SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getNextVelocity().x,
-                SolarSystem.landingModule.getNextVelocity().y - SolarSystem.landingModule.getNextVelocity().y,
+                0.0,
                 SolarSystem.landingModule.getNextVelocity().z);
         thrusterTarget.set(thrusterTarget.x + sign * acceleration * modifier * SolarSystem.landingModule.getMass(),
                 SolarSystem.landingModule.getMass() * gravity
@@ -188,7 +189,7 @@ public class Controller {
         changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
         thruster.set(thrusterTarget);
         SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getNextVelocity().x,
-                SolarSystem.landingModule.getNextVelocity().y - SolarSystem.landingModule.getNextVelocity().y,
+                0.0,
                 SolarSystem.landingModule.getNextVelocity().z);
         int tracker = 0;
         while (Math.abs(SolarSystem.landingModule.getLocation().x) > (distance / 2)) {
@@ -197,8 +198,8 @@ public class Controller {
                             SolarSystem.landingModule.getVelocity().x + sign * acceleration * modifier,
                             SolarSystem.landingModule.getVelocity().y
                                     + ((thruster.y / SolarSystem.landingModule.getMass()) - gravity
-                                            + wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y)
-                                            * PhysicsUtils.STEPSIZE,
+                                    + wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y)
+                                    * stepSize,
                             0));
             updateCoordinates();
             tracker++;
@@ -211,7 +212,7 @@ public class Controller {
         thrusterTarget.z = thrusterTarget.getAngle(new Vector(0, 1, 0));
         changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
         SolarSystem.landingModule.setNextVelocity(SolarSystem.landingModule.getNextVelocity().x,
-                SolarSystem.landingModule.getNextVelocity().y - SolarSystem.landingModule.getNextVelocity().y,
+                0.0,
                 SolarSystem.landingModule.getNextVelocity().z);
         thruster.set(thrusterTarget);
         while (tracker > 0) {
@@ -221,7 +222,7 @@ public class Controller {
                             SolarSystem.landingModule.getVelocity().y
                                     + (thruster.y / SolarSystem.landingModule.getMass()) - gravity
                                     + (wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y)
-                                            * PhysicsUtils.STEPSIZE,
+                                    * stepSize,
                             0));
             updateCoordinates();// A check if update coordinates is actually all we need
             tracker--;
@@ -250,7 +251,8 @@ public class Controller {
             Controller.alignX(modifier / 4);
         }
     }
-//function to find the target force we must emit to obtain certain speed in certain time. from suvat equations from motion.
+
+    //function to find the target force we must emit to obtain certain speed in certain time. from suvat equations from motion.
     public static double findTargetForce(double speed, double time) {
         return ((speed - SolarSystem.landingModule.getVelocity().y) / time) * SolarSystem.landingModule.getMass();
     }
@@ -259,14 +261,15 @@ public class Controller {
     private static double findTargetDistance(double acceleration) {
         return Math.pow(SolarSystem.landingModule.getVelocity().y, 2) / (2 * acceleration);
     }
-//descend straight downwards, countering wind and gravity appropriately.
+
+    //descend straight downwards, countering wind and gravity appropriately.
     private static void descend() throws IOException {
 
         double time = 20;
         double targetForce = findTargetForce(1, time);
 
         double scalar = acceleration * (1 / intialheight);// have to find value such that the thruster doesnt emit more
-                                                          // than it is allowed
+        // than it is allowed
         double distance = SolarSystem.landingModule.getLocation().y;
         // double originaly= thrusterTarget.y;
         thrusterTarget.set(-wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x,
@@ -294,7 +297,7 @@ public class Controller {
             updateCoordinates();
             if ((-wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x != thruster.x)
                     || (-wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y != thruster.y
-                            - gravity * SolarSystem.landingModule.getMass())) {
+                    - gravity * SolarSystem.landingModule.getMass())) {
                 thrusterTarget.set(-wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x,
                         -wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).y
                                 + gravity * SolarSystem.landingModule.getMass(),
@@ -366,7 +369,8 @@ public class Controller {
             System.out.println("Succesfully landed, with all parameters met!");
         }
     }
-        //returns true if paraemeters are met, meaning if we have landed.
+
+    //returns true if paraemeters are met, meaning if we have landed.
     private static boolean confirmland() throws IOException {
         if (Math.abs(SolarSystem.landingModule.getLocation().x) > 0.0001) {
             double sign;
@@ -391,7 +395,7 @@ public class Controller {
                 if (2 * (((Math.sqrt(Math.abs(SolarSystem.landingModule.getLocation().x))) * acceleration)
                         / acceleration) < 1
                         && 2 * (((Math.sqrt(Math.abs(SolarSystem.landingModule.getLocation().x))) * acceleration)
-                                / acceleration) > 0) {
+                        / acceleration) > 0) {
                     SolarSystem.landingModule.setLocation(0, 0, 0);
                 } else {
                     System.out.println("failed at reaching appropriate horizontal coordinate interval");
@@ -408,7 +412,7 @@ public class Controller {
         if (Math.abs(SolarSystem.landingModule.getVelocity().x) > 0.0001) {
             System.out.println("failed at reaching minimal horizontal speed");
             return false;// exact same reason as above we should naturally attain this through our
-                         // descend and align x methods
+            // descend and align x methods
         }
         if (Math.abs(SolarSystem.landingModule.getVelocity().y) > 0.0001) {
             System.out.println("failed at reaching minimal vertical speed");
@@ -417,7 +421,8 @@ public class Controller {
         return true;
 
     }
-// forces the landing module to nosedive downwards, allowing us to lower altitude significantly at a fast rate.
+
+    // forces the landing module to nosedive downwards, allowing us to lower altitude significantly at a fast rate.
     private static void noseDive() throws IOException {
         double targetHeight = SolarSystem.landingModule.getLocation().y;
         while (SolarSystem.landingModule.getLocation().y > targetHeight * (1.0 / 3.0)) {

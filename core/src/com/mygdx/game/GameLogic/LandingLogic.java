@@ -6,6 +6,7 @@ import com.mygdx.game.GUI.InfoLabel;
 import com.mygdx.game.GUI.LandingScreen;
 import com.mygdx.game.GUI.Odyssey;
 import com.mygdx.game.Objects.*;
+import com.mygdx.game.PhysicsEngine.Controller;
 import com.mygdx.game.PhysicsEngine.Function;
 import com.mygdx.game.PhysicsEngine.PhysicsUtils;
 import com.mygdx.game.Properties.SolarSystem;
@@ -51,6 +52,13 @@ public class LandingLogic {
         label = new InfoLabel(game, timer);
 
         ProbeLauncher.launchLandingModule(new Vector(0.0, 0.0, 0.0), new Vector(0.0, 0.0, 0.0), 2000); // initialize landing module launch
+
+        try {
+            Controller.run(timer.stepSize);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
