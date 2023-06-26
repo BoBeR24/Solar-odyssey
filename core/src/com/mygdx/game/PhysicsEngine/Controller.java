@@ -399,7 +399,7 @@ public class Controller {
                 }
             }
         }
-        if (Math.abs(SolarSystem.landingModule.getRotation()) > 20000) {// check angle bound
+        if (Math.abs(SolarSystem.landingModule.getRotation()) > 0.02) {// check angle bound
             System.out.println("failed at reaching appropriate angle interval");
             return false;
             // probably have to add correcter but theres a chane it will always be straight
