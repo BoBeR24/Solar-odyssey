@@ -25,7 +25,7 @@ public class Pathfinding {
         Vector velocity = probe.getNextVelocity();
         Vector directionToBody = body.getLocation().subtract(probe.getLocation());
         double distanceToBody = directionToBody.magnitude();
-        double maxSpeed = 30000;
+        double maxSpeed = 100;
         Vector desiredNewVelocity = directionToBody.multiply(maxSpeed / distanceToBody);
 
         double accelerationX = desiredNewVelocity.x - velocity.x;
