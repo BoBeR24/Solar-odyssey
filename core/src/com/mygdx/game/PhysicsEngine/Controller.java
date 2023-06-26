@@ -163,7 +163,6 @@ public class Controller {
             changeAngle(thrusterTarget.z - SolarSystem.landingModule.getRotation());
             thruster.set(thrusterTarget);
         }
-        System.out.println("done with stabalize");
     }
 
     private static void changeAngle(double angleDifference) throws IOException {
@@ -417,11 +416,15 @@ private static void descend() throws IOException {
         while(SolarSystem.landingModule.getLocation().y>0.0001){
            updateVelocity();
             updateCoordinates();
-             // System.out.println(SolarSystem.landingModule.getLocation().y + "howw"); 
+              if((wind.getForceBasedOnDistance(SolarSystem.landingModule.getLocation().y).x== 0)  ){
+                thrusterTarget.set(0,0+ gravity*SolarSystem.landingModule.getMass() , 0.0);
+       thrusterTarget.set(0, thrusterTarget.y , thrusterTarget.getAngle(new Vector(0, 1, 0)));
+       thruster.set(thrusterTarget);
+       changeAngle(thruster.z - SolarSystem.landingModule.getRotation());}
         }
-        System.out.println(SolarSystem.landingModule.getLocation().y +"balls");
+        
         if(confirmland()){
-            System.out.println("gj");
+            System.out.println("Succesfully landed, with all parameters met!");
         }
     }
 
