@@ -18,7 +18,7 @@ public class Wind {
     private Vector forceBoundTwo;
     private Vector forceBoundThree;
     private int windDirection; // 1 for from left to right, 2 for from right to left
-    final int MAX_ANGLE = 15; // in degrees
+    final int MAX_ANGLE = 0; // in degrees
     private double angle; // in radians
     private static Wind Wind; 
     
