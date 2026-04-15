@@ -31,8 +31,8 @@ public class DataReader {
     }
 
     public DataReader() {
-        this(new File("C:\\JavaWorkspace\\Odyssey\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\values.txt"),
-                new File("C:\\JavaWorkspace\\Odyssey\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\coordinates.txt"));
+        this(new File(".\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\values.txt"),
+                new File(".\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\coordinates.txt"));
     }
 
     /**

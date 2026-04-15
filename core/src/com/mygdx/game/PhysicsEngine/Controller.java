@@ -30,7 +30,7 @@ public class Controller {
         thrusterTarget = new Vector(0, 0, 0);
         thruster = new Vector(0, 0, 0);
 
-        fileWriter = new FileWriter("C:\\JavaWorkspace\\Odyssey\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\coordinates.txt");
+        fileWriter = new FileWriter(".\\core\\src\\com\\mygdx\\game\\SupportiveClasses\\coordinates.txt");
         writer = new BufferedWriter(fileWriter);
         //narrative / stages of landing
         noseDive();
